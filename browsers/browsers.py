@@ -12,6 +12,7 @@ Example:
 
 from selenium import webdriver
 
+
 """----------------------------------- Running with the browser open -----------------------------------"""
 
 
