@@ -5,41 +5,40 @@ from utilities.utility_functions import safe_click
 
 
 class TasksPage:
-    """ The TasksPage class Represents the general tasks page in Qlik replicate software, which is default page on
-        Replicate.
+    """ The TasksPage class Represents the 'Tasks view', the default view that opens when you open Qlik Replicate
+        software for the first time. The 'Tasks view' lists all replication tasks you have defined and allows you to
+        manage them.
 
-        Objective: Managing tasks on Qlik Replicate.
-
-        Functionalities: This class provides methods for interacting with various elements on the tasks page, such as
-        creating, selecting, opening, and deleting tasks."""
+        This class provides methods for interacting with various elements on the 'Tasks view', and will allow to perform
+        the 'Tasks view' functionalities, like creating, editing selecting, opening, executing and deleting tasks."""
 
     def __init__(self, driver: WebDriver):
         """ Initialize the TasksPage object
-            Gets the instance parameter driver: WebDriver for Selenium automation"""
+            :param driver: WebDriver instance for Selenium automation. """
 
         self.driver = driver
         self.actions = ActionChains(driver)
 
     def create_new_task(self):
-        """Clicks on the New Task button in the General task page and enters to the 'New Task' page"""
+        """Click on the New Task button in the General task page and enters to the 'New Task' page"""
 
         create_new_task = self.driver.find_element(By.XPATH, "//span[text()='New Task...']")
         safe_click(create_new_task)
 
     def enter_manage_endpoints(self):
-        """Clicks on the Manage endpoints button and enters to the 'Manage endpoints page'"""
+        """Click on the Manage endpoints button and enters to the 'Manage endpoints' page"""
 
         manage_endpoints = self.driver.find_element(By.XPATH, "//span[text()='Manage Endpoint Connections...']")
         safe_click(manage_endpoints)
 
     def import_task(self):
-        """Clicks on the import task button, which provide an ability to import a task to Replicate with a Jason file"""
+        """Click on the import task button, which provide an ability to import a task to Replicate with a Jason file"""
 
         import_task = self.driver.find_element(By.XPATH, "//span[text()='Import Task']")
         safe_click(import_task)
 
     def export_task(self):
-        """Clicks on the export task button which creates a Jason file with the task definition"""
+        """Click on the export task button which creates a Jason file with the task definition"""
 
         export_task = self.driver.find_element(By.XPATH, "//span[text()='Export Task']")
         safe_click(export_task)
@@ -99,7 +98,7 @@ class TasksPage:
         safe_click(download_logs_icon)
 
     def run_task_dropdown(self, task_name: str):
-        """ Open the task's Run options dropdown menu by clicking on it, as part of the task management.
+        """ Open the task's Run options dropdown menu by clicking on it, as part of the run task management.
             :param task_name: The name of the task for which to open the dropdown menu. """
 
         self.select_task(task_name)
@@ -107,8 +106,8 @@ class TasksPage:
         safe_click(run_dropdown)
 
     def run_new_task(self, task_name: str):
-        """ Start a new task.
-            :param task_name: The name of the task for which to start process"""
+        """ Start a new task by clicking on the 'Start Processing' option in the run options dropdown.
+            :param task_name: The name of the task to run"""
 
         self.run_task_dropdown(task_name)
         start_processing = self.driver.find_element(By.XPATH,
@@ -116,8 +115,8 @@ class TasksPage:
         safe_click(start_processing)
 
     def reload_task(self, task_name: str):
-        """ Start a task again by reloading it.
-            :param task_name: The name of the task for which to start process"""
+        """ Start a task again by reloading it with the 'Reload task' option in the run options dropdown.
+            :param task_name: The name of the task to reload."""
 
         self.run_task_dropdown(task_name)
         reload_task = self.driver.find_element(By.XPATH,
@@ -128,8 +127,8 @@ class TasksPage:
         safe_click(yes_button)
 
     def stop_task(self, task_name: str):
-        """ Stop a task entirely.
-            :param task_name: The name of the task for which to start process"""
+        """ Stop a task entirely by clicking on the 'Stop task' options in the run options dropdown.
+            :param task_name: The name of the task o stop"""
 
         self.select_task(task_name)
         stop_task_element = self.driver.find_element(By.XPATH, "//span[text()='Stop']")
