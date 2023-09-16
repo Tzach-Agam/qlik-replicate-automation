@@ -10,6 +10,7 @@ class DesignerPage:
         be replicated and modify table and task settings. This is the default mode when you open a task.
         The DesignerPage class will provide various functionalities on Designer Mode, including running tasks, selecting
         endpoints and, entering to the pages 'Task Settings', 'Manage Endpoint', 'Table Selection' and 'Monitor Mode'."""
+
     def __init__(self, driver: WebDriver):
         """ Initialize the DesignerPage object
             :param driver: WebDriver instance for Selenium automation. """
