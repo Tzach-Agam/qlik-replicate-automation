@@ -84,7 +84,7 @@ class TasksPage:
         self.actions.double_click(task)
 
     def enter_view_logs(self):
-        """Click on the View logs button and allowing to see the task log page"""
+        """Click on the View logs button that allow viewing the task log"""
 
         view_logs = self.driver.find_element(By.XPATH, "//span[text()='View Logs...']")
         safe_click(view_logs)
