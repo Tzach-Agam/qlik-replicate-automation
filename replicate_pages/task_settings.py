@@ -12,6 +12,9 @@ class TaskSettings:
         The class will provide methods for the task settings page functionality, like setting target replication schemas
         or adding logs"""
     def __init__(self, driver: WebDriver):
+        """ Initialize the TaskSettings object
+            :param driver: WebDriver instance for Selenium automation. """
+
         self.driver = driver
         self.actions = ActionChains(driver)
 
