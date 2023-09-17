@@ -63,8 +63,8 @@ class NewTaskPage:
         safe_click(cdc)
 
     def new_task_creation(self, name, description):
-        """ Create a new task by entering the task name and description and then closing the dialog. This function combines
-            previous function and allows creation of a task with default configurations.
+        """ Create a new task by entering the task name and description and then closing the dialog. This method combines
+            previous methods and allows creation of a task with default configurations.
             :param name: The name of the task to be entered.
             :param description: The description of the task to be entered. """
 

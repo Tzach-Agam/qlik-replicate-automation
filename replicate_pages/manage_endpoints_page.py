@@ -110,13 +110,13 @@ class ManageEndpoints:
         safe_click(save_button)
 
     def close(self):
-        """Click the 'Close' button to close the endpoint configuration dialog."""
+        """Click the 'Close' button to close 'Manage Endpoints Connection' page."""
 
         close_button = self.driver.find_element(By.XPATH, "//*[text()='Close']")
         safe_click(close_button)
 
     def close_and_save(self):
-        """ Close the endpoint configuration dialog and save changes if prompted.
+        """ Close 'Manage Endpoints Connection' page and save changes if prompted.
             This function closes the dialog and, if changes are made, clicks the 'Save' button. """
 
         self.close()
@@ -124,21 +124,13 @@ class ManageEndpoints:
         safe_click(save_button)
 
     def close_no_save(self):
-        """ Close the endpoint configuration dialog without saving changes.
+        """ Close 'Manage Endpoints Connection' page without saving changes.
             This function closes the dialog without saving any changes. """
 
         self.close()
         no_save_button = self.driver.find_element(
             (By.XPATH, "//div[@class='modal-footer ng-scope']/*[text()='Don't save']"))
         safe_click(no_save_button)
-
-    def close_and_cancel(self):
-        """ Close the endpoint configuration dialog and cancel any changes.
-            This function closes the dialog and cancels any unsaved changes. """
-
-        self.close()
-        cancel_button = self.driver.find_element((By.XPATH, "//div[@class='modal-footer ng-scope']/*[text()='Cancel']"))
-        safe_click(cancel_button)
 
     def delete_endpoint(self, endpoint_data: dict):
         """ Delete an endpoint entirely using the endpoint data from a dictionary in the endpoint configuration module.
