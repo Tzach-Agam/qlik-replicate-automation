@@ -67,7 +67,7 @@ class DesignerPage:
         self.actions.double_click(target_element).perform()
 
     def enter_monitor_page(self):
-        """Enter to the task's 'Monitor Mode', where you view the replication task activities in real time."""
+        """Enter to the task's 'Monitor Mode'."""
 
         monitor = self.driver.find_element(By.XPATH, "//span[text()='Monitor']")
         safe_click(monitor)
