@@ -16,7 +16,7 @@ sqlserver_source_endpoint = {
     "type": "SQL Server",
     "server": "tzachsqlserver19.qdinet",
     "username": "sa",
-    "password": "nrWEL7zZwmXPZueb",
+    "password": "##########",
     "database": "tzach_src"
 }
 
@@ -27,7 +27,7 @@ oracle_source_endpoint = {
     "type": "Oracle",
     "server": "tzachoracle19.qdinet",
     "username": "system",
-    "password": "oracle"
+    "password": "##########"
 }
 
 mysql_source_endpoint = {
@@ -37,7 +37,7 @@ mysql_source_endpoint = {
     "type": "MySQL",
     "server": "tzachmysql8.qdinet",
     "username": "root",
-    "password": "Kofiko123"
+    "password": "##########"
 }
 
 postgres_source_endpoint = {
@@ -47,7 +47,7 @@ postgres_source_endpoint = {
     "type": "PostgreSQL",
     "server": "tzachpostgres13.qdinet",
     "username": "postgres",
-    "password": "postgres",
+    "password": "##########",
     "database": "postgres"
 }
 
@@ -61,7 +61,7 @@ oracle_target_endpoint = {
     "type": "oracle",
     "server": "tzachoracle19.qdinet/orcl",
     "username": "system",
-    "password": "oracle"
+    "password": "#######"
 }
 
 sqlserver_target_endpoint = {
@@ -71,7 +71,7 @@ sqlserver_target_endpoint = {
     "type": "SQL Server",
     "server": "tzachoracle19.qdinet",
     "username": "sa",
-    "password": "nrWEL7zZwmXPZueb",
+    "password": "#########",
     "database": "tzach_trg"
 }
 
@@ -80,7 +80,7 @@ s3_target_endpoint = {
     "description": "Endpoint for testing",
     "role": "target",
     "type": "S3",
-    "bucket": "attibigdata",
-    "access_key": "AKIAZKHSSZQOEE7O3DB3",
-    "secret-key": "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"
+    "bucket": "########",
+    "access_key": "####################",
+    "secret-key": "####################"
 }
