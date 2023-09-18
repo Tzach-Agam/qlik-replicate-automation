@@ -1,0 +1,30 @@
+Description of the 'tests' directory:
+
+Folder Structure:
+>tests: The main directory for test scripts.
+ >postgres_source: Subdirectory for tests related to PostgreSQL source endpoint.
+ >oracle_source: Subdirectory for tests related to Oracle source endpoint.
+ >mysql_source: Subdirectory for tests related to MySQL source endpoint.
+ >sql_source: Subdirectory for tests related to SQL source endpoint.
+ >s3_target: Subdirectory for tests related to S3 target endpoint.
+
+Contents of Each Subdirectory:
+>good_files: This directory contains sample "good" data files that will be used as test data during the tests. These files represent the expected correct data in the target endpoint schema after the end of the test case. At the end of every test case, the program will create a csv file with all the data and metadata of the replicated tables. Then it will compare the csv file to the respective good file of the test case. If the files are identical, the csv file created during the task will be deleted and the test case will pass.
+>logs: Log files generated during the execution of tests in each respective category. The logs are created by Qlik Replicate software, and they provide information about test execution, including any errors or issues encountered.
+>tests.py: The Python script that contains the actual test cases for the specific category of tests. This script is responsible for interacting with the Qlik Replicate software, performing test actions, and validating the results.
+
+Purpose:
+This directory aims to automate testing for various endpoints in the Qlik Replicate software using Selenium and Python. The "tests" directory is organized into subdirectories based on the type of source or target being tested. Within each subdirectory, you will find sample data files, logs, and the test script itself.
+
+Dependencies:
+The test.py modules in each directory correspond with the modules under databases folder, and the modules under replicate_pages folder. The test.py modules leverages the modules in databasees and replicate_pages and creates instances from the classes in them to use their functionality.
+
+How to Run Tests:
+Navigate to the relevant subdirectory (e.g., "postgres_source," "oracle_source," etc.) based on the specific test you want to run.
+Run the corresponding "tests.py" script using Python. Make sure you have the required dependencies and Selenium set up correctly.
+The script will execute the Selenium test cases, interact with the Qlik Replicate software, and generate log files for review.
+
+Additional Notes:
+Ensure that you have properly configured Selenium and installed any necessary drivers for web automation in your testing environment.
+Refer to the specific "tests.py" script for detailed test scenarios and assertions.
+By following this folder structure and running the appropriate scripts, you can perform automated testing for Qlik Replicate software across different source and target types.
