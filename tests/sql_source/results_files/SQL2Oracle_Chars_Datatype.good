@@ -1,0 +1,19 @@
+"test_table - A (Data type: NUMBER, Data length: 22), char1 (Data type: VARCHAR2, Data length: 36), varchar1 (Data type: VARCHAR2, Data length: 36), nchar1 (Data type: NVARCHAR2, Data length: 72), nvarchar1 (Data type: NVARCHAR2, Data length: 72)"
+A,char1,varchar1,nchar1,nvarchar1
+1,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz
+2,"!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890"
+3,a,a,a,a
+4, , , , 
+5, , , , 
+6, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa
+7,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz ,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz 
+8,,,,
+11,a,a,a,a
+15,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz ,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz 
+16,,,,
+12, , , , 
+9,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz
+13, , , , 
+10,"!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890"
+14, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa
+
