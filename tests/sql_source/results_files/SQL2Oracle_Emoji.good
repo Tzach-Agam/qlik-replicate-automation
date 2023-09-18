@@ -1,0 +1,16 @@
+"test_table - A (Data type: NUMBER, Data length: 22), B (Data type: NVARCHAR2, Data length: 32), C (Data type: NVARCHAR2, Data length: 32), D (Data type: NCLOB, Data length: 4000)"
+A,B,C,D
+2,😀,😀,😀
+3,🍕🍕,🍕🍕,🍕🍕
+4,🐷🐷,🐷🐷,🐷🐷
+5,😱😱,😱😱,😱😱
+6,😀😱,😀😱,😀😱
+
+"test_table1 - A1 (Data type: NUMBER, Data length: 22), B1 (Data type: NVARCHAR2, Data length: 32), C1 (Data type: NVARCHAR2, Data length: 32), D1 (Data type: NCLOB, Data length: 4000)"
+A1,B1,C1,D1
+2,😀,😀,😀
+3,🍕🍕,🍕🍕,🍕🍕
+4,🐷🐷,🐷🐷,🐷🐷
+5,😱😱,😱😱,😱😱
+6,😀😱,😀😱,😀😱
+

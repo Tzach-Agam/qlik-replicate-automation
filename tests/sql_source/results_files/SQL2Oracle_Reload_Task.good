@@ -1,0 +1,6 @@
+"test_table - COL1_Reload (Data type: NUMBER, Data length: 22), COL2_Reload (Data type: VARCHAR2, Data length: 20)"
+COL1_Reload,COL2_Reload
+101,UPDATE
+303,FL
+404,CDC
+

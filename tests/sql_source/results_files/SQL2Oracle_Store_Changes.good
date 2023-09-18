@@ -1,0 +1,13 @@
+"test_table__ct - header__change_seq (Data type: VARCHAR2, Data length: 35), header__change_oper (Data type: VARCHAR2, Data length: 1), header__change_mask (Data type: RAW, Data length: 128), header__stream_position (Data type: VARCHAR2, Data length: 128), header__operation (Data type: VARCHAR2, Data length: 12), header__transaction_id (Data type: VARCHAR2, Data length: 32), header__timestamp (Data type: TIMESTAMP(6), Data length: 11), A (Data type: NUMBER, Data length: 22), B (Data type: VARCHAR2, Data length: 20)"
+header__change_seq,header__change_oper,header__change_mask,header__stream_position,header__operation,header__transaction_id,header__timestamp,A,B
+20230907160609430000000000000000013,U,b'\x01\x00',00000029:00005e30:0008,UPDATE,040D0000000000000000000000000000,2023-09-07 16:06:09.427000,101,UPDATE
+20230907160609430000000000000000013,B,,00000029:00005e30:0008,BEFOREIMAGE,040D0000000000000000000000000000,2023-09-07 16:06:09.427000,101,FL
+20230907160609430000000000000000005,I,b'\x01\x80',00000029:00005e30:0007,INSERT,040D0000000000000000000000000000,2023-09-07 16:06:09.427000,404,CDC
+20230907160609430000000000000000017,D,b'\x80',00000029:00005e30:0009,DELETE,040D0000000000000000000000000000,2023-09-07 16:06:09.427000,202,FL
+
+"test_table - A (Data type: NUMBER, Data length: 22), B (Data type: VARCHAR2, Data length: 20)"
+A,B
+101,UPDATE
+303,FL
+404,CDC
+
