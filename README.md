@@ -19,7 +19,7 @@ An automation project that serves as a comprehensive testing suite, aims to auto
 3. [Installation and Setup](#installation-and-setup)
 4. [Configuration](#configuration)
 5. [Usage](#usage)
-6. [Testing](#testing)
+6. [Demo](#demo)
 7. [Contact Information](#contact-information)
 
 ## Introduction
