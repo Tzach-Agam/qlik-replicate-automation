@@ -1,0 +1,8 @@
+"test_table - COL1 (Data type: NUMBER, Data length: 22), COL2 (Data type: VARCHAR2, Data length: 30), COL4 (Data type: NUMBER, Data length: 22)"
+COL1,COL2,COL4
+101,FL,
+202,FL,
+303,CDC,
+404,CDC,
+505,CDC,
+

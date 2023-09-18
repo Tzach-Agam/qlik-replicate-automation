@@ -1,0 +1,7 @@
+"test_table - A (Data type: NUMBER, Data length: 22), english_upper (Data type: VARCHAR2, Data length: 20), english_lower (Data type: VARCHAR2, Data length: 20), chinese_upper (Data type: NVARCHAR2, Data length: 80), chinese_lower (Data type: NVARCHAR2, Data length: 80)"
+A,english_upper,english_lower,chinese_upper,chinese_lower
+1,GOOD MORNING,good morning,壹貳參肆伍陸柒捌玖拾佰仟萬,一二三四五六七八九十百千萬
+3,ABCDEFG,abcdef,捌玖拾佰仟萬壹貳參肆伍陸柒,八九十百千萬一二三四五六七
+4,GOOD MORNING,good morning,壹貳參肆伍陸柒捌玖拾佰仟萬,一二三四五六七八九十百千萬
+5,GOOD MORNING,good morning,壹貳參肆伍陸柒捌玖拾佰仟萬,一二三四五六七八九十百千萬
+

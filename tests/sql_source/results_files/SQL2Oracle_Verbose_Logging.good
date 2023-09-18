@@ -1,0 +1,9 @@
+"test_table - VerboseNumber (Data type: NUMBER, Data length: 22), VerboseString (Data type: VARCHAR2, Data length: 20)"
+VerboseNumber,VerboseString
+101,FL
+202,FL
+303,CDC
+404,CDC
+505,CDC
+
+']V:' found 782 times in the log file.
