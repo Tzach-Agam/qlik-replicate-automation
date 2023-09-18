@@ -39,6 +39,7 @@ class SQL_Source_Tests(TestCase):
         self.sqldb.drop_replication_constraint()
         self.sqldb.close()
         self.oracledb.close()
+        self.driver.close()
 
     def _initialize_web_pages(self):
         """ Initialize web page objects for interacting with the Qlik Replicate web application. """
@@ -109,6 +110,8 @@ class SQL_Source_Tests(TestCase):
         self.manage_endpoints.close()
 
     def test_fl_cdc(self):
+        """FL + CDC: basic test with all DMLs"""
+
         task_name = "SQL2Oracle_FL_CDC"
         self.task_creation(task_name)
         self.sqldb.execute_query(f'CREATE TABLE "{self.source_schema}".test_table (A int primary key, B varchar(20));')
@@ -141,6 +144,8 @@ class SQL_Source_Tests(TestCase):
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
 
     def test_several_tables(self):
+        """Replication of 3 tables from SQL Server database to Oracle database"""
+
         task_name = "SQL2Oracle_Several_Tables"
         self.task_creation(task_name)
         for i in range(1, 4):
@@ -175,6 +180,8 @@ class SQL_Source_Tests(TestCase):
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
 
     def test_char_columns(self):
+        """Replication of a table with 'chars' datatype from SQL Server source to Oracle target"""
+
         task_name = "SQL2Oracle_Chars_Datatype"
         self.task_creation(task_name)
         self.sqldb.execute_query(
@@ -216,6 +223,8 @@ class SQL_Source_Tests(TestCase):
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
 
     def test_number_columns(self):
+        """Replication of a table with 'integer' datatype columns from SQL Server source to Oracle target"""
+
         task_name = "SQL2Oracle_Number_Datatype"
         self.task_creation(task_name)
         self.sqldb.execute_query(
@@ -258,6 +267,8 @@ class SQL_Source_Tests(TestCase):
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
 
     def test_column_ddl(self):
+        """FL + CDC task with column related DDL statements (ADD DROP, ALTER) """
+
         task_name = "SQL2Oracle_DDL_Columns"
         self.task_creation(task_name)
         self.sqldb.execute_query(
@@ -294,9 +305,12 @@ class SQL_Source_Tests(TestCase):
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
 
     def test_verbose_logs(self):
+        """FL + CDC task with Verbose logs configured for detailed task logs"""
+
         task_name = "SQL2Oracle_Verbose_Logging"
         self.task_creation(task_name)
         self.designer_page.enter_task_settings()
+        self.common_functions.loader_icon_opening_replicate()
         self.task_settings.task_logging()
         self.task_settings.change_component_logging('SERVER', 'SOURCE_UNLOAD', 'TARGET_LOAD', 'SOURCE_CAPTURE',
                                                     'TARGET_APPLY', logging_level='VERBOSE')
@@ -330,9 +344,12 @@ class SQL_Source_Tests(TestCase):
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
 
     def test_transactional_mode(self):
+        """FL + CDC task with transactional mode for CDC"""
+
         task_name = "SQL2Oracle_FL_CDC_Transactional"
         self.task_creation(task_name)
         self.designer_page.enter_task_settings()
+        self.common_functions.loader_icon_opening_replicate()
         self.task_settings.transactional_mode_change()
         self.task_settings.ok_button()
         self.sqldb.execute_query(f'CREATE TABLE "{self.source_schema}".test_table (A int primary key, B varchar(20));')
@@ -367,6 +384,8 @@ class SQL_Source_Tests(TestCase):
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
 
     def test_reload_task(self):
+        """Replication task that stops and perform reload task operation """
+
         task_name = "SQL2Oracle_Reload_Task"
         self.task_creation(task_name)
         self.sqldb.execute_query(
@@ -409,6 +428,8 @@ class SQL_Source_Tests(TestCase):
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
 
     def test_100_tables(self):
+        """Replication of 100 tables from SQL Server source to Oracle target"""
+
         task_name = "SQL2Oracle_100_Tables"
         self.task_creation(task_name)
         for i in range(1, 101):
@@ -434,6 +455,8 @@ class SQL_Source_Tests(TestCase):
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
 
     def test_100columns(self):
+        """ Replication task of a table with 100 columns"""
+
         task_name = "SQL2Oracle_100_Columns"
         self.task_creation(task_name)
         self.sqldb.execute_query(
@@ -455,6 +478,8 @@ class SQL_Source_Tests(TestCase):
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
 
     def test_case_sensitive(self):
+        """Replication task of a table upper-case and lower-case columns and cahracters"""
+
         task_name = "SQL2Oracle_Case_Sensitive"
         self.task_creation(task_name)
         self.sqldb.execute_query(
@@ -490,6 +515,8 @@ class SQL_Source_Tests(TestCase):
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
 
     def test_chinese_table(self):
+        """Replication of a table with Chinese characters"""
+
         task_name = "SQL2Oracle_Chinese_Table"
         self.task_creation(task_name)
         self.sqldb.execute_query(
@@ -525,7 +552,8 @@ class SQL_Source_Tests(TestCase):
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
 
     def test_hebrew_table(self):
-        pass
+        """Replication of a table with Hebrew characters"""
+
         task_name = "SQL2Oracle_Hebrew_Table"
         self.task_creation(task_name)
         self.sqldb.execute_query(
@@ -560,6 +588,8 @@ class SQL_Source_Tests(TestCase):
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
 
     def test_emoji_datatype(self):
+        """Replication task of a table with emojis"""
+
         task_name = "SQL2Oracle_Emoji"
         self.task_creation(task_name)
         self.sqldb.execute_query(
@@ -608,6 +638,9 @@ class SQL_Source_Tests(TestCase):
 
     @unittest.skip("store_changes test good files give a different result every run. Run it manually")
     def test_store_changes_table(self):
+        """ Replication task with 'store_changes' functionality. Store changes is a table that contains all the CDC events
+            executed from the source database"""
+
         task_name = "SQL2Oracle_Store_Changes"
         self.task_creation(task_name)
         self.designer_page.enter_task_settings()
