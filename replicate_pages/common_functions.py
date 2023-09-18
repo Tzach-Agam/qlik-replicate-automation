@@ -41,7 +41,6 @@ class CommonFunctions:
     def task_data_loader(self):
         """ Wait until the task data loader disappears. Used to wait for task-related data loading to complete."""
 
-
         try:
             wait = WebDriverWait(self.driver, 10)
             wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[class='loader'][loader-type='ball-clip-rotate-multiple']")))
