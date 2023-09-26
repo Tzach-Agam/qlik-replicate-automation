@@ -36,6 +36,7 @@ class MySQL_Source_Tests(TestCase):
 
         self.mysqldb.close()
         self.oracledb.close()
+        self.driver.close()
 
     def _initialize_web_pages(self):
         """ Initialize web page objects for interacting with the Qlik Replicate web application. """
