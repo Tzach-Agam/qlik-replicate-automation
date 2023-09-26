@@ -1,0 +1,16 @@
+"test_table - pk (Data type: NUMBER, Data length: 22), col_1 (Data type: VARCHAR2, Data length: 5), col_2 (Data type: VARCHAR2, Data length: 5)"
+pk,col_1,col_2
+1,true,true
+2,true,false
+3,true,false
+4,true,false
+6,true,false
+7,,
+11,true,false
+8,true,false
+12,true,false
+9,true,false
+13,true,false
+10,true,false
+14,,
+

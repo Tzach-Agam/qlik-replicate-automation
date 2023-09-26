@@ -1,0 +1,18 @@
+"test_table1 - a (Data type: NUMBER, Data length: 22), b (Data type: NVARCHAR2, Data length: 40)"
+a,b
+101,UPDATE
+303,FL
+404,CDC
+
+"test_table2 - a (Data type: NUMBER, Data length: 22), b (Data type: NVARCHAR2, Data length: 40)"
+a,b
+101,UPDATE
+303,FL
+404,CDC
+
+"test_table3 - a (Data type: NUMBER, Data length: 22), b (Data type: NVARCHAR2, Data length: 40)"
+a,b
+101,UPDATE
+303,FL
+404,CDC
+
