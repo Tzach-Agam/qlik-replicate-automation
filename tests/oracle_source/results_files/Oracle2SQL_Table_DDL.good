@@ -1,0 +1,9 @@
+"WOW - COL1 (Data type: numeric, Data length: None), COL2 (Data type: varchar, Data length: 25)"
+COL1,COL2
+101.0000000000,FL
+202.0000000000,FL
+303.0000000000,FL
+
+"test_table3 - COL1 (Data type: numeric, Data length: None), COL2 (Data type: varchar, Data length: 25)"
+COL1,COL2
+
