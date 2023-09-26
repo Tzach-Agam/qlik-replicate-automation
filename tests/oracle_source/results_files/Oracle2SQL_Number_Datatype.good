@@ -1,0 +1,10 @@
+"test_table - COL1 (Data type: numeric, Data length: None), NUMBER_1 (Data type: numeric, Data length: None), NUMBER_2 (Data type: numeric, Data length: None), NUMBER_3 (Data type: int, Data length: None), NUMBER_4 (Data type: numeric, Data length: None), NUMBER_5 (Data type: int, Data length: None), NUMBER_6 (Data type: smallint, Data length: None), NUMBER_7 (Data type: numeric, Data length: None), NUMBER_8 (Data type: float, Data length: None), NUMBER_9 (Data type: numeric, Data length: None)"
+COL1,NUMBER_1,NUMBER_2,NUMBER_3,NUMBER_4,NUMBER_5,NUMBER_6,NUMBER_7,NUMBER_8,NUMBER_9
+1,0E-10,12345.67890,1234567,1234567890,12345,123,1,12350.0,0.12345
+3,0E-10,1.23456,0,9999999999,99999,999,0,10.0,0.12000
+4,,,,,,,,,
+5,0E-10,12345.67890,1234567,1234567890,12345,123,1,12350.0,0.12345
+6,8884407.0000000000,2.00000,9999999,1,1,1,99999999999999999999999999999999999999,1230.0,0.12340
+7,0E-10,1.23456,0,9999999999,99999,999,0,10.0,0.12000
+8,,,,,,,,,
+
