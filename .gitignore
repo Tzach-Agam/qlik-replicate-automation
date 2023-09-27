@@ -14,3 +14,4 @@
 /tests/oracle_source/__pycache__
 /tests/postgres_source/__pycache__
 /tests/sql_source/__pycache__
+/utilities/__pycache__
