@@ -18,21 +18,21 @@ from selenium import webdriver
 
 def chrom_driver():
     from selenium.webdriver.chrome.service import Service
-    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_automation\\browsers\chromedriver.exe")
+    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_project\\browsers\chromedriver.exe")
     driver = webdriver.Chrome(service=serv_obj)
     return driver
 
 
 def edge_driver():
     from selenium.webdriver.edge.service import Service
-    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_automation\\browsers\msedgedriver.exe")
+    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_project\\browsers\msedgedriver.exe")
     driver = webdriver.Edge(service=serv_obj)
     return driver
 
 
 def firefox_driver():
     from selenium.webdriver.firefox.service import Service
-    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_automation\\browsers\geckodriver.exe")
+    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_project\\browsers\geckodriver.exe")
     driver = webdriver.Firefox(service=serv_obj)
     return driver
 
@@ -42,7 +42,7 @@ def firefox_driver():
 
 def headless_chrom_driver():
     from selenium.webdriver.chrome.service import Service
-    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_automation\\browsers\chromedriver.exe")
+    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_project\\browsers\chromedriver.exe")
     ops = webdriver.ChromeOptions()
     ops.headless = True
     driver = webdriver.Chrome(service=serv_obj, options=ops)
@@ -51,7 +51,7 @@ def headless_chrom_driver():
 
 def headless_edge_driver():
     from selenium.webdriver.edge.service import Service
-    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_automation\\browsers\msedgedriver.exe")
+    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_project\\browsers\msedgedriver.exe")
     ops = webdriver.EdgeOptions()
     ops.headless = True
     driver = webdriver.Chrome(service=serv_obj, options=ops)
@@ -60,7 +60,7 @@ def headless_edge_driver():
 
 def headless_firefox_driver():
     from selenium.webdriver.firefox.service import Service
-    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_automation\\browsers\geckodriver.exe")
+    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_project\\browsers\geckodriver.exe")
     ops = webdriver.FirefoxOptions()
     ops.headless = True
     driver = webdriver.Chrome(service=serv_obj, options=ops)

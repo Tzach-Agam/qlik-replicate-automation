@@ -5,3 +5,9 @@
 /.idea/qlik_replicate_project.iml
 /.idea/vcs.xml
 /.idea/workspace.xml
+/.replicate_pages/__pycache__
+/.databases/__pycache__
+/.tests/mysql_source/__pycache__
+/.tests/sql_source/__pycache__
+/.tests/postgres_source/__pycache__
+/.tests/oracle_source/__pycache__
