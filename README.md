@@ -77,7 +77,6 @@ Execute automated tests for Qlik Replicate using the following command from one 
 python -m unittest {test_module}.{TestClass}
 ```
 You have the flexibility to specify additional options or arguments to target specific test modules or scenarios according to your testing needs.
-![SQL2Oracle_FL_CDC](https://github.com/Tzach-Agam/qlik-replicate-automation/assets/95846232/886a4f9e-f3e8-4077-9626-e6ca86b341a2)
 
 ## Demo
 <div>A short video demonstration of the automated test case FL-CDC from SQL Server to Oracle in action, which you can view here:</div>
