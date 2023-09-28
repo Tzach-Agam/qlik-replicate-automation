@@ -20,7 +20,6 @@ An automation project that serves as a comprehensive testing suite, aims to auto
 4. [Configuration](#configuration)
 5. [Usage](#usage)
 6. [Demo](#demo)
-7. [Contact Information](#contact-information)
 
 ## Introduction
 
@@ -48,6 +47,10 @@ To get started with running automated tests for Qlik Replicate, you'll need to s
 - Acquire an Amazon S3 stroage
 - Ensure you have Python 3.x installed on your system.
 - Install the necessary Selenium WebDriver (e.g., ChromeDriver) and add it to your system's PATH.
+- Clone the repository by the following command:
+```ini
+git clone git@github.com:Tzach-Agam/qlik-replicate-automation.git
+```
 - Install the required Python packages using the following command:
   ```bash
   pip install -r requirements.txt
@@ -69,17 +72,14 @@ db_password = your_password
 ```
 
 ## Usage
-Execute automated tests for Qlik Replicate using the following command:
+Execute automated tests for Qlik Replicate using the following command from one of the tests sub-directories:
 ```ini
-python run_tests.py
+python -m unittest {test_module}.{TestClass}
 ```
 You have the flexibility to specify additional options or arguments to target specific test modules or scenarios according to your testing needs.
 
 ## Demo
-A short video demonstration of the automated test cases in action, which you can view here. This video offers a visual representation of how the tests interact with Qlik Replicate's user interface and database functionality.
-The automated tests within this project are designed to rigorously validate Qlik Replicate's functionality across a range of use cases, ensuring its reliability and accuracy.
-
-
-## Contact Information
+A short video demonstration of the automated test case FL-CDC from SQL Server to Oracle in action, which you can view here:
+This video offers a visual representation of how the tests interact with Qlik Replicate's user interface and database functionality.
 
 
