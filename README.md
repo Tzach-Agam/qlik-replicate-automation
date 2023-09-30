@@ -80,6 +80,6 @@ You have the flexibility to specify additional options or arguments to target sp
 
 ## Demo
 <div>A short video demonstration of the automated test case FL-CDC from SQL Server to Oracle in action, which you can view here:</div>
-https://vimeo.com/869263736
+[Qlik Replicate Automation Demo](https://vimeo.com/869263736)
 <div>This video offers a visual representation of how the tests interact with Qlik Replicate's user interface and database functionality.</div>
 
