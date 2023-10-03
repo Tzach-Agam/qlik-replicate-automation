@@ -96,8 +96,6 @@ def log_finder(file_path, search_text, result_file=None):
                 if search_text in line:
                     count += 1
 
-            result_message = f"'{search_text}' found {count} times in the log file."
-
             if count == 0 and result_file:
                 not_found_message = f"'{search_text}' not found in the log file."
                 with open(result_file, 'a') as output:
@@ -105,11 +103,10 @@ def log_finder(file_path, search_text, result_file=None):
                 print(not_found_message)
 
             elif count > 0 and result_file:
+                result_message = f"'{search_text}' found {count} times in the log file."
                 with open(result_file, 'a') as output:
                     output.write(result_message + "\n")
-
-            print(result_message)
-            return result_message
+                print(result_message)
 
     except Exception as e:
         error_message = f"An error occurred: {str(e)}"
@@ -117,4 +114,3 @@ def log_finder(file_path, search_text, result_file=None):
             with open(result_file, 'a') as output:
                 output.write(error_message + "\n")
         print(error_message)
-        return error_message

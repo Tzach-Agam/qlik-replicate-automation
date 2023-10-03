@@ -79,7 +79,7 @@ python -m unittest {test_module}.{TestClass}
 You have the flexibility to specify additional options or arguments to target specific test modules or scenarios according to your testing needs.
 
 ## Demo
-A short video demonstration of the automated test case FL-CDC from SQL Server to Oracle in action, which you can view here:
-This video offers a visual representation of how the tests interact with Qlik Replicate's user interface and database functionality.
-
+<div>A short video demonstration of the automated test case FL-CDC from SQL Server to Oracle in action, which you can view here:</div>
+<a href="https://vimeo.com/869263736">Qlik Replicate Automation Demo</a>
+<div>This video offers a visual representation of how the tests interact with Qlik Replicate's user interface and database functionality.</div>
 
