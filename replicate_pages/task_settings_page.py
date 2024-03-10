@@ -126,13 +126,11 @@ class TaskSettings:
                         if logging_level.upper() == "TRACE":
                             logging_slider = self.driver.find_element(By.XPATH,
                                                                       f"//*[@id='{component.upper()}']/span")
-                            actions = ActionChains(self.driver)
-                            actions.click_and_hold(logging_slider).move_by_offset(80, 0).release().perform()
+                            self.actions.click_and_hold(logging_slider).move_by_offset(80, 0).release().perform()
                         elif logging_level.upper() == "VERBOSE":
                             logging_slider = self.driver.find_element(By.XPATH,
                                                                       f"//*[@id='{component.upper()}']/span")
-                            actions = ActionChains(self.driver)
-                            actions.click_and_hold(logging_slider).move_by_offset(132, 0).release().perform()
+                            self.actions.click_and_hold(logging_slider).move_by_offset(132, 0).release().perform()
                         else:
                             raise ValueError(f"Logging level '{logging_level}' not recognized")
         except Exception as e:
