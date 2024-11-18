@@ -12,28 +12,27 @@ Example:
 
 from selenium import webdriver
 
-
 """----------------------------------- Running with the browser open -----------------------------------"""
 
 
 def chrom_driver():
-    from selenium.webdriver.chrome.service import Service
-    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_project\\browsers\chromedriver.exe")
-    driver = webdriver.Chrome(service=serv_obj)
+    from webdriver_manager.chrome import ChromeDriverManager
+    from selenium.webdriver.chrome.service import Service as ChromeService
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
     return driver
 
 
 def edge_driver():
-    from selenium.webdriver.edge.service import Service
-    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_project\\browsers\msedgedriver.exe")
-    driver = webdriver.Edge(service=serv_obj)
+    from webdriver_manager.microsoft import EdgeChromiumDriverManager
+    from selenium.webdriver.edge.service import Service as EdgeService
+    driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()))
     return driver
 
 
 def firefox_driver():
-    from selenium.webdriver.firefox.service import Service
-    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_project\\browsers\geckodriver.exe")
-    driver = webdriver.Firefox(service=serv_obj)
+    from webdriver_manager.firefox import GeckoDriverManager
+    from selenium.webdriver.firefox.service import Service as FirefoxService
+    driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
     return driver
 
 
@@ -41,27 +40,27 @@ def firefox_driver():
 
 
 def headless_chrom_driver():
-    from selenium.webdriver.chrome.service import Service
-    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_project\\browsers\chromedriver.exe")
+    from webdriver_manager.chrome import ChromeDriverManager
+    from selenium.webdriver.chrome.service import Service as ChromeService
     ops = webdriver.ChromeOptions()
     ops.headless = True
-    driver = webdriver.Chrome(service=serv_obj, options=ops)
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=ops)
     return driver
 
 
 def headless_edge_driver():
-    from selenium.webdriver.edge.service import Service
-    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_project\\browsers\msedgedriver.exe")
+    from webdriver_manager.microsoft import EdgeChromiumDriverManager
+    from selenium.webdriver.edge.service import Service as EdgeService
     ops = webdriver.EdgeOptions()
     ops.headless = True
-    driver = webdriver.Chrome(service=serv_obj, options=ops)
+    driver = webdriver.Chrome(service=EdgeService(EdgeChromiumDriverManager().install()), options=ops)
     return driver
 
 
 def headless_firefox_driver():
-    from selenium.webdriver.firefox.service import Service
-    serv_obj = Service("C:\\Users\\JUJ\PycharmProjects\\qlik_replicate_project\\browsers\geckodriver.exe")
+    from webdriver_manager.firefox import GeckoDriverManager
+    from selenium.webdriver.firefox.service import Service as FirefoxService
     ops = webdriver.FirefoxOptions()
     ops.headless = True
-    driver = webdriver.Chrome(service=serv_obj, options=ops)
+    driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=ops)
     return driver
