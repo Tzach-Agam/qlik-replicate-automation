@@ -1,4 +1,6 @@
 import configparser
+import os
+
 
 class ConfigurationManager:
     """Utility for managing configuration settings using a configuration file (config.ini)."""
@@ -28,6 +30,24 @@ class ConfigurationManager:
         """Returns the base URL setting from the 'Website' section in config.ini. """
 
         return self.config.get('Website', 'base_url')
+
+    def get_username(self):
+        """Returns the username setting from the 'Website' section in config.ini. """
+
+        return self.config.get('Credentials', 'username')
+
+    def get_password(self):
+        """Returns the password setting from the 'Website' section in config.ini. """
+
+        return self.config.get('Credentials', 'password')
+
+    def get_login_url(self):
+        """Returns the login URL setting from the 'Website' section in config.ini. """
+        base_url = self.get_base_url()
+        username = self.get_username()
+        password = self.get_password()
+        login_url = base_url[0:8] + username + ':' + password + '@' + base_url[8:] + '/login/'
+        return login_url
 
     def get_default_schemas(self):
         """Gets default schema settings from the 'Default_Schemas' in config.ini.
@@ -79,5 +99,3 @@ class ConfigurationManager:
         task_logs_path = self.config.get('Task_log_Path', 's3_tasks_logs_dir')
         good_files_path = self.config.get('Good_Files_Path', 's3_good_files')
         return task_logs_path, good_files_path
-
-

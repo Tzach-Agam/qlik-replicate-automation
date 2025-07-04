@@ -48,18 +48,29 @@ class OracleDatabase:
             raise Exception("Connection is not established. Call 'connect()' method first.")
         return self.cursor.fetchall()
 
+    def does_user_not_exist(self, user_name):
+        """ Checks if the specified schema/user does not exist in the Oracle database.
+            Queries the DBA_USERS view to determine if the user exists.
+            :param user_name: The name of the schema/user to check for non-existence. """
+
+        query = f"SELECT 1 FROM dba_users WHERE username = '{user_name}'"
+        self.cursor.execute(query)
+        result = self.cursor.fetchone()
+        return result is None
+
     def create_user(self, user_name):
         """ Create a new user in the Oracle database, and immediately give it Admin privileges. Users act like schemas
             In an oracle database.
             :param user_name: The name of the user to create. """
 
-        create_user_query = f'create user "{user_name}" identified by oracle'
-        grant_user_query = f'GRANT DBA TO "{user_name}" WITH ADMIN OPTION'
-        try:
+        if self.does_user_not_exist(user_name):
+            create_user_query = f'CREATE USER "{user_name}" IDENTIFIED BY oracle'
+            grant_user_query = f'GRANT DBA TO "{user_name}" WITH ADMIN OPTION'
             self.execute_query(create_user_query)
             self.execute_query(grant_user_query)
-        except oracledb.DatabaseError as e:
-            print(f"Error while creating user '{user_name}':", e)
+            print(f"User '{user_name}' created and granted DBA privileges.")
+        else:
+            print(f"User '{user_name}' already exists. Skipping creation.")
 
     def create_table(self, user_name, table_name, columns):
         """ Create a new table in the connected database user with the specified columns.
@@ -75,11 +86,12 @@ class OracleDatabase:
         """ Drop an existing user in the connected Oracle database.
             :param user_name: The name of the schema to drop. """
 
-        drop_user_query = f'drop user "{user_name}"'
-        try:
+        if self.does_user_not_exist(user_name):
+            print(f"User '{user_name}' already exists. Skipping drop.")
+        else:
+            drop_user_query = f'drop user "{user_name}"'
             self.execute_query(drop_user_query)
-        except oracledb.DatabaseError as e:
-            print(f"Error while dropping schema '{user_name}':", e)
+            print(f"User '{user_name}' dropped")
 
     def drop_table(self, user_name, table_name):
         """ Drop an existing table in the connected Oracle database user.

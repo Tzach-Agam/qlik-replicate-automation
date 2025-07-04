@@ -48,15 +48,26 @@ class SQLServerDatabase:
             raise Exception("Connection is not established. Call 'connect()' method first.")
         return self.cursor.fetchall()
 
+    def does_schema_not_exist(self, schema):
+        """ Checks if the specified schema/user does not exist in the Oracle database.
+            Queries the DBA_USERS view to determine if the user exists.
+            :param schema: The name of the schema/user to check for non-existence. """
+
+        query = f"SELECT 1 FROM sys.schemas WHERE name = '{schema}'"
+        self.cursor.execute(query)
+        result = self.cursor.fetchone()
+        return result is None
+
     def create_schema(self, schema_name):
         """ Create a new schema in the connected database.
             :param schema_name: The name of the schema to create. """
 
-        create_schema_query = f"CREATE SCHEMA {schema_name}"
-        try:
+        if self.does_schema_not_exist(schema_name):
+            create_schema_query = f"CREATE SCHEMA {schema_name}"
             self.execute_query(create_schema_query)
-        except pyodbc.Error as e:
-            print(f"Error while creating schema '{schema_name}':", e)
+            print(f"Schema '{schema_name}' created.")
+        else:
+            print(f"Schema '{schema_name}' already exists. Skipping creation.")
 
     def create_table(self, schema_name, table_name, columns):
         """ Create a new table in the connected database schema with the specified columns.
@@ -72,11 +83,12 @@ class SQLServerDatabase:
         """ Drop an existing schema in the connected database.
             :param schema_name: The name of the schema to drop. """
 
-        drop_schema_query = f"drop schema {schema_name}"
-        try:
+        if self.does_schema_not_exist(schema_name):
+            print(f"Schema '{schema_name}' already exists. Skipping drop.")
+        else:
+            drop_schema_query = f'drop schema "{schema_name}"'
             self.execute_query(drop_schema_query)
-        except pyodbc.Error as e:
-            print(f"Error while dropping schema '{schema_name}':", e)
+            print(f"Schema '{schema_name}' dropped")
 
     def drop_table(self, schema_name, table_name):
         """ Drop an existing table in the connected database schema.
