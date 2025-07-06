@@ -16,3 +16,4 @@
 /tests/sql_source/__pycache__
 /tests/s3_target/__pycache__
 /utilities/__pycache__
+/configurations/config.ini
