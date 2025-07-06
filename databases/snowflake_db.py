@@ -66,9 +66,8 @@ class SnowflakeDatabase:
 
         query = f'DROP SCHEMA IF EXISTS "{schema_name}";'
         self.execute(query)
-        self.connection.commit()
-        result_massage = self.fetch_results()[0][0]
-        print(result_massage)
+        result_message = self.fetch_results()[0][0]
+        print(result_message)
 
 if __name__ == '__main__':
     config = ConfigurationManager("C:\\Users\juj\PycharmProjects\qlik-replicate-automation\configurations\config.ini")
