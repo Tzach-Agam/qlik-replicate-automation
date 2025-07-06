@@ -58,8 +58,8 @@ class SnowflakeDatabase:
         query = f'CREATE SCHEMA IF NOT EXISTS "{schema_name}";'
         self.execute(query)
         self.connection.commit()
-        result_massage = self.fetch_results()[0][0]
-        print(result_massage)
+        result_message = self.fetch_results()[0][0]
+        print(result_message)
 
     def drop_schema(self, schema_name):
         """ Drop a schema in the Snowflake database.
