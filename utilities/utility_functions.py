@@ -2,6 +2,7 @@ import os
 import shutil
 import filecmp
 import random
+from configurations.config_manager import ConfigurationManager
 from selenium.common.exceptions import *
 
 """
@@ -22,23 +23,45 @@ def safe_click(element):
             ElementNotInteractableException, ElementNotSelectableException) as e:
         print(f"Error clicking element: {e}")
 
-def move_file_to_target_dir(source_dir: str, target_dir: str, file_name: str):
-    """ Moves a chosen file from source dir to target dir while preserving the file in target dir if it already exits.
+def move_file_to_target_dir(source_dir: str, target_dir: str, file_name: str, config: ConfigurationManager):
+    """ Copies a chosen file from source dir to target dir.
+        If a file with the same name exists in the target, appends a random suffix to avoid overwriting.
+        The source file remains intact.
+
         :param source_dir: the path of the source directory
         :param target_dir: the path of the target directory
-        :param file_name: the name of the file that will be moved """
+        :param file_name: the name of the file that will be copied
+        :param config: the configuration manager object for the base_url value
+    """
 
+    hostname = os.environ.get('COMPUTERNAME')
     source_path = os.path.join(source_dir, file_name)
     target_path = os.path.join(target_dir, file_name)
 
+    if not os.path.exists(source_path):
+        print(f"Source file {source_path} does not exist. Skipping file transfer.")
+        return
+
+    if hostname is None:
+        print("Hostname could not be determined. Skipping file transfer.")
+        return
+
+    if hostname.lower() not in config.get_base_url().lower():
+        print(f"Test runs on a Replicate machine that is not project host machine: {hostname}. Skipping file transfer.")
+        return
+
     if os.path.exists(target_path):
         base_name, extension = os.path.splitext(file_name)
-        random_suffix = str(random.randint(1, 99999))
-        new_file_name = f"{base_name}_{random_suffix}{extension}"
-        target_path = os.path.join(target_dir, new_file_name)
+        while True:
+            random_suffix = str(random.randint(1, 99999))
+            new_file_name = f"{base_name}_{random_suffix}{extension}"
+            target_path = os.path.join(target_dir, new_file_name)
+            if not os.path.exists(target_path):
+                break
 
     shutil.copy(source_path, target_path)
-    print(f"Moved '{file_name}' to '{target_dir}'")
+    print(f"Copied '{file_name}' to '{target_path}'")
+
 
 def compare_files(good_file, data_file):
     """ Compares files and deletes the data file if it's identical to the good file.
