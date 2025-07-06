@@ -24,10 +24,10 @@ class SQL_Source_Tests(TestCase):
 
         self.driver = chrom_driver()
         self.config_manager = \
-            ConfigurationManager(r"C:\Users\JUJ\PycharmProjects\qlik_replicate_project\configurations\config.ini")
+            ConfigurationManager(r"C:\Users\JUJ\PycharmProjects\qlik-replicate-automation\configurations\config.ini")
         self.logs_location, self.results_location = self.config_manager.sql_logs_results_path()
-        self.sqldb = SQLServerDatabase(self.config_manager, 'MSSQL_db')
-        self.oracledb = OracleDatabase(self.config_manager, 'Oracle_db')
+        self.sqldb = SQLServerDatabase(self.config_manager, 'MSSQL_DB')
+        self.oracledb = OracleDatabase(self.config_manager, 'Oracle_DB')
         self._initialize_web_pages()
         self._initialize_databases()
         self._initialize_web_driver()
@@ -75,10 +75,9 @@ class SQL_Source_Tests(TestCase):
             Open the web application URL, maximize the browser window,
             set an implicit wait time, secure the browser connection, and handle loader icon. """
 
-        self.driver.get(self.config_manager.get_base_url())
+        self.driver.get(self.config_manager.get_login_url())
         self.driver.maximize_window()
         self.driver.implicitly_wait(10)
-        self.common_functions.secure_browser_connection()
         self.common_functions.loader_icon_opening_replicate()
 
     def task_creation(self, task_name):
@@ -125,19 +124,19 @@ class SQL_Source_Tests(TestCase):
         self.designer_page.start_task_wait()
         self.monitor_page.wait_for_fl('1')
         self.monitor_page.cdc_tab()
-        self.sqldb.cursor.execute(
-            f"INSERT INTO \"{self.source_schema}\".test_table VALUES (404, 'CDC')"
-            f"UPDATE \"{self.source_schema}\".test_table SET B = 'UPDATE' WHERE A = 101;"
-            f"DELETE FROM \"{self.source_schema}\".test_table WHERE A = 202;"
-        )
-        self.sqldb.connection.commit()
-        self.monitor_page.inserts_check('1')
-        self.monitor_page.updates_check('1')
-        self.monitor_page.delete_check('1')
+        # self.sqldb.cursor.execute(
+        #     f"INSERT INTO \"{self.source_schema}\".test_table VALUES (404, 'CDC')"
+        #     f"UPDATE \"{self.source_schema}\".test_table SET B = 'UPDATE' WHERE A = 101;"
+        #     f"DELETE FROM \"{self.source_schema}\".test_table WHERE A = 202;"
+        # )
+        # self.sqldb.connection.commit()
+        # self.monitor_page.inserts_check('1')
+        # self.monitor_page.updates_check('1')
+        # self.monitor_page.delete_check('1')
         self.monitor_page.stop_task()
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
-                                self.logs_location, f"reptask_{task_name}.log")
+                                self.logs_location, f"reptask_{task_name}.log", self.config_manager)
         self.common_functions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")

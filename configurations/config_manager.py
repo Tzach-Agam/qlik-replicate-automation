@@ -1,6 +1,4 @@
 import configparser
-import os
-
 
 class ConfigurationManager:
     """Utility for managing configuration settings using a configuration file (config.ini)."""
