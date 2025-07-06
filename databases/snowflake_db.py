@@ -57,7 +57,6 @@ class SnowflakeDatabase:
 
         query = f'CREATE SCHEMA IF NOT EXISTS "{schema_name}";'
         self.execute(query)
-        self.connection.commit()
         result_message = self.fetch_results()[0][0]
         print(result_message)
 
