@@ -24,8 +24,8 @@ class Oracle_Source_Tests(TestCase):
         self.config_manager = \
             ConfigurationManager(r"C:\Users\JUJ\PycharmProjects\qlik_replicate_project\configurations\config.ini")
         self.logs_location, self.results_location = self.config_manager.oracle_logs_results_path()
-        self.oracledb = OracleDatabase(self.config_manager, 'Oracle_db')
-        self.sqldb = SQLServerDatabase(self.config_manager, 'MSSQL_db')
+        self.oracledb = OracleDatabase(self.config_manager, 'Oracle_DB')
+        self.sqldb = SQLServerDatabase(self.config_manager, 'MSSQL_DB')
         self._initialize_web_pages()
         self._initialize_databases()
         self._initialize_web_driver()
