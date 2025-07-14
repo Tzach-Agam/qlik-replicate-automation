@@ -4,10 +4,8 @@ from browsers.browsers import *
 from configurations.config_manager import ConfigurationManager
 from databases.sqlserver_db import SQLServerDatabase
 from databases.oracle_db import OracleDatabase
-from configurations.endpoint_configuration import sqlserver_source_endpoint, oracle_target_endpoint
 from utilities.utility_functions import move_file_to_target_dir, compare_files, log_finder
 from replicate_pages import *
-from time import sleep
 
 
 class SQL_Source_Tests(TestCase):
@@ -22,14 +20,14 @@ class SQL_Source_Tests(TestCase):
             Initialize the WebDriver, load configurations from the specified INI file,
             initialize databases, and initialize web pages. """
 
-        self.driver = chrom_driver()
         self.config_manager = \
             ConfigurationManager(r"C:\Users\JUJ\PycharmProjects\qlik-replicate-automation\configurations\config.ini")
+        self.driver = get_webdriver(self.config_manager)
         self.logs_location, self.results_location = self.config_manager.sql_logs_results_path()
         self.sqldb = SQLServerDatabase(self.config_manager, 'MSSQL_DB')
         self.oracledb = OracleDatabase(self.config_manager, 'Oracle_DB')
         self._initialize_web_pages()
-        self._initialize_databases()
+        #self._initialize_databases()
         self._initialize_web_driver()
 
     def tearDown(self):
@@ -44,10 +42,10 @@ class SQL_Source_Tests(TestCase):
     def _initialize_web_pages(self):
         """ Initialize web page objects for interacting with the Qlik Replicate web application. """
 
-        self.common_functions = CommonFunctions(self.driver)
+        self.replicate_actions = ReplicateCommonActions(self.driver, self.config_manager)
         self.tasks_general_page = TasksPage(self.driver)
         self.new_task_page = NewTaskPage(self.driver)
-        self.manage_endpoints = ManageEndpoints(self.driver)
+        self.manage_endpoints = ManageEndpoints(self.driver, self.config_manager)
         self.task_settings = TaskSettings(self.driver)
         self.table_selection = TableSelection(self.driver)
         self.designer_page = DesignerPage(self.driver)
@@ -75,43 +73,38 @@ class SQL_Source_Tests(TestCase):
             Open the web application URL, maximize the browser window,
             set an implicit wait time, secure the browser connection, and handle loader icon. """
 
-        self.driver.get(self.config_manager.get_login_url())
-        self.driver.maximize_window()
-        self.driver.implicitly_wait(10)
-        self.common_functions.loader_icon_opening_replicate()
+        self.replicate_actions.open_replicate_software()
+        self.replicate_actions.set_windows_size()
+        self.driver.implicitly_wait(3)
+        self.replicate_actions.loader_icon_opening_replicate()
 
     def task_creation(self, task_name):
         """ Create a new task with the specified name in the Qlik Replicate application, configure source and target
             endpoints, and set table selection and task settings.
             :param task_name: The name of the task to be created. """
 
+        #sql_source_name = self.manage_endpoints.random_endpoint_name('MSSQL_DB')
+        #snowflake_source_name = self.manage_endpoints.random_endpoint_name('Snowflake_DB')
+        mongodb_source_name = self.manage_endpoints.random_endpoint_name('MongoDB_DB')
+        sql_target_name = self.manage_endpoints.random_endpoint_name('MSSQL_DB')
+        self.tasks_general_page.enter_manage_endpoints()
+        self.manage_endpoints.create_mongodb_source_endpoint(mongodb_source_name)
+        #self.manage_endpoints.create_sql_server_source_endpoint(sql_source_name)
+        self.manage_endpoints.create_sql_server_target_endpoint(sql_target_name)
+        self.manage_endpoints.close()
         self.tasks_general_page.create_new_task()
         self.new_task_page.new_task_creation(f'{task_name}', 'task')
-        self.common_functions.task_data_loader()
-        self.designer_page.choose_source_target(sqlserver_source_endpoint, oracle_target_endpoint)
+        self.replicate_actions.task_data_loader()
+        self.designer_page.choose_source_target(mongodb_source_name, sql_target_name)
         self.designer_page.enter_table_selection()
         self.table_selection.choose_source_schema(self.source_schema)
         self.designer_page.enter_task_settings()
         self.task_settings.set_task_settings_general(self.target_schema, self.control_schema)
 
-    def endpoints_creation(self):
-        """ Create source and target RDBMS endpoints for SQL Server and Oracle  for testing in the Qlik Replicate
-            application. """
-
-        self.tasks_general_page.enter_manage_endpoints()
-        self.manage_endpoints.create_rdbms_endpoint(sqlserver_source_endpoint)
-        sleep(5)
-        self.manage_endpoints.close()
-        sleep(5)
-        self.tasks_general_page.enter_manage_endpoints()
-        self.manage_endpoints.create_rdbms_endpoint(oracle_target_endpoint)
-        sleep(5)
-        self.manage_endpoints.close()
-
     def test_fl_cdc(self):
         """FL + CDC: basic test with all DMLs"""
 
-        task_name = "SQL2Oracle_FL_CDC"
+        task_name = "Snowflake_FL_CDC"
         self.task_creation(task_name)
         self.sqldb.execute_query(f'CREATE TABLE "{self.source_schema}".test_table (A int primary key, B varchar(20));')
         self.sqldb.cursor.execute(
@@ -137,7 +130,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log", self.config_manager)
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
@@ -173,7 +166,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
@@ -216,7 +209,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
@@ -260,7 +253,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
@@ -298,7 +291,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
@@ -309,7 +302,7 @@ class SQL_Source_Tests(TestCase):
         task_name = "SQL2Oracle_Verbose_Logging"
         self.task_creation(task_name)
         self.designer_page.enter_task_settings()
-        self.common_functions.loader_icon_opening_replicate()
+        self.replicate_actions.loader_icon_opening_replicate()
         self.task_settings.task_logging()
         self.task_settings.change_component_logging('SERVER', 'SOURCE_UNLOAD', 'TARGET_LOAD', 'SOURCE_CAPTURE',
                                                     'TARGET_APPLY', logging_level='VERBOSE')
@@ -336,7 +329,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         log_finder(f"{self.logs_location}/reptask_{task_name}.log", "]V:", f"{self.results_location}\\{task_name}.csv")
@@ -348,7 +341,7 @@ class SQL_Source_Tests(TestCase):
         task_name = "SQL2Oracle_FL_CDC_Transactional"
         self.task_creation(task_name)
         self.designer_page.enter_task_settings()
-        self.common_functions.loader_icon_opening_replicate()
+        self.replicate_actions.loader_icon_opening_replicate()
         self.task_settings.transactional_mode_change()
         self.task_settings.ok_button()
         self.sqldb.execute_query(f'CREATE TABLE "{self.source_schema}".test_table (A int primary key, B varchar(20));')
@@ -375,7 +368,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         log_finder(f"{self.logs_location}/reptask_{task_name}.log", "Working in transactional apply mode",
@@ -410,7 +403,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.delete_check('1')
         self.monitor_page.stop_task()
         self.monitor_page.stop_task_wait()
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.reload_task(task_name)
         self.designer_page.start_task_wait()
         self.tasks_general_page.open_task(task_name)
@@ -419,7 +412,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.wait_for_fl('1')
         self.monitor_page.stop_task()
         self.monitor_page.stop_task_wait()
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
         self.tasks_general_page.delete_task(task_name)
@@ -448,7 +441,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
@@ -471,7 +464,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
@@ -508,7 +501,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
@@ -545,7 +538,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
@@ -581,7 +574,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
@@ -630,7 +623,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
@@ -670,7 +663,7 @@ class SQL_Source_Tests(TestCase):
         self.monitor_page.stop_task_wait()
         move_file_to_target_dir(self.config_manager.source_tasklog_path(),
                                 self.logs_location, f"reptask_{task_name}.log")
-        self.common_functions.navigate_to_main_page('tasks')
+        self.replicate_actions.navigate_to_main_page('tasks')
         self.tasks_general_page.delete_task(task_name)
         self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
         compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")

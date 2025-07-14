@@ -8,8 +8,9 @@ Example:
     driver = chrom_driver()"""
 
 from selenium import webdriver
+from configurations.config_manager import ConfigurationManager
 
-def chrom_driver():
+def chrom_driver(config: ConfigurationManager):
     from webdriver_manager.chrome import ChromeDriverManager
     from selenium.webdriver.chrome.service import Service as ChromeService
     from selenium.webdriver.chrome.options import Options
@@ -18,11 +19,12 @@ def chrom_driver():
     options.add_argument("--incognito")
     options.accept_insecure_certs = True
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    #options.add_argument('--headless=new')
+    if config.get_headless():
+        options.add_argument('--headless=new')
     driver = webdriver.Chrome(service=service, options=options)
     return driver
 
-def edge_driver():
+def edge_driver(config: ConfigurationManager):
     from webdriver_manager.microsoft import EdgeChromiumDriverManager
     from selenium.webdriver.edge.service import Service as EdgeService
     from selenium.webdriver.edge.options import Options
@@ -31,11 +33,12 @@ def edge_driver():
     options.add_argument("--incognito")
     options.accept_insecure_certs = True
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    #options.add_argument('--headless=new')
+    if config.get_headless():
+        options.add_argument('--headless=new')
     driver = webdriver.Edge(service=service, options=options)
     return driver
 
-def firefox_driver():
+def firefox_driver(config: ConfigurationManager):
     from webdriver_manager.firefox import GeckoDriverManager
     from selenium.webdriver.firefox.service import Service as FirefoxService
     from selenium.webdriver.firefox.options import Options
@@ -43,6 +46,23 @@ def firefox_driver():
     options = Options()
     options.add_argument("--incognito")
     options.accept_insecure_certs = True
-    #options.add_argument('--headless=new')
+    if config.get_headless():
+        options.add_argument('--headless=new')
     driver = webdriver.Firefox(service=service, options=options)
     return driver
+
+def get_webdriver(config: ConfigurationManager):
+    """
+    Factory function that returns a WebDriver instance based on the configuration.
+    Valid values for driver in config.ini under [Browser] section are: chrome, edge, firefox
+    """
+    browser = config.get_driver().lower()
+    if browser == "chrome":
+        return chrom_driver(config)
+    elif browser == "edge":
+        return edge_driver(config)
+    elif browser == "firefox":
+        return firefox_driver(config)
+    else:
+        raise ValueError(f"Unsupported browser specified in config: '{browser}'")
+

@@ -1,7 +1,12 @@
+from selenium.common import StaleElementReferenceException, ElementNotInteractableException
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from utilities.utility_functions import safe_click
+from configurations.config_manager import ConfigurationManager
+import random
 
 
 class ManageEndpoints:
@@ -10,23 +15,32 @@ class ManageEndpoints:
         The class provide methods that will interact with the 'Manage Endpoints Connections' window functionalities,like
         creation, deletion and configuration of an endpoint """
 
-    def __init__(self, driver: WebDriver):
+    def __init__(self, driver: WebDriver, config: ConfigurationManager):
         """ Initialize the ManageEndpoints object
             :param driver: WebDriver instance for Selenium automation. """
 
         self.driver = driver
-        self.actions = ActionChains(driver)
+        self.wait = WebDriverWait(self.driver, 20)
+        self.actions = ActionChains(self.driver)
+        self.config = config
 
     def new_endpoint_connection(self):
-        """Click the 'New Endpoint Connection' button for creation of a new endpoint."""
-
-        new_endpoint = self.driver.find_element(By.XPATH, "//*[text()='New Endpoint Connection']")
+        """Click the 'New Endpoint Connection' button to create a new endpoint."""
+        new_endpoint = self.wait.until(
+            EC.element_to_be_clickable((By.XPATH, "//button/span[text()='New Endpoint Connection']"))
+        )
         safe_click(new_endpoint)
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@id='endpointName']")))
+        self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[class='textInputInRowWrap']>[type='text']")))
+
+    def random_endpoint_name(self, config_section):
+        """Creates a random name of the endpoint by appending a 6-digit random number.
+        :param config_section: The base name of the endpoint. """
+        random_number = random.randint(100000, 999999)  # 6-digit number
+        return f"{self.config.get_section(config_section)['endpoint']}{random_number}"
 
     def enter_endpoint_name(self, name: str):
-        """ Enter the endpoint name.
-            :param name: The name of the endpoint. """
-
+        """Enter the name of the endpoint."""
         endpoint_name = self.driver.find_element(By.XPATH, "//*[@id='endpointName']")
         endpoint_name.clear()
         endpoint_name.send_keys(name)
@@ -34,108 +48,277 @@ class ManageEndpoints:
     def enter_endpoint_description(self, description: str):
         """ Enter description for the endpoint.
             :param description: The description of the endpoint. """
-
         endpoint_desc = self.driver.find_element(By.CSS_SELECTOR, "[name='endpointDescription']")
         endpoint_desc.send_keys(description)
 
     def choose_target_role(self):
         """ Choose 'target' as the role of the endpoint. The endpoint will receive the data in the replication task. """
-
-        target_role = self.driver.find_element(By.CSS_SELECTOR, "[id='targetRB']>[class='radioBtnSpan ']")
-        safe_click(target_role)
+        try:
+            target_role = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='targetRB']/span[1]")))
+            safe_click(target_role)
+        except (StaleElementReferenceException, ElementNotInteractableException):
+            target_role = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='targetRB']/span[1]")))
+            safe_click(target_role)
 
     def choose_endpoint_type(self, endpoint_type: str):
         """ Choose the type of the endpoint, meaning the database that the endpoint represents, for example Oracle, MySQL,
             PostgresSQL etc. """
+        try:
+            input_element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[class='textInputInRowWrap']>[type='text']")))
+            input_element.send_keys(endpoint_type)
+        except (StaleElementReferenceException, ElementNotInteractableException):
+            input_element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[class='textInputInRowWrap']>[type='text']")))
+            input_element.send_keys(endpoint_type)
 
-        input_element = self.driver.find_element(By.CSS_SELECTOR, "[class='textInputInRowWrap']>[type='text']")
-        input_element.send_keys(endpoint_type)
-        endpoint_mapping = {
-            "sql server": "Microsoft SQL Server",
-            "oracle": "Oracle",
-            "mySQL": "MySQL",
-            "postgresql": "PostgreSQL"
-        }
-        if endpoint_type.lower() in endpoint_mapping:
-            endpoint_text = endpoint_mapping[endpoint_type.lower()]
-            endpoint_to_select = self.driver.find_element(By.XPATH, f"//*[text()='{endpoint_text}']")
-            safe_click(endpoint_to_select)
-        else:
-            raise ValueError("Invalid endpoint type")
+
+
+    """------------------ SQL Server endpoint: Specific Methods ------------------"""
+
+    def choose_sql_server_type(self):
+        self.choose_endpoint_type("Microsoft SQL Server")
+        sql_server_type = self.driver.find_element(By.XPATH, "//li//*[text()='Microsoft SQL Server']")
+        safe_click(sql_server_type)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
+
+    def enter_sql_server(self, name: str):
+        server = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
+        server.send_keys(name)
 
     def sql_auth_option(self):
-        """ Choose 'SQL Server authentication' for when the endpoint created is SQL Server"""
-
         sql_auth_checkbox = self.driver.find_element(By.XPATH, "//*[@id='sqlAuth']/span[1]")
         safe_click(sql_auth_checkbox)
 
-    def enter_server(self, server):
-        """ Enter the server information for the database.
-            :param server: The server information to be entered. """
-
-        server_element = self.driver.find_element(By.CSS_SELECTOR, "[input-id='server']")
-        server_element.send_keys(server)
-
-    def enter_username(self, username):
-        """ Enter the username for database authentication.
-            :param username: The username to be entered. """
-
+    def enter_sql_username(self, username):
         username_element = self.driver.find_element(By.CSS_SELECTOR, "[name='username']")
         username_element.send_keys(username)
 
-    def enter_password(self, password):
-        """ Enter the password for database authentication.
-            :param password: The password to be entered. """
-
+    def enter_sql_password(self, password):
         password_element = self.driver.find_element(By.CSS_SELECTOR, "[name='password']")
         password_element.send_keys(password)
 
-    def enter_database(self, database):
-        """ Enter the database name.
-            :param database: The database name or identifier to be entered. """
-
+    def enter_sql_database(self, database):
         database_element = self.driver.find_element(By.CSS_SELECTOR, "[name='database']")
         database_element.send_keys(database)
 
+    def create_sql_server_source_endpoint(self, endpoint_name):
+        """Creates a SQL Server source endpoint using the parameters in the config.ini file
+        :param endpoint_name: The name of the endpoint. """
+        self.new_endpoint_connection()
+        self.choose_sql_server_type()
+        self.sql_auth_option()
+        self.enter_sql_server(self.config.get_section('MSSQL_DB')['server'])
+        self.enter_sql_username(self.config.get_section('MSSQL_DB')['username'])
+        self.enter_sql_password(self.config.get_section('MSSQL_DB')['password'])
+        self.enter_sql_database(self.config.get_section('MSSQL_DB')['database'])
+        self.enter_endpoint_description('SQL Server Source Endpoint')
+        self.enter_endpoint_name(endpoint_name)
+        self.test_connection_valid()
+        self.save()
+        print("Created a SQL Server source endpoint:", endpoint_name)
+
+    def create_sql_server_target_endpoint(self, endpoint_name):
+        """Creates a SQL Server source endpoint using the parameters in the config.ini file
+        :param endpoint_name: The name of the endpoint"""
+        self.new_endpoint_connection()
+        self.choose_target_role()
+        self.choose_sql_server_type()
+        self.sql_auth_option()
+        self.enter_sql_server(self.config.get_section('MSSQL_DB')['server'])
+        self.enter_sql_username(self.config.get_section('MSSQL_DB')['username'])
+        self.enter_sql_password(self.config.get_section('MSSQL_DB')['password'])
+        self.enter_sql_database(self.config.get_section('MSSQL_DB')['database'])
+        self.enter_endpoint_description('SQL Server Target Endpoint')
+        self.enter_endpoint_name(endpoint_name)
+        self.test_connection_valid()
+        self.save()
+        print("Created a SQL Server target endpoint:", endpoint_name)
+
+
+
+    """------------------ Oracle endpoint: Specific Methods ------------------"""
+
+    def choose_oracle_type(self):
+        self.choose_endpoint_type("Oracle")
+        oracle_type = self.driver.find_element(By.XPATH, "//li//*[text()='Oracle']")
+        safe_click(oracle_type)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='username']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='password']")))
+
+    def enter_oracle_server(self, name: str):
+        server = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
+        server.send_keys(name)
+
+    def enter_oracle_username(self, username):
+        username_element = self.driver.find_element(By.XPATH, "//*[@id='username']")
+        username_element.send_keys(username)
+
+    def enter_oracle_password(self, password):
+        password_element = self.driver.find_element(By.XPATH, "//*[@id='password']")
+        password_element.send_keys(password)
+        self.driver.find_element(By.TAG_NAME, "body").click()
+
+    def create_oracle_source_endpoint(self, endpoint_name):
+        """Creates an Oracle source endpoint using the parameters in the config.ini file
+        :param endpoint_name: The name of the endpoint. """
+        self.new_endpoint_connection()
+        self.choose_oracle_type()
+        self.enter_oracle_server(self.config.get_section('Oracle_DB')['dsn'])
+        self.enter_oracle_username(self.config.get_section('Oracle_DB')['username'])
+        self.enter_oracle_password(self.config.get_section('Oracle_DB')['password'])
+        self.enter_endpoint_description('Oracle Source Endpoint')
+        self.enter_endpoint_name(endpoint_name)
+        self.test_connection_valid()
+        self.save()
+        print("Created an Oracle source endpoint:", endpoint_name)
+
+    def create_oracle_target_endpoint(self, endpoint_name):
+        """Creates an Oracle target endpoint using the parameters in the config.ini file
+        :param endpoint_name: The name of the endpoint. """
+        self.new_endpoint_connection()
+        self.choose_target_role()
+        self.choose_oracle_type()
+        self.enter_oracle_server(self.config.get_section('Oracle_DB')['dsn'])
+        self.enter_oracle_username(self.config.get_section('Oracle_DB')['username'])
+        self.enter_oracle_password(self.config.get_section('Oracle_DB')['password'])
+        self.enter_endpoint_description('Oracle Target Endpoint')
+        self.enter_endpoint_name(endpoint_name)
+        self.test_connection_valid()
+        self.save()
+        print("Created an Oracle target endpoint:", endpoint_name)
+
+
+
+    """------------------ Snowflake endpoint: Specific Methods ------------------"""
+
+    def choose_snowflake_type(self):
+        self.choose_endpoint_type("Snowflake")
+        sql_server_type = self.driver.find_element(By.XPATH, "//li//*[text()='Snowflake']")
+        safe_click(sql_server_type)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
+
+    def enter_snowflake_server(self, name: str):
+        server = self.driver.find_element(By.XPATH, "//*[@id='server']")
+        server.send_keys(name)
+
+    def choose_snowflake_user_pass_auth(self):
+        auth_options = self.driver.find_element(By.XPATH, "//*[text()='Key Pair']/following-sibling::span")
+        safe_click(auth_options)
+        user_pass_option = self.driver.find_element(By.XPATH, "//*[text()='Username and password']")
+        safe_click(user_pass_option)
+
+    def enter_snowflake_username(self, username):
+        username_element = self.driver.find_element(By.XPATH, "//*[@id='username']")
+        username_element.send_keys(username)
+
+    def enter_snowflake_password(self, password):
+        password_element = self.driver.find_element(By.XPATH, "//*[@id='password']")
+        password_element.send_keys(password)
+
+    def enter_snowflake_database(self, database):
+        database_element = self.driver.find_element(By.CSS_SELECTOR, "[name='database']")
+        database_element.send_keys(database)
+
+    def enter_snowflake_warehouse(self, warehouse):
+        warehouse_element = self.driver.find_element(By.CSS_SELECTOR, "[name='warehouse']")
+        warehouse_element.clear()
+        warehouse_element.send_keys(warehouse)
+
+    def create_snowflake_source_endpoint(self, endpoint_name):
+        """Creates a Snowflake source endpoint using the parameters in the config.ini file
+        :param endpoint_name: The name of the endpoint. """
+        self.new_endpoint_connection()
+        self.choose_snowflake_type()
+        self.choose_snowflake_user_pass_auth()
+        self.enter_snowflake_server(self.config.get_section('Snowflake_DB')['server'])
+        self.enter_snowflake_username(self.config.get_section('Snowflake_DB')['user'])
+        self.enter_snowflake_password(self.config.get_section('Snowflake_DB')['password'])
+        self.enter_snowflake_database(self.config.get_section('Snowflake_DB')['database'])
+        self.enter_snowflake_warehouse(self.config.get_section('Snowflake_DB')['warehouse'])
+        self.enter_endpoint_description('Snowflake Source Endpoint')
+        self.enter_endpoint_name(endpoint_name)
+        self.test_connection_valid()
+        self.save()
+        print("Created a Snowflake source endpoint:", endpoint_name)
+
+
+
+    """------------------ MongoDB endpoint: Specific Methods ------------------"""
+
+    def choose_mongodb_type(self):
+        self.choose_endpoint_type("MongoDB")
+        mongodb_type = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//li//*[text()='MongoDB']")))
+        safe_click(mongodb_type)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='host']")))
+
+    def enter_mongodb_host(self, name: str):
+        server = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='host']")))
+        server.send_keys(name)
+
+    def enter_mongodb_username(self, username):
+        username_element = self.driver.find_element(By.XPATH, "//*[@id='username']")
+        username_element.send_keys(username)
+
+    def enter_mongodb_password(self, password):
+        password_element = self.driver.find_element(By.XPATH, "//*[@id='password']")
+        password_element.send_keys(password)
+
+    def enter_mongodb_database(self, database):
+        database_element = self.driver.find_element(By.XPATH, "//*[@id='dbName']")
+        database_element.clear()
+        database_element.send_keys(database)
+
+    def create_mongodb_source_endpoint(self, endpoint_name):
+        """Creates a MongoDB source endpoint using the parameters in the config.ini file
+        :param endpoint_name: The name of the endpoint. """
+        self.new_endpoint_connection()
+        self.choose_mongodb_type()
+        self.enter_mongodb_host(f"{self.config.get_section('MongoDB_DB')['host']}:{self.config.get_section('MongoDB_DB')['port']}")
+        self.enter_mongodb_username(self.config.get_section('MongoDB_DB')['user'])
+        self.enter_mongodb_password(self.config.get_section('MongoDB_DB')['password'])
+        self.enter_mongodb_database(self.config.get_section('MongoDB_DB')['database'])
+        self.enter_endpoint_description('MongoDB Source Endpoint')
+        self.enter_endpoint_name(endpoint_name)
+        self.test_connection_valid()
+        self.save()
+        print("Created a MongoDB source endpoint:", endpoint_name)
+
+
     def test_connection(self):
         """Click the 'Test Connection' button to test the database connection."""
-
-        test_connection_element = self.driver.find_element(By.XPATH, "//*[text()='Test Connection']")
+        test_connection_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Test Connection']")))
         safe_click(test_connection_element)
+
+    def test_connection_valid(self):
+        """Click the 'Test Connection' button to test the database connection and verifies the connection is valid."""
+        self.test_connection()
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//span[contains(@custom-tooltip-text,'Test connection succeeded')]")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Save']")))
 
     def save(self):
         """Click the 'Save' button to save the endpoint configuration."""
-
-        save_button = self.driver.find_element(By.XPATH, "//*[text()='Save']")
+        save_button = self.driver.find_element(By.XPATH, "//button[text()='Save']")
         safe_click(save_button)
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Database was successfully saved']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Delete']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Duplicate']")))
+        self.driver.find_element(By.XPATH, "//*[@id='endpointViewContainer']/div[1]/span[2]").click()
 
     def close(self):
         """Click the 'Close' button to close 'Manage Endpoints Connection' page."""
-
         close_button = self.driver.find_element(By.XPATH, "//*[text()='Close']")
         safe_click(close_button)
 
     def close_and_save(self):
         """ Close 'Manage Endpoints Connection' page and save changes if prompted.
             This function closes the dialog and, if changes are made, clicks the 'Save' button. """
-
         self.close()
         save_button = self.driver.find_element((By.XPATH, "//div[@class='modal-footer ng-scope']/*[text()='Save']"))
         safe_click(save_button)
 
-    def close_no_save(self):
-        """ Close 'Manage Endpoints Connection' page without saving changes.
-            This function closes the dialog without saving any changes. """
-
-        self.close()
-        no_save_button = self.driver.find_element(
-            (By.XPATH, "//div[@class='modal-footer ng-scope']/*[text()='Don't save']"))
-        safe_click(no_save_button)
-
     def delete_endpoint(self, endpoint_data: dict):
         """ Delete an endpoint entirely using the endpoint data from a dictionary in the endpoint configuration module.
             :param endpoint_data: Information about the endpoint to be deleted. """
-
         endpoint = self.driver.find_element(By.XPATH, f"//*[text()='{endpoint_data['name']}']")
         safe_click(endpoint)
         delete_button = self.driver.find_element(By.XPATH, "//*[text()='Delete']")
@@ -146,36 +329,9 @@ class ManageEndpoints:
     def delete_endpoint_2(self, endpoint_name):
         """ Delete an endpoint entirely using a different method.
             :param endpoint_name: The name of the endpoint to be deleted. """
-
         endpoint = self.driver.find_element(By.XPATH, f"//*[text()='{endpoint_name}']")
         self.actions.context_click(endpoint).perform()
         self.driver.find_element(By.XPATH, "//*[@id='5']").click()
         ok_button = self.driver.find_element(By.XPATH, "//button[text()='OK']")
         safe_click(ok_button)
 
-    def create_rdbms_endpoint(self, endpoint_data: dict):
-        """ Create an RDBMS endpoint connection with the provided endpoint data. All the endpoint information, including
-            its name, type, role and connection credentials, will be taken from a specific dictionary with the endpoint's
-            information in the endpoints configuration module.
-            :param endpoint_data: Information about the RDBMS endpoint to be created. """
-
-        self.new_endpoint_connection()
-        self.enter_endpoint_name(endpoint_data["name"])
-        self.enter_endpoint_description(endpoint_data["description"])
-
-        if endpoint_data["role"].lower() == "target":
-            self.choose_target_role()
-
-        self.choose_endpoint_type(endpoint_data["type"])
-
-        if endpoint_data["type"] == "SQL Server":
-            self.sql_auth_option()
-
-        self.enter_server(endpoint_data["server"])
-        self.enter_username(endpoint_data["username"])
-        self.enter_password(endpoint_data["password"])
-
-        if endpoint_data["type"] == "SQL Server" or endpoint_data["type"] == "PostgresSQL":
-            self.enter_database(endpoint_data["database"])
-
-        self.save()

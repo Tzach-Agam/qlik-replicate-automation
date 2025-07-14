@@ -1,4 +1,4 @@
-from replicate_pages.common_functions import CommonFunctions
+from replicate_pages.replicate_common_actions import ReplicateCommonActions
 from replicate_pages.tasks_view_page import TasksPage
 from replicate_pages.new_task_page import NewTaskPage
 from replicate_pages.manage_endpoints_page import ManageEndpoints
