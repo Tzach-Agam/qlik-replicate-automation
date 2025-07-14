@@ -16,18 +16,16 @@ class DesignerPage:
             :param driver: WebDriver instance for Selenium automation. """
 
         self.driver = driver
-        self.actions = ActionChains(driver)
+        self.actions = ActionChains(self.driver)
 
-    def choose_source_target(self, source_endpoint_data: dict, target_endpoint_data: dict):
+    def choose_source_target(self, source_endpoint: str, target_endpoint: str):
         """ Choose source and target endpoints for a task by their names on the 'Endpoint Connections' list in Designer Mode.
-            The names will be taken from a dictionary that contain the endpoint's definition.
-            :param source_endpoint_data: Information about the source endpoint.
-            :param target_endpoint_data: Information about the target endpoint."""
+            The names are create dynamically during the task start
+            :param source_endpoint: Information about the source endpoint.
+            :param target_endpoint: Information about the target endpoint."""
 
-        source_name = source_endpoint_data["name"]
-        target_name = target_endpoint_data["name"]
-        self.driver.find_element(By.XPATH, f"//*[text()='{source_name}']/following-sibling::span[1]").click()
-        self.driver.find_element(By.XPATH, f"//*[text()='{target_name}']/following-sibling::span[1]").click()
+        self.driver.find_element(By.XPATH, f"//*[text()='{source_endpoint}']/following-sibling::span[1]").click()
+        self.driver.find_element(By.XPATH, f"//*[text()='{target_endpoint}']/following-sibling::span[1]").click()
 
     def enter_task_settings(self):
         """Enter to 'Task Settings' dialog box, where the task-specific replication settings will be configured."""

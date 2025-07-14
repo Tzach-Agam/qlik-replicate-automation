@@ -17,7 +17,7 @@ class TasksPage:
             :param driver: WebDriver instance for Selenium automation. """
 
         self.driver = driver
-        self.actions = ActionChains(driver)
+        self.actions = ActionChains(self.driver)
 
     def create_new_task(self):
         """Click on the New Task button in the General task page and enters to the 'New Task' page"""
