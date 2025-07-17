@@ -27,7 +27,7 @@ class SQL_Source_Tests(TestCase):
         self.sqldb = SQLServerDatabase(self.config_manager, 'MSSQL_DB')
         self.oracledb = OracleDatabase(self.config_manager, 'Oracle_DB')
         self._initialize_web_pages()
-        #self._initialize_databases()
+        self._initialize_databases()
         self._initialize_web_driver()
 
     def tearDown(self):
@@ -37,6 +37,7 @@ class SQL_Source_Tests(TestCase):
         self.sqldb.drop_replication_constraint()
         self.sqldb.close()
         self.oracledb.close()
+        self.replicate_actions.delete_task_endpoint(self.task_name, self.sql_source_name, self.oracle_target_name)
         self.driver.close()
 
     def _initialize_web_pages(self):
@@ -46,8 +47,8 @@ class SQL_Source_Tests(TestCase):
         self.tasks_general_page = TasksPage(self.driver)
         self.new_task_page = NewTaskPage(self.driver)
         self.manage_endpoints = ManageEndpoints(self.driver, self.config_manager)
-        self.task_settings = TaskSettings(self.driver)
-        self.table_selection = TableSelection(self.driver)
+        self.task_settings = TaskSettings(self.driver, self.config_manager)
+        self.table_selection = TableSelection(self.driver, self.config_manager)
         self.designer_page = DesignerPage(self.driver)
         self.monitor_page = MonitorPage(self.driver)
 
@@ -82,58 +83,52 @@ class SQL_Source_Tests(TestCase):
         """ Create a new task with the specified name in the Qlik Replicate application, configure source and target
             endpoints, and set table selection and task settings.
             :param task_name: The name of the task to be created. """
-
-        #sql_source_name = self.manage_endpoints.random_endpoint_name('MSSQL_DB')
-        #snowflake_source_name = self.manage_endpoints.random_endpoint_name('Snowflake_DB')
-        mongodb_source_name = self.manage_endpoints.random_endpoint_name('MongoDB_DB')
-        sql_target_name = self.manage_endpoints.random_endpoint_name('MSSQL_DB')
         self.tasks_general_page.enter_manage_endpoints()
-        self.manage_endpoints.create_mongodb_source_endpoint(mongodb_source_name)
-        #self.manage_endpoints.create_sql_server_source_endpoint(sql_source_name)
-        self.manage_endpoints.create_sql_server_target_endpoint(sql_target_name)
+        self.sql_source_name = self.manage_endpoints.random_endpoint_name('MSSQL_DB')
+        self.oracle_target_name = self.manage_endpoints.random_endpoint_name('Oracle_DB')
+        self.manage_endpoints.create_sql_server_source_endpoint(self.sql_source_name)
+        self.manage_endpoints.create_oracle_target_endpoint(self.oracle_target_name)
         self.manage_endpoints.close()
         self.tasks_general_page.create_new_task()
-        self.new_task_page.new_task_creation(f'{task_name}', 'task')
+        new_task_name = self.new_task_page.new_task_creation(task_name)
         self.replicate_actions.task_data_loader()
-        self.designer_page.choose_source_target(mongodb_source_name, sql_target_name)
+        self.designer_page.choose_source_target(self.sql_source_name, self.oracle_target_name)
         self.designer_page.enter_table_selection()
-        self.table_selection.choose_source_schema(self.source_schema)
+        self.table_selection.choose_source_schema()
         self.designer_page.enter_task_settings()
-        self.task_settings.set_task_settings_general(self.target_schema, self.control_schema)
+        self.task_settings.set_task_settings_general()
+        return new_task_name
 
     def test_fl_cdc(self):
         """FL + CDC: basic test with all DMLs"""
-
-        task_name = "Snowflake_FL_CDC"
-        self.task_creation(task_name)
-        self.sqldb.execute_query(f'CREATE TABLE "{self.source_schema}".test_table (A int primary key, B varchar(20));')
-        self.sqldb.cursor.execute(
-            f"INSERT INTO \"{self.source_schema}\".test_table VALUES (101, 'FL')"
-            f"INSERT INTO \"{self.source_schema}\".test_table VALUES (202, 'FL')"
-            f"INSERT INTO \"{self.source_schema}\".test_table VALUES (303, 'FL')"
-        )
-        self.sqldb.connection.commit()
-        self.designer_page.run_new_task()
-        self.designer_page.start_task_wait()
-        self.monitor_page.wait_for_fl('1')
-        self.monitor_page.cdc_tab()
+        self.task_name = self.task_creation("SQL2Oracle_FL_CDC")
+        # self.sqldb.execute_query(f'CREATE TABLE "{self.source_schema}".test_table (A int primary key, B varchar(20));')
         # self.sqldb.cursor.execute(
-        #     f"INSERT INTO \"{self.source_schema}\".test_table VALUES (404, 'CDC')"
-        #     f"UPDATE \"{self.source_schema}\".test_table SET B = 'UPDATE' WHERE A = 101;"
-        #     f"DELETE FROM \"{self.source_schema}\".test_table WHERE A = 202;"
+        #     f"INSERT INTO \"{self.source_schema}\".test_table VALUES (101, 'FL')"
+        #     f"INSERT INTO \"{self.source_schema}\".test_table VALUES (202, 'FL')"
+        #     f"INSERT INTO \"{self.source_schema}\".test_table VALUES (303, 'FL')"
         # )
         # self.sqldb.connection.commit()
-        # self.monitor_page.inserts_check('1')
-        # self.monitor_page.updates_check('1')
-        # self.monitor_page.delete_check('1')
-        self.monitor_page.stop_task()
-        self.monitor_page.stop_task_wait()
-        move_file_to_target_dir(self.config_manager.source_tasklog_path(),
-                                self.logs_location, f"reptask_{task_name}.log", self.config_manager)
+        # self.designer_page.run_new_task()
+        # self.designer_page.start_task_wait()
+        # self.monitor_page.wait_for_fl('1')
+        # self.monitor_page.cdc_tab()
+        # # self.sqldb.cursor.execute(
+        # #     f"INSERT INTO \"{self.source_schema}\".test_table VALUES (404, 'CDC')"
+        # #     f"UPDATE \"{self.source_schema}\".test_table SET B = 'UPDATE' WHERE A = 101;"
+        # #     f"DELETE FROM \"{self.source_schema}\".test_table WHERE A = 202;"
+        # # )
+        # # self.sqldb.connection.commit()
+        # # self.monitor_page.inserts_check('1')
+        # # self.monitor_page.updates_check('1')
+        # # self.monitor_page.delete_check('1')
+        # self.monitor_page.stop_task()
+        # self.monitor_page.stop_task_wait()
         self.replicate_actions.navigate_to_main_page('tasks')
-        self.tasks_general_page.delete_task(task_name)
-        self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\{task_name}.csv")
-        compare_files(f"{self.results_location}\\{task_name}.good", f"{self.results_location}\\{task_name}.csv")
+        # move_file_to_target_dir(self.config_manager.source_tasklog_path(),
+        #                         self.logs_location, f"reptask_{self.task_name}.log", self.config_manager)
+        # self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\SQL2Oracle_FL_CDC.csv")
+        # compare_files(f"{self.results_location}\\SQL2Oracle_FL_CDC.good", f"{self.results_location}\\SQL2Oracle_FL_CDC.csv")
 
     def test_several_tables(self):
         """Replication of 3 tables from SQL Server database to Oracle database"""

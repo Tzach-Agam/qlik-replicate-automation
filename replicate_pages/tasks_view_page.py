@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from utilities.utility_functions import safe_click
 
-
 class TasksPage:
     """ The TasksPage class Represents the 'Tasks view', the default view that opens when you open Qlik Replicate
         software for the first time. The 'Tasks view' lists all replication tasks you have defined and allows you to
@@ -15,31 +14,26 @@ class TasksPage:
     def __init__(self, driver: WebDriver):
         """ Initialize the TasksPage object
             :param driver: WebDriver instance for Selenium automation. """
-
         self.driver = driver
         self.actions = ActionChains(self.driver)
 
     def create_new_task(self):
         """Click on the New Task button in the General task page and enters to the 'New Task' page"""
-
         create_new_task = self.driver.find_element(By.XPATH, "//span[text()='New Task...']")
         safe_click(create_new_task)
 
     def enter_manage_endpoints(self):
         """Click on the Manage endpoints button and enters to the 'Manage endpoints' page"""
-
         manage_endpoints = self.driver.find_element(By.XPATH, "//span[text()='Manage Endpoint Connections...']")
         safe_click(manage_endpoints)
 
     def import_task(self):
         """Click on the import task button, which provide an ability to import a task to Replicate with a Jason file"""
-
         import_task = self.driver.find_element(By.XPATH, "//span[text()='Import Task']")
         safe_click(import_task)
 
     def export_task(self):
         """Click on the export task button which creates a Jason file with the task definition"""
-
         export_task = self.driver.find_element(By.XPATH, "//span[text()='Export Task']")
         safe_click(export_task)
 
@@ -47,21 +41,18 @@ class TasksPage:
         """ Find and return a task element on the page by its name.
             :param task_name: The name of the task to locate.
             :return: The WebElement representing the task element, or None if not found. """
-
         task = self.driver.find_element(By.XPATH, f"//*[@class='taskImageName ellipsisStyle ng-binding' and text()='{task_name}']")
         return task
 
     def select_task(self, task_name: str):
         """ Select a task on the page by its name.
             :param task_name: The name of the task to select. """
-
         task = self.find_task_element(task_name)
         safe_click(task)
 
     def open_task(self, task_name: str):
         """ Open a task by name on the page and enter to the tasks configurations and design.
             :param task_name: The name of the task to open. """
-
         self.select_task(task_name)
         open_task_option = self.driver.find_element(By.XPATH, "//span[text()='Open']")
         safe_click(open_task_option)
@@ -69,29 +60,26 @@ class TasksPage:
     def delete_task(self, task_name: str):
         """ Delete a task entirely from Qlik Replicate by name on the page.
             :param task_name: The name of the task to delete. """
-
         self.select_task(task_name)
         delete_task_button = self.driver.find_element(By.XPATH, "//span[text()='Delete...']")
         safe_click(delete_task_button)
         ok_button = self.driver.find_element(By.XPATH, "//button[text()='OK']")
         safe_click(ok_button)
+        print(f"Task {task_name} successfully deleted")
 
     def double_click_task(self, task_name: str):
         """ Double-click on a task by its name and entering to the task page.
             :param task_name: The name of the task to double-click. """
-
         task = self.find_task_element(task_name)
         self.actions.double_click(task)
 
     def enter_view_logs(self):
         """Click on the View logs button that allow viewing the task log"""
-
         view_logs = self.driver.find_element(By.XPATH, "//span[text()='View Logs...']")
         safe_click(view_logs)
 
     def download_logs(self):
         """Enter to the task log and download them to the machine"""
-
         self.enter_view_logs()
         download_logs_icon = self.driver.find_element(By.CSS_SELECTOR,
                                                       "[class='bootstrapGlyphicon glyphicon-download-alt']")
@@ -100,7 +88,6 @@ class TasksPage:
     def run_task_dropdown(self, task_name: str):
         """ Open the task's Run options dropdown menu by clicking on it, as part of the run task management.
             :param task_name: The name of the task for which to open the dropdown menu. """
-
         self.select_task(task_name)
         run_dropdown = self.driver.find_element(By.CSS_SELECTOR, "button[data-toggle='dropdown']>[class='caret']")
         safe_click(run_dropdown)
@@ -108,7 +95,6 @@ class TasksPage:
     def run_new_task(self, task_name: str):
         """ Start a new task by clicking on the 'Start Processing' option in the run options dropdown.
             :param task_name: The name of the task to run"""
-
         self.run_task_dropdown(task_name)
         start_processing = self.driver.find_element(By.XPATH,
                                                     "//li[@title='Start Processing']/a[text()='Start Processing']")
@@ -117,7 +103,6 @@ class TasksPage:
     def reload_task(self, task_name: str):
         """ Start a task again by reloading it with the 'Reload task' option in the run options dropdown.
             :param task_name: The name of the task to reload."""
-
         self.run_task_dropdown(task_name)
         reload_task = self.driver.find_element(By.XPATH,
                                                     "//*[@title='Reload Target...']/a[text()='Reload Target...']")
@@ -129,14 +114,8 @@ class TasksPage:
     def stop_task(self, task_name: str):
         """ Stop a task entirely by clicking on the 'Stop task' options in the run options dropdown.
             :param task_name: The name of the task o stop"""
-
         self.select_task(task_name)
         stop_task_element = self.driver.find_element(By.XPATH, "//span[text()='Stop']")
         safe_click(stop_task_element)
         yes_button = self.driver.find_element(By.XPATH, "//button[text()='Yes']")
         safe_click(yes_button)
-
-
-
-
-

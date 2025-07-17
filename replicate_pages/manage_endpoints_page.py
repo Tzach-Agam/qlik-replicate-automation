@@ -18,7 +18,6 @@ class ManageEndpoints:
     def __init__(self, driver: WebDriver, config: ConfigurationManager):
         """ Initialize the ManageEndpoints object
             :param driver: WebDriver instance for Selenium automation. """
-
         self.driver = driver
         self.wait = WebDriverWait(self.driver, 20)
         self.actions = ActionChains(self.driver)
@@ -309,29 +308,15 @@ class ManageEndpoints:
         close_button = self.driver.find_element(By.XPATH, "//*[text()='Close']")
         safe_click(close_button)
 
-    def close_and_save(self):
-        """ Close 'Manage Endpoints Connection' page and save changes if prompted.
-            This function closes the dialog and, if changes are made, clicks the 'Save' button. """
-        self.close()
-        save_button = self.driver.find_element((By.XPATH, "//div[@class='modal-footer ng-scope']/*[text()='Save']"))
-        safe_click(save_button)
-
-    def delete_endpoint(self, endpoint_data: dict):
-        """ Delete an endpoint entirely using the endpoint data from a dictionary in the endpoint configuration module.
-            :param endpoint_data: Information about the endpoint to be deleted. """
-        endpoint = self.driver.find_element(By.XPATH, f"//*[text()='{endpoint_data['name']}']")
-        safe_click(endpoint)
-        delete_button = self.driver.find_element(By.XPATH, "//*[text()='Delete']")
-        safe_click(delete_button)
-        ok_button = self.driver.find_element(By.XPATH, "//button[text()='OK']")
-        safe_click(ok_button)
-
-    def delete_endpoint_2(self, endpoint_name):
+    def delete_endpoint(self, endpoint_name):
         """ Delete an endpoint entirely using a different method.
             :param endpoint_name: The name of the endpoint to be deleted. """
-        endpoint = self.driver.find_element(By.XPATH, f"//*[text()='{endpoint_name}']")
-        self.actions.context_click(endpoint).perform()
-        self.driver.find_element(By.XPATH, "//*[@id='5']").click()
-        ok_button = self.driver.find_element(By.XPATH, "//button[text()='OK']")
-        safe_click(ok_button)
+        endpoint = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//*[text()='{endpoint_name}']")))
+        endpoint.click()
+        delete_button = self.driver.find_element(By.XPATH, "//*[text()='Delete']")
+        delete_button.click()
+        ok_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='OK']")))
+        ok_button.click()
+        self.wait.until(EC.invisibility_of_element_located((By.XPATH, f"//*[text()='{endpoint_name}']")))
+        print("Deleted endpoint:", endpoint_name)
 

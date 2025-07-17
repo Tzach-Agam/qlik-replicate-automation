@@ -33,6 +33,12 @@ class ConfigurationManager:
         """Returns whether replicate will log in with secure method """
         return self.config.getboolean('Login_Method', 'secure_login')
 
+    def get_delete_task_endpoint(self):
+        """Returns whether replicate will delete task endpoint at the end of the task"""
+        delete_task = self.config.getboolean("Clean_Replicate", "task")
+        delete_endpoint = self.config.getboolean("Clean_Replicate", "endpoint")
+        return delete_task, delete_endpoint
+
     def get_base_url(self):
         """Returns the base URL setting from the 'Website' section in config.ini. """
         return self.config.get('Website', 'base_url')
