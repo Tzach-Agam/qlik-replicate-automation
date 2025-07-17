@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from utilities.utility_functions import safe_click
 from time import sleep
+
 class MonitorPage:
     """ The MonitorPage class represents the 'Monitor mode' on Qlik Replicate. In Monitor mode, you view the replication
         task activities in real time, including changes, errors and warnings. The Monitor mode also allows other operations
@@ -15,69 +16,63 @@ class MonitorPage:
     def __init__(self, driver: WebDriver):
         """ Initialize the MonitorPage object
             :param driver: WebDriver instance for Selenium automation. """
-
         self.driver = driver
-        self.actions = ActionChains(driver)
+        self.wait = WebDriverWait(self.driver, 20)
+        self.actions = ActionChains(self.driver)
 
     def fl_tab(self):
         """Click on 'Full Load' tab to view that status of the Full load process."""
-
         fl_tab = self.driver.find_element(By.CSS_SELECTOR, "[title='Full Load']")
         safe_click(fl_tab)
 
     def cdc_tab(self):
         """Click on 'Change Processing' tab to view that status of the CDC process."""
-
         cdc_tab = self.driver.find_element(By.CSS_SELECTOR, "[title='Change Processing']")
         safe_click(cdc_tab)
 
     def enter_designer_page(self):
         """Enter to the task's 'Designer mode'"""
-
         designer = self.driver.find_element(By.XPATH, "//span[text()='Designer']")
         safe_click(designer)
 
     def source_endpoint_click(self):
         """Double-click on the source endpoint."""
-
         source_endpoint = self.driver.find_element(By.XPATH, "//*[@id='mapSrcAreaItem']/div/div/div")
         self.actions.double_click(source_endpoint).perform()
 
     def target_endpoint_click(self):
         """Double-click on the target endpoint."""
-
         target_endpoint = self.driver.find_element(By.XPATH, "//*[@id='mapTargetAreaItems']/div/div/div")
         self.actions.double_click(target_endpoint).perform()
 
     def enter_view_logs(self):
         """Click on the View logs button to view the task log"""
-
         view_logs = self.driver.find_element(By.XPATH, "//span[text()='View Logs...']")
         safe_click(view_logs)
 
     def download_logs(self):
         """Enter to the task log and download them to the machine"""
-
         self.enter_view_logs()
         download_logs_icon = self.driver.find_element(By.CSS_SELECTOR, "[class='bootstrapGlyphicon glyphicon-download-alt']")
         safe_click(download_logs_icon)
 
-    def wait_for_fl(self, number_of_tables: str):
+    def wait_for_fl(self, number_of_tables: str, timeout: int = 30):
         """ Wait for the specified number of tables to complete in Full Load (FL) mode.
             This method waits for a specific number of tables to complete their Full Load operation in the Monitor mode
             of Qlik Replicate. It checks if the expected number of tables have reached completion status within the given
             timeout.
             :param number_of_tables: The number of tables to wait for completion. this number represents the expected
             number of completed tables, which will be matched against the actual number of completed tables displayed on
-            the UI. """
-
-        wait = WebDriverWait(self.driver, 20)
+            the UI.
+            :param timeout: The maximum number of seconds to wait for completion. this number represents the expected"""
         try:
-            wait.until(EC.visibility_of_element_located((By.XPATH, f"//*[@id='Monitoring_FL_CompletedTables']/div/div[3]/*[text()='{number_of_tables}']")))
+            dynamic_wait = WebDriverWait(self.driver, timeout)
+            dynamic_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[title='Full Load']")))
+            self.fl_tab()
+            dynamic_wait.until(EC.visibility_of_element_located((By.XPATH, f"//*[@id='Monitoring_FL_CompletedTables']/div/div[3]/*[text()='{number_of_tables}']")))
             print("Full Load completed")
-            sleep(5)
         except:
-            print("Full Load did not complete within the timeout")
+            raise AssertionError(f"Full Load did not complete {number_of_tables} tables within {timeout} seconds.")
 
     def inserts_check(self, *args: str):
         """ Check the status of insert operations in the Monitor mode of Qlik Replicate for each of the specified tables
@@ -177,7 +172,6 @@ class MonitorPage:
 
     def stop_task(self):
         """Stop the current replication task entirely."""
-
         stop_task_element = self.driver.find_element(By.XPATH, "//span[text()='Stop']")
         safe_click(stop_task_element)
         yes_button = self.driver.find_element(By.XPATH, "//button[text()='Yes']")
@@ -185,7 +179,6 @@ class MonitorPage:
 
     def stop_task_wait(self):
         """Wait for the replication task to stop."""
-
         wait = WebDriverWait(self.driver, 20)
         wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Stopping task']")))
         print("Stopping task")
