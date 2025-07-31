@@ -1,6 +1,8 @@
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from configurations.config_manager import ConfigurationManager
 from utilities.utility_functions import safe_click
 
@@ -15,10 +17,11 @@ class TableSelection:
             :param driver: WebDriver instance for Selenium automation. """
         self.driver = driver
         self.config = config
+        self.wait = WebDriverWait(self.driver, 20)
 
     def choose_schema(self, source_schema = None):
         """Enter the name of source schema for the replication task """
-        schema_input = self.driver.find_element(By.CSS_SELECTOR, "[place-holder='Select a Schema in the list or search']>div>input")
+        schema_input = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[place-holder='Select a Schema in the list or search']>div>input")))
         if source_schema:
             schema_input.send_keys(source_schema)
         else:

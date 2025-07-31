@@ -102,33 +102,33 @@ class SQL_Source_Tests(TestCase):
     def test_fl_cdc(self):
         """FL + CDC: basic test with all DMLs"""
         self.task_name = self.task_creation("SQL2Oracle_FL_CDC")
-        # self.sqldb.execute_query(f'CREATE TABLE "{self.source_schema}".test_table (A int primary key, B varchar(20));')
-        # self.sqldb.cursor.execute(
-        #     f"INSERT INTO \"{self.source_schema}\".test_table VALUES (101, 'FL')"
-        #     f"INSERT INTO \"{self.source_schema}\".test_table VALUES (202, 'FL')"
-        #     f"INSERT INTO \"{self.source_schema}\".test_table VALUES (303, 'FL')"
-        # )
-        # self.sqldb.connection.commit()
-        # self.designer_page.run_new_task()
-        # self.designer_page.start_task_wait()
-        # self.monitor_page.wait_for_fl('1')
-        # self.monitor_page.cdc_tab()
-        # # self.sqldb.cursor.execute(
-        # #     f"INSERT INTO \"{self.source_schema}\".test_table VALUES (404, 'CDC')"
-        # #     f"UPDATE \"{self.source_schema}\".test_table SET B = 'UPDATE' WHERE A = 101;"
-        # #     f"DELETE FROM \"{self.source_schema}\".test_table WHERE A = 202;"
-        # # )
-        # # self.sqldb.connection.commit()
-        # # self.monitor_page.inserts_check('1')
-        # # self.monitor_page.updates_check('1')
-        # # self.monitor_page.delete_check('1')
-        # self.monitor_page.stop_task()
-        # self.monitor_page.stop_task_wait()
+        self.sqldb.execute_query(f'CREATE TABLE "{self.source_schema}".test_table (A int primary key, B varchar(20));')
+        self.sqldb.cursor.execute(
+            f"INSERT INTO \"{self.source_schema}\".test_table VALUES (101, 'FL')"
+            f"INSERT INTO \"{self.source_schema}\".test_table VALUES (202, 'FL')"
+            f"INSERT INTO \"{self.source_schema}\".test_table VALUES (303, 'FL')"
+        )
+        self.sqldb.connection.commit()
+        self.designer_page.run_new_task()
+        self.designer_page.start_task_wait()
+        self.monitor_page.wait_for_fl('1')
+        self.monitor_page.cdc_tab()
+        self.sqldb.cursor.execute(
+            f"INSERT INTO \"{self.source_schema}\".test_table VALUES (404, 'CDC')"
+            f"UPDATE \"{self.source_schema}\".test_table SET B = 'UPDATE' WHERE A = 101;"
+            f"DELETE FROM \"{self.source_schema}\".test_table WHERE A = 202;"
+        )
+        self.sqldb.connection.commit()
+        self.monitor_page.inserts_check('1')
+        self.monitor_page.updates_check('1')
+        self.monitor_page.delete_check('1')
+        self.monitor_page.stop_task()
+        self.monitor_page.stop_task_wait()
         self.replicate_actions.navigate_to_main_page('tasks')
-        # move_file_to_target_dir(self.config_manager.source_tasklog_path(),
-        #                         self.logs_location, f"reptask_{self.task_name}.log", self.config_manager)
-        # self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\SQL2Oracle_FL_CDC.csv")
-        # compare_files(f"{self.results_location}\\SQL2Oracle_FL_CDC.good", f"{self.results_location}\\SQL2Oracle_FL_CDC.csv")
+        move_file_to_target_dir(self.config_manager.source_tasklog_path(),
+                                self.logs_location, f"reptask_{self.task_name}.log", self.config_manager)
+        self.oracledb.export_schema_data_to_csv(self.target_schema, f"{self.results_location}\\SQL2Oracle_FL_CDC.csv")
+        compare_files(f"{self.results_location}\\SQL2Oracle_FL_CDC.good", f"{self.results_location}\\SQL2Oracle_FL_CDC.csv")
 
     def test_several_tables(self):
         """Replication of 3 tables from SQL Server database to Oracle database"""
