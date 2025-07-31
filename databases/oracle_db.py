@@ -12,7 +12,6 @@ class OracleDatabase:
         """ Initialize the OracleDatabase instance.
             :param config_manager: An instance of ConfigurationManager to retrieve database configuration.
             :param section: The name of the configuration section containing database connection details. """
-
         self.config = config_manager.get_section(section)
         self.connection = None
         self.cursor = None
@@ -20,11 +19,11 @@ class OracleDatabase:
     def connect(self):
         """ Establish a connection to the Oracle database using the connection string provided during object
             initialization. It also initializes a cursor to execute SQL queries on the database. """
-
         try:
             self.connection = oracledb.connect(user=self.config["username"],
                                                password=self.config["password"], dsn=self.config["dsn"])
             self.cursor = self.connection.cursor()
+            print("Connection to Oracle established")
         except oracledb.DatabaseError as e:
             print("Error while connecting to the Oracle database:", e)
 
@@ -33,7 +32,6 @@ class OracleDatabase:
             This method takes a SQL query as a parameter and executes it on the connected database using the cursor. It
             also commits the transaction to persist changes.
             :param query: The SQL query to execute. """
-
         if not self.cursor:
             raise Exception("Connection is not established. Call 'connect()' method first.")
         self.cursor.execute(query)
@@ -43,7 +41,6 @@ class OracleDatabase:
         """ Fetch the results of the last executed query.
             This method retrieves the results of the last executed SQL query using the cursor and returns them as a list
             of rows, where each row is represented as a tuple."""
-
         if not self.cursor:
             raise Exception("Connection is not established. Call 'connect()' method first.")
         return self.cursor.fetchall()
@@ -52,7 +49,6 @@ class OracleDatabase:
         """ Checks if the specified schema/user does not exist in the Oracle database.
             Queries the DBA_USERS view to determine if the user exists.
             :param user_name: The name of the schema/user to check for non-existence. """
-
         query = f"SELECT 1 FROM dba_users WHERE username = '{user_name}'"
         self.cursor.execute(query)
         result = self.cursor.fetchone()
@@ -62,7 +58,6 @@ class OracleDatabase:
         """ Create a new user in the Oracle database, and immediately give it Admin privileges. Users act like schemas
             In an oracle database.
             :param user_name: The name of the user to create. """
-
         if self.does_user_not_exist(user_name):
             create_user_query = f'CREATE USER "{user_name}" IDENTIFIED BY oracle'
             grant_user_query = f'GRANT DBA TO "{user_name}" WITH ADMIN OPTION'
@@ -71,13 +66,11 @@ class OracleDatabase:
             print(f"User '{user_name}' created and granted DBA privileges.")
         else:
             print(f"User '{user_name}' already exists. Skipping creation.")
-
     def create_table(self, user_name, table_name, columns):
         """ Create a new table in the connected database user with the specified columns.
             :param user_name: The name of the user where the table will be created.
             :param table_name: The name of the table to create.
             :param columns: A list of column definitions in the format "column_name data_type". """
-
         columns_definition = ', '.join(columns)
         create_table_query = f"CREATE TABLE {user_name}.{table_name} ({columns_definition})"
         self.execute_query(create_table_query)
@@ -85,7 +78,6 @@ class OracleDatabase:
     def drop_user(self, user_name):
         """ Drop an existing user in the connected Oracle database.
             :param user_name: The name of the schema to drop. """
-
         if self.does_user_not_exist(user_name):
             print(f"User '{user_name}' already exists. Skipping drop.")
         else:
@@ -97,7 +89,6 @@ class OracleDatabase:
         """ Drop an existing table in the connected Oracle database user.
             :param user_name: The name of the schema containing the table to drop.
             :param table_name: The name of the table to drop. """
-
         drop_table_query = f'drop table "{user_name}"."{table_name}"'
         self.execute_query(drop_table_query)
 
@@ -106,7 +97,6 @@ class OracleDatabase:
             This method retrieves the names of all tables within the specified schema/user in the connected Oracle
             database and iteratively drops each table. It also prints a success message for each dropped table.
             :param schema_name: The name of the schema/user containing the tables to drop. """
-
         get_tables_query = f"SELECT table_name FROM all_tables WHERE owner = '{schema_name}'"
         try:
             self.cursor.execute(get_tables_query)
@@ -131,7 +121,6 @@ class OracleDatabase:
 
             :param schema_name: The name of the schema containing the tables to export.
             :param output_file: The name of the CSV file to write data to. """
-
         get_tables_query = f"SELECT table_name FROM all_tables WHERE owner = '{schema_name}'"
         try:
             with open(output_file, 'w', newline='', encoding="utf-8") as csvfile:
@@ -163,8 +152,8 @@ class OracleDatabase:
         """ Close the database connection and associated cursor.
             Closing the connection and cursor is important to ensure that database resources are freed when they are no
             longer needed. It should be called at the end of database operations to clean up resources properly. """
-
         if self.cursor:
             self.cursor.close()
         if self.connection:
             self.connection.close()
+            print("Database connection to Oracle closed.")

@@ -80,5 +80,5 @@ class ReplicateCommonActions:
             task_view.enter_manage_endpoints()
             manage_endpoints.delete_endpoint(source_endpoint)
             manage_endpoints.delete_endpoint(target_endpoint)
-
+            manage_endpoints.close()
 

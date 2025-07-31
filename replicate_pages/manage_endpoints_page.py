@@ -30,6 +30,7 @@ class ManageEndpoints:
         )
         safe_click(new_endpoint)
         self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@id='endpointName']")))
+        self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[name='endpointDescription']")))
         self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[class='textInputInRowWrap']>[type='text']")))
 
     def random_endpoint_name(self, config_section):
