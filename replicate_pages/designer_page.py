@@ -67,19 +67,17 @@ class DesignerPage:
         run_dropdown = self.driver.find_element(By.CSS_SELECTOR, "button[data-toggle='dropdown']>[class='caret']")
         safe_click(run_dropdown)
 
-    def run_new_task(self):
+    def run_new_task(self, timeout=40):
         """ Start a new task by clicking on the 'Start Processing' option in the run options dropdown. """
         self.run_task_dropdown()
         start_processing = self.driver.find_element(By.XPATH,
                                                     "//li[@title='Start Processing']/a[text()='Start Processing']")
         safe_click(start_processing)
-
-    def start_task_wait(self):
-        """Wait for the task to start and provide status messages."""
         try:
-            self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Starting task']")))
+            dynamic_wait = WebDriverWait(self.driver, timeout)
+            dynamic_wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Starting task']")))
             print("Starting task")
-            self.wait.until(EC.invisibility_of_element_located((By.XPATH, "//*[text()='Starting task']")))
+            dynamic_wait.until(EC.invisibility_of_element_located((By.XPATH, "//*[text()='Starting task']")))
             print("Task started")
         except:
             print("Element did not become visible within the timeout or became stale.")

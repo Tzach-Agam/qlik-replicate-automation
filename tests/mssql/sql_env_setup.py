@@ -3,7 +3,7 @@ import pytest
 from types import SimpleNamespace
 from configurations.config_manager import ConfigurationManager
 from browsers.browsers import get_webdriver
-from databases.snowflake_db import SnowflakeDatabase
+from databases.sqlserver_db import SQLServerDatabase
 from databases.oracle_db import OracleDatabase
 from replicate_pages import *
 from utilities.utility_functions import move_file_to_target_dir, compare_files, log_finder
@@ -26,15 +26,15 @@ def driver(config_manager):
     print("🧹 WebDriver teardown")
     driver.quit()
 
-# 3️⃣ Snowflake DB (Session level)
+# 3️⃣ SQL Server DB (Session level)
 @pytest.fixture(scope="session")
-def snowflake(config_manager):
-    print("❄️ Snowflake setup")
-    snowflake_db = SnowflakeDatabase(config_manager, 'Snowflake_DB')
-    snowflake_db.connect()
-    yield snowflake_db
-    print("🧹 Snowflake teardown")
-    snowflake_db.disconnect()
+def mssql(config_manager):
+    print("SQL Server setup")
+    mssql_db = SQLServerDatabase(config_manager, 'MSSQL_DB')
+    mssql_db.connect()
+    yield mssql_db
+    print("🧹 SQL Server teardown")
+    mssql_db.close()
 
 # 4️⃣ Oracle DB (Session level)
 @pytest.fixture(scope="session")
@@ -84,54 +84,56 @@ def setup_browser(driver, replicate_pages):
 
 # 🔄 Clean database state before each test
 @pytest.fixture
-def reset_database_env(default_schemas, oracle, snowflake):
+def reset_database_env(default_schemas,mssql, oracle):
     source_schema, target_schema, control_schema = default_schemas
     print("🔁 Resetting database environment (per test)")
+    mssql.drop_all_tables_in_schema(source_schema)
+    mssql.drop_schema(source_schema)
     oracle.drop_all_tables_in_schema(target_schema)
     oracle.drop_all_tables_in_schema(control_schema)
-    snowflake.drop_schema(source_schema)
     oracle.drop_user(target_schema)
     oracle.drop_user(control_schema)
-    snowflake.create_schema(source_schema)
+    mssql.create_schema(source_schema)
     oracle.create_user(target_schema)
     oracle.create_user(control_schema)
 
 # Per-test fixture to set up full test environment
 @pytest.fixture
-def snow_test(config_manager, snowflake, oracle, replicate_pages, default_schemas, default_table, reset_database_env, setup_browser):
+def mssql_test(config_manager, mssql, oracle, replicate_pages, default_schemas, default_table, reset_database_env, setup_browser):
     env = SimpleNamespace(
         config=config_manager,
         **replicate_pages.__dict__,
-        snowflake_db=snowflake,
+        mssql_db=mssql,
         oracle_db=oracle,
         table=default_table,
         source_schema=default_schemas[0],
         target_schema=default_schemas[1],
         control_schema=default_schemas[2],
-        snowflake_source_name= None,
+        mssql_source_name= None,
         oracle_target_name= None,
         task_name=None
     )
     yield env
-    replicate_pages.replicate_actions.delete_task_endpoint(env.task_name, env.snowflake_source_name, env.oracle_target_name)
+    mssql.drop_replication_constraint()
+    replicate_pages.replicate_actions.delete_task_endpoint(env.task_name, env.mssql_source_name, env.oracle_target_name)
     replicate_pages.replicate_actions.open_replicate_software()
     replicate_pages.replicate_actions.loader_icon_opening_replicate()
 
-def create_task(snow_test: SimpleNamespace, task_name: str):
-    snow_test.tasks_general_page.enter_manage_endpoints()
-    snow_test.snowflake_source_name = snow_test.manage_endpoints.random_endpoint_name('Snowflake_DB')
-    snow_test.oracle_target_name = snow_test.manage_endpoints.random_endpoint_name('Oracle_DB')
-    snow_test.manage_endpoints.create_snowflake_source_endpoint(snow_test.snowflake_source_name)
-    snow_test.manage_endpoints.create_oracle_target_endpoint(snow_test.oracle_target_name)
-    snow_test.manage_endpoints.close()
-    snow_test.tasks_general_page.create_new_task()
-    new_task_name = snow_test.new_task_page.new_task_creation(task_name)
-    snow_test.replicate_actions.task_data_loader()
-    snow_test.designer_page.choose_source_target(snow_test.snowflake_source_name, snow_test.oracle_target_name)
-    snow_test.designer_page.enter_table_selection()
-    snow_test.table_selection.choose_source_schema()
-    snow_test.designer_page.enter_task_settings()
-    snow_test.task_settings.set_task_settings_general()
-    snow_test.task_name = new_task_name
+def create_task(mssql_test: SimpleNamespace, task_name: str):
+    mssql_test.tasks_general_page.enter_manage_endpoints()
+    mssql_test.mssql_source_name = mssql_test.manage_endpoints.random_endpoint_name('MSSQL_DB')
+    mssql_test.oracle_target_name = mssql_test.manage_endpoints.random_endpoint_name('Oracle_DB')
+    mssql_test.manage_endpoints.create_sql_server_source_endpoint(mssql_test.mssql_source_name)
+    mssql_test.manage_endpoints.create_oracle_target_endpoint(mssql_test.oracle_target_name)
+    mssql_test.manage_endpoints.close()
+    mssql_test.tasks_general_page.create_new_task()
+    new_task_name = mssql_test.new_task_page.new_task_creation(task_name)
+    mssql_test.replicate_actions.task_data_loader()
+    mssql_test.designer_page.choose_source_target(mssql_test.mssql_source_name, mssql_test.oracle_target_name)
+    mssql_test.designer_page.enter_table_selection()
+    mssql_test.table_selection.choose_source_schema()
+    mssql_test.designer_page.enter_task_settings()
+    mssql_test.task_settings.set_task_settings_general()
+    mssql_test.task_name = new_task_name
     return new_task_name
 

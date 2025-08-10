@@ -55,7 +55,7 @@ class ReplicateCommonActions:
             This method opens the dropdown menu and selects the target page based on the provided 'target_page' argument,
             which can be "tasks" for 'Task View' or "server" for the 'Server page'.
             :param target_page : The name of the target page to navigate to (e.g., "tasks" or "server"). """
-        dropdown = self.driver.find_element(By.CSS_SELECTOR, ".dropdown-toggle.hiddenActionButton.right")
+        dropdown = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".dropdown-toggle.hiddenActionButton.right")))
         safe_click(dropdown)
         if target_page == "tasks":
             page_link_text = "Tasks"

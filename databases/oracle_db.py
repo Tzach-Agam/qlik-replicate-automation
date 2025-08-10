@@ -66,6 +66,7 @@ class OracleDatabase:
             print(f"User '{user_name}' created and granted DBA privileges.")
         else:
             print(f"User '{user_name}' already exists. Skipping creation.")
+
     def create_table(self, user_name, table_name, columns):
         """ Create a new table in the connected database user with the specified columns.
             :param user_name: The name of the user where the table will be created.

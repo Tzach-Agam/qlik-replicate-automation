@@ -1,6 +1,8 @@
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from utilities.utility_functions import safe_click
 
 class TasksPage:
@@ -15,6 +17,7 @@ class TasksPage:
         """ Initialize the TasksPage object
             :param driver: WebDriver instance for Selenium automation. """
         self.driver = driver
+        self.wait = WebDriverWait(self.driver, 20)
         self.actions = ActionChains(self.driver)
 
     def create_new_task(self):
@@ -65,6 +68,7 @@ class TasksPage:
         safe_click(delete_task_button)
         ok_button = self.driver.find_element(By.XPATH, "//button[text()='OK']")
         safe_click(ok_button)
+        self.wait.until(EC.invisibility_of_element_located((By.XPATH, f"//*[text()='{task_name}']")))
         print(f"Task {task_name} successfully deleted")
 
     def double_click_task(self, task_name: str):

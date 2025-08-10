@@ -25,6 +25,7 @@ class SQLServerDatabase:
         try:
             self.connection = pyodbc.connect(self.connection_string)
             self.cursor = self.connection.cursor()
+            print("Connected to SQL Server database successfully.")
         except pyodbc.Error as e:
             print("Error while connecting to the SQL Server database:", e)
 

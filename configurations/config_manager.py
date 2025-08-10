@@ -67,6 +67,11 @@ class ConfigurationManager:
         control_schema = self.config.get('Default_Schemas', 'control_schema')
         return source_schema, target_schema, control_schema
 
+    def get_default_table(self):
+        """Gets the default table name from the 'Default_Table' section in config.ini."""
+        default_table = self.config.get('Default_Tables', 'default_table')
+        return default_table
+
     def source_tasklog_path(self):
         """Gets and returns the path to the directory with all the task logs of replicate software
         (source path of task logs)."""
