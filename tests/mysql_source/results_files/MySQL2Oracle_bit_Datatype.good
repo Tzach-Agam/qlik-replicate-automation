@@ -1,8 +1,0 @@
-"test_table - a (Data type: NUMBER, Data length: 22), bit_1 (Data type: NUMBER, Data length: 22), bit_2 (Data type: RAW, Data length: 8)"
-a,bit_1,bit_2
-1,1,b'\x00\x00\x00\x00\x00\x0fi\xb5'
-3,,
-6,,
-4,0,b'\x8cNS\x94R\xb3x\xd2'
-5,1,b'\x8cNS\x94R\xb3x\xd2'
-

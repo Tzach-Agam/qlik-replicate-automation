@@ -11,9 +11,9 @@
 /databases/__pycache__
 /replicate_pages/__pycache__
 /tests/mysql_source/__pycache__
-/tests/oracle_source/__pycache__
+/tests/oracle/__pycache__
 /tests/postgres_source/__pycache__
-/tests/sql_source/__pycache__
+/tests/mssql/__pycache__
 /tests/s3_target/__pycache__
 /utilities/__pycache__
 /configurations/config.ini

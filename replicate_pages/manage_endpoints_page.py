@@ -79,6 +79,8 @@ class ManageEndpoints:
         sql_server_type = self.driver.find_element(By.XPATH, "//li//*[text()='Microsoft SQL Server']")
         safe_click(sql_server_type)
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Save']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Test Connection']")))
 
     def enter_sql_server(self, name: str):
         server = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
@@ -144,6 +146,8 @@ class ManageEndpoints:
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='username']")))
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='password']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Save']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Test Connection']")))
 
     def enter_oracle_server(self, name: str):
         server = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
@@ -284,6 +288,74 @@ class ManageEndpoints:
         print("Created a MongoDB source endpoint:", endpoint_name)
 
 
+
+    """------------------ IMS endpoint: Specific Methods ------------------"""
+
+    def choose_ims_type(self):
+        self.choose_endpoint_type("IBM IMS")
+        ims_type = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//li//*[text()='IBM IMS']")))
+        safe_click(ims_type)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
+
+    def enter_ims_server(self, name: str):
+        server = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
+        server.send_keys(name)
+
+    def enter_ims_port(self, port):
+        port_element = self.driver.find_element(By.CSS_SELECTOR, "[label='port']>div>div:nth-of-type(2)>div>input")
+        port_element.clear()
+        port_element.send_keys(port)
+
+    def enter_ims_connect_server(self, server):
+        connect_server = self.driver.find_element(By.XPATH, "//*[@id='imsConnectServer']")
+        connect_server.send_keys(server)
+
+    def enter_ims_connect_port(self, port):
+        port_element = self.driver.find_element(By.CSS_SELECTOR, "[number-data='model.imsConnectPort']>input")
+        port_element.clear()
+        port_element.send_keys(port)
+
+    def enter_ims_username(self, username):
+        username_element = self.driver.find_element(By.XPATH, "//*[@id='user']")
+        username_element.send_keys(username)
+
+    def enter_ims_password(self, password):
+        password_element = self.driver.find_element(By.XPATH, "//*[@id='password']")
+        password_element.send_keys(password)
+
+    def enter_ims_psb(self, psb):
+        psb_element = self.driver.find_element(By.XPATH, "//*[@id='psb']")
+        psb_element.send_keys(psb)
+
+    def enter_ims_pcb(self, pcb):
+        pcb_element = self.driver.find_element(By.XPATH, "//*[@id='pcb']")
+        pcb_element.send_keys(pcb)
+
+    def enter_ims_dbd_xml(self, xml_location):
+        dbd_xml_element = self.driver.find_element(By.XPATH, "//*[@id='dbd']")
+        dbd_xml_element.send_keys(xml_location)
+
+    def create_ims_source_endpoint(self, endpoint_name):
+        """Creates a MongoDB source endpoint using the parameters in the config.ini file
+        :param endpoint_name: The name of the endpoint. """
+        self.new_endpoint_connection()
+        self.choose_ims_type()
+        self.enter_ims_server(self.config.get_section('IMS_DB')['server'])
+        self.enter_ims_port(self.config.get_section('IMS_DB')['server_port'])
+        self.enter_ims_connect_server(self.config.get_section('IMS_DB')['host'])
+        self.enter_ims_connect_port(self.config.get_section('IMS_DB')['port'])
+        self.enter_ims_username(self.config.get_section('IMS_DB')['user'])
+        self.enter_ims_password(self.config.get_section('IMS_DB')['password'])
+        self.enter_ims_psb(self.config.get_section('IMS_DB')['psb'][0:6])
+        self.enter_ims_pcb(self.config.get_section('IMS_DB')['schema'])
+        self.enter_ims_dbd_xml(self.config.get_section('IMS_DB')['dbd_xml'])
+        self.enter_endpoint_description('IMS Source Endpoint')
+        self.enter_endpoint_name(endpoint_name)
+        self.test_connection_valid()
+        self.save()
+        print("Created a IMS source endpoint:", endpoint_name)
+
+
     def test_connection(self):
         """Click the 'Test Connection' button to test the database connection."""
         test_connection_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Test Connection']")))
@@ -314,7 +386,7 @@ class ManageEndpoints:
             :param endpoint_name: The name of the endpoint to be deleted. """
         endpoint = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//*[text()='{endpoint_name}']")))
         endpoint.click()
-        delete_button = self.driver.find_element(By.XPATH, "//*[text()='Delete']")
+        delete_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Delete']")))
         delete_button.click()
         ok_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='OK']")))
         ok_button.click()

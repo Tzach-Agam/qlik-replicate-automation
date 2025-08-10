@@ -70,6 +70,7 @@ class MonitorPage:
             dynamic_wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[title='Full Load']")))
             self.fl_tab()
             dynamic_wait.until(EC.visibility_of_element_located((By.XPATH, f"//*[@id='Monitoring_FL_CompletedTables']/div/div[3]/*[text()='{number_of_tables}']")))
+            dynamic_wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@style='width: 100%;']")))
             print("Full Load completed")
         except:
             raise AssertionError(f"Full Load did not complete {number_of_tables} tables within {timeout} seconds.")
