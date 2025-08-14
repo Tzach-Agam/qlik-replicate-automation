@@ -81,6 +81,7 @@ class ManageEndpoints:
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Save']")))
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Test Connection']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Advanced']")))
 
     def enter_sql_server(self, name: str):
         server = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
@@ -148,6 +149,7 @@ class ManageEndpoints:
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='password']")))
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Save']")))
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Test Connection']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Advanced']")))
 
     def enter_oracle_server(self, name: str):
         server = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
@@ -200,6 +202,9 @@ class ManageEndpoints:
         sql_server_type = self.driver.find_element(By.XPATH, "//li//*[text()='Snowflake']")
         safe_click(sql_server_type)
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Save']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Test Connection']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Advanced']")))
 
     def enter_snowflake_server(self, name: str):
         server = self.driver.find_element(By.XPATH, "//*[@id='server']")
@@ -254,6 +259,9 @@ class ManageEndpoints:
         mongodb_type = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//li//*[text()='MongoDB']")))
         safe_click(mongodb_type)
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='host']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Save']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Test Connection']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Advanced']")))
 
     def enter_mongodb_host(self, name: str):
         server = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='host']")))
@@ -296,6 +304,9 @@ class ManageEndpoints:
         ims_type = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//li//*[text()='IBM IMS']")))
         safe_click(ims_type)
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Save']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Test Connection']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Advanced']")))
 
     def enter_ims_server(self, name: str):
         server = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
@@ -336,8 +347,7 @@ class ManageEndpoints:
         dbd_xml_element.send_keys(xml_location)
 
     def create_ims_source_endpoint(self, endpoint_name):
-        """Creates a MongoDB source endpoint using the parameters in the config.ini file
-        :param endpoint_name: The name of the endpoint. """
+        """Creates an IMS source endpoint using the parameters in the config.ini file"""
         self.new_endpoint_connection()
         self.choose_ims_type()
         self.enter_ims_server(self.config.get_section('IMS_DB')['server'])
@@ -355,6 +365,24 @@ class ManageEndpoints:
         self.save()
         print("Created a IMS source endpoint:", endpoint_name)
 
+    def create_custom_ims_source_endpoint(self, endpoint_name, description, dbd_xml, schema, psb, password, user, port, host, server_port, server):
+        """Creates custom IMS source endpoint using parameters inserted by the user"""
+        self.new_endpoint_connection()
+        self.choose_ims_type()
+        self.enter_ims_server(server)
+        self.enter_ims_port(server_port)
+        self.enter_ims_connect_server(host)
+        self.enter_ims_connect_port(port)
+        self.enter_ims_username(user)
+        self.enter_ims_password(password)
+        self.enter_ims_psb(psb)
+        self.enter_ims_pcb(schema)
+        self.enter_ims_dbd_xml(dbd_xml)
+        self.enter_endpoint_description(description)
+        self.enter_endpoint_name(endpoint_name)
+        self.test_connection_valid()
+        self.save()
+        print("Created a IMS source endpoint:", endpoint_name)
 
     def test_connection(self):
         """Click the 'Test Connection' button to test the database connection."""

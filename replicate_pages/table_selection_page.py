@@ -48,8 +48,9 @@ class TableSelection:
 
     def search_for_tables(self):
         """Click on the 'Search' button to search for tables under a chosen schema"""
-        search_button = self.driver.find_element(By.XPATH, "//*[text()='Search']")
+        search_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Search']")))
         safe_click(search_button)
+        self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[class='bottomButtons']>button:nth-child(3)")))
 
     def select_one_table(self):
         """Select one table of the tables available under a schema"""
@@ -80,5 +81,15 @@ class TableSelection:
         self.include_schema_button()
         self.ok_button_click()
 
-
+    def select_chosen_tables(self, *tables):
+        """Selects the specified tables for replication. This method searches for the provided table names, clicks on
+           each matching table element, and confirms the selection for replication. It assumes that the necessary web
+           elements for table search and selection are available in the UI.
+           :param tables: Table names to be selected for replication. """
+        self.search_for_tables()
+        for table in tables:
+            chosen_table = self.driver.find_element(By.XPATH, f"//*[text()='{table}']")
+            chosen_table.click()
+            self.select_one_table()
+        self.ok_button_click()
 

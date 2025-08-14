@@ -64,7 +64,6 @@ def replicate_pages(driver, config_manager):
         monitor_page=MonitorPage(driver)
     )
 
-
 # 6️⃣ Default schemas (Session level)
 @pytest.fixture(scope="session")
 def default_schemas(config_manager):
@@ -96,42 +95,23 @@ def setup_browser(driver, replicate_pages):
 
 # 🧪 Per-test fixture to set up full test environment
 @pytest.fixture
-def ims_test(ims, oracle, replicate_pages, default_schemas, reset_database_env, setup_browser):
+def ims_test(request, ims, oracle, replicate_pages, default_schemas, reset_database_env, setup_browser):
+    test_dir = Path(request.fspath).parent
+
     env = SimpleNamespace(
         **replicate_pages.__dict__,
         ims=ims,
         oracle=oracle,
-        source_schema=default_schemas[0],
         target_schema=default_schemas[1],
         control_schema=default_schemas[2],
         ims_source_name=None,
         oracle_target_name=None,
-        task_name=None
+        task_name=None,
+        test_dir = str(test_dir),  # base test folder as string
+        task_logs_dir = str(test_dir / "task_logs"),  # full string path to task_logs
+        good_files_dir = str(test_dir / "good_files")  # now available as string
     )
     yield env
     replicate_pages.replicate_actions.delete_task_endpoint(
         env.task_name, env.ims_source_name, env.oracle_target_name
     )
-
-# 🧱 Helper to create a task
-def create_task(ims_test: SimpleNamespace, task_name: str):
-    ims_test.tasks_general_page.enter_manage_endpoints()
-    ims_test.ims_source_name = ims_test.manage_endpoints.random_endpoint_name('IMS_DB')
-    ims_test.oracle_target_name = ims_test.manage_endpoints.random_endpoint_name('Oracle_DB')
-    ims_test.manage_endpoints.create_ims_source_endpoint(ims_test.ims_source_name)
-    ims_test.manage_endpoints.create_oracle_target_endpoint(ims_test.oracle_target_name)
-    ims_test.manage_endpoints.close()
-    ims_test.tasks_general_page.create_new_task()
-    new_task_name = ims_test.new_task_page.new_task_creation(task_name)
-    ims_test.replicate_actions.task_data_loader()
-    ims_test.designer_page.choose_source_target(ims_test.ims_source_name, ims_test.oracle_target_name)
-    ims_test.designer_page.enter_table_selection()
-    return new_task_name
-
-def test_something(ims_test):
-    create_task(ims_test, "IMS_2_Oracle_Number")
-    ims_test.replicate_actions.navigate_to_main_page('tasks')
-
-def test_something2(ims_test):
-    create_task(ims_test, "IMS_2_Oracle_Number")
-    ims_test.replicate_actions.navigate_to_main_page('tasks')

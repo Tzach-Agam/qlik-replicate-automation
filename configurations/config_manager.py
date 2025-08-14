@@ -67,43 +67,14 @@ class ConfigurationManager:
         control_schema = self.config.get('Default_Schemas', 'control_schema')
         return source_schema, target_schema, control_schema
 
-    def get_default_table(self):
+    def get_default_tables(self):
         """Gets the default table name from the 'Default_Table' section in config.ini."""
-        default_table = self.config.get('Default_Tables', 'default_table')
-        return default_table
+        default_table_name = self.config.get('Default_Tables', 'default_table_name')
+        sync_table_name = self.config.get('Default_Tables', 'sync_table_name')
+        return default_table_name, sync_table_name
 
     def source_tasklog_path(self):
-        """Gets and returns the path to the directory with all the task logs of replicate software
-        (source path of task logs)."""
+        """Gets and returns the path to the directory with all the task task_logs of replicate software
+        (source path of task task_logs)."""
         source_log_path = self.config.get('Task_log_Path', 'source_directory')
         return source_log_path
-
-    def sql_logs_results_path(self):
-        """Gets and returns paths to directory's of task logs and good files for the sql server database tests."""
-        task_logs_path = self.config.get('Task_log_Path', 'sql_task_logs_dir')
-        good_files_path = self.config.get('Good_Files_Path', 'sql_good_files')
-        return task_logs_path, good_files_path
-
-    def oracle_logs_results_path(self):
-        """Gets and returns paths to directory's of task logs and good files for oracle database tests."""
-        task_logs_path = self.config.get('Task_log_Path', 'oracle_task_logs_dir')
-        good_files_path = self.config.get('Good_Files_Path', 'oracle_good_files')
-        return task_logs_path, good_files_path
-
-    def mysql_logs_results_path(self):
-        """Gets and returns paths to directory's of task logs and good files for mysql database tests."""
-        task_logs_path = self.config.get('Task_log_Path', 'mysql_task_logs_dir')
-        good_files_path = self.config.get('Good_Files_Path', 'mysql_good_files')
-        return task_logs_path, good_files_path
-
-    def postgres_logs_results_path(self):
-        """Gets and returns paths to directory's of task logs and good files for postgres database tests."""
-        task_logs_path = self.config.get('Task_log_Path', 'postgres_task_logs_dir')
-        good_files_path = self.config.get('Good_Files_Path', 'postgres_good_files')
-        return task_logs_path, good_files_path
-
-    def s3_logs_results_path(self):
-        """Gets and returns paths to directory's of task logs and good files for postgres database tests."""
-        task_logs_path = self.config.get('Task_log_Path', 's3_tasks_logs_dir')
-        good_files_path = self.config.get('Good_Files_Path', 's3_good_files')
-        return task_logs_path, good_files_path

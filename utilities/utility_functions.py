@@ -8,7 +8,7 @@ from selenium.common.exceptions import *
 """
 Utility Functions for Qlik Replicate Automation project.
 This module contains a set of utility functions to simplify common tasks in the project. 
-These functions are designed to provide error handling and make it easier to interact with web elements files and logs.
+These functions are designed to provide error handling and make it easier to interact with web elements files and task_logs.
 """
 
 def safe_click(element):

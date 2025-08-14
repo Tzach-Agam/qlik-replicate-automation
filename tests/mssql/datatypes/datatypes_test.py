@@ -2,8 +2,7 @@ from tests.mssql.sql_env_setup import *
 
 def test_char_datatype(mssql_test):
     create_task(mssql_test, "SQL2Oracle_Chars_Datatype")
-    mssql_test.mssql_db.execute_query(
-        f'CREATE TABLE "{mssql_test.source_schema}".test_table (A int primary key, char1 char(36), varchar1 varchar(36), nchar1 nchar(36), nvarchar1 nvarchar(36));')
+    mssql_test.mssql_db.execute_query(f'CREATE TABLE "{mssql_test.source_schema}".test_table (A int primary key, char1 char(36), varchar1 varchar(36), nchar1 nchar(36), nvarchar1 nvarchar(36));')
     mssql_test.mssql_db.cursor.execute(
         f"INSERT INTO \"{mssql_test.source_schema}\".test_table VALUES (1, 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz');"
         f"INSERT INTO \"{mssql_test.source_schema}\".test_table VALUES (2, '!@#$%^&*()_-+=[]<>?.,1234567890', '!@#$%^&*()_-+=[]<>?.,1234567890', '!@#$%^&*()_-+=[]<>?.,1234567890', '!@#$%^&*()_-+=[]<>?.,1234567890');"
@@ -15,11 +14,81 @@ def test_char_datatype(mssql_test):
         f"INSERT INTO \"{mssql_test.source_schema}\".test_table VALUES (8, null,null,null,null);")
     mssql_test.mssql_db.connection.commit()
     mssql_test.designer_page.run_new_task()
-    mssql_test.monitor_page.wait_for_fl('1')
+    mssql_test.monitor_page.wait_for_fl('2')
     mssql_test.monitor_page.cdc_tab()
+    mssql_test.mssql_db.cursor.execute(
+        f"INSERT INTO \"{mssql_test.source_schema}\".test_table VALUES (9, 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz');"
+        f"INSERT INTO \"{mssql_test.source_schema}\".test_table VALUES (10, '!@#$%^&*()_-+=[]<>?.,1234567890', '!@#$%^&*()_-+=[]<>?.,1234567890', '!@#$%^&*()_-+=[]<>?.,1234567890', '!@#$%^&*()_-+=[]<>?.,1234567890');"
+        f"INSERT INTO \"{mssql_test.source_schema}\".test_table VALUES (11, 'a', 'a', 'a', 'a');"
+        f"INSERT INTO \"{mssql_test.source_schema}\".test_table VALUES (12, '', '', '', '');"
+        f"INSERT INTO \"{mssql_test.source_schema}\".test_table VALUES (13, ' ', ' ', ' ', ' ');"
+        f"INSERT INTO \"{mssql_test.source_schema}\".test_table VALUES (14, ' aaaaaaaaaaaaaaaaaaaa', ' aaaaaaaaaaaaaaaaaaaa', ' aaaaaaaaaaaaaaaaaaaa', ' aaaaaaaaaaaaaaaaaaaa');"
+        f"INSERT INTO \"{mssql_test.source_schema}\".test_table VALUES (15, 'zzzzzzzzzzzzzzzzzzzz ', 'zzzzzzzzzzzzzzzzzzzz ', 'zzzzzzzzzzzzzzzzzzzz ', 'zzzzzzzzzzzzzzzzzzzz ');"
+        f"INSERT INTO \"{mssql_test.source_schema}\".test_table VALUES (16, null,null,null,null);")
+    mssql_test.mssql_db.connection.commit()
+    mssql_test.mssql_db.cursor.execute(
+    f"DELETE FROM \"{mssql_test.source_schema}\".test_table WHERE A =5;"
+    f"UPDATE \"{mssql_test.source_schema}\".test_table SET char1='', varchar1='', nchar1='', nvarchar1='' WHERE A=1;"
+	f"UPDATE \"{mssql_test.source_schema}\".test_table SET char1='amich',  varchar1='amich', nchar1='amich', nvarchar1='amich' WHERE A=4;")
+    mssql_test.mssql_db.connection.commit()
+    mssql_test.mssql_db.sync_command(mssql_test.source_schema, mssql_test.sync_table)
+    mssql_test.monitor_page.insert_check('1', '8')
+    mssql_test.monitor_page.update_check('0', '2')
+    mssql_test.monitor_page.delete_check('0', '1')
+    mssql_test.monitor_page.wait_for_cdc()
     mssql_test.monitor_page.stop_task()
     mssql_test.monitor_page.stop_task_wait()
     mssql_test.replicate_actions.navigate_to_main_page('tasks')
+    move_file_to_target_dir(mssql_test.config.source_tasklog_path(), mssql_test.task_logs_dir,f"reptask_{mssql_test.task_name}.log", mssql_test.config)
+    mssql_test.oracle_db.export_schema_data_to_csv(mssql_test.target_schema, mssql_test.good_files_dir + "\\SQL_2_Oracle_char_datatype.csv")
+    compare_files(mssql_test.good_files_dir + "\\SQL_2_Oracle_char_datatype.good", mssql_test.good_files_dir + "\\SQL_2_Oracle_char_datatype.csv")
+
+def test_several_tables(mssql_test):
+    create_task(mssql_test, "SQL2Oracle_Several_Tables")
+    for i in range(1,4):
+        mssql_test.mssql_db.execute_query(f'CREATE TABLE "{mssql_test.source_schema}".test_table{i} (A int primary key, char1 char(36), varchar1 varchar(36), nchar1 nchar(36), nvarchar1 nvarchar(36));')
+    for i in range(1,4):
+        mssql_test.mssql_db.cursor.execute(
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (1, 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (2, '!@#$%^&*()_-+=[]<>?.,1234567890', '!@#$%^&*()_-+=[]<>?.,1234567890', '!@#$%^&*()_-+=[]<>?.,1234567890', '!@#$%^&*()_-+=[]<>?.,1234567890');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (3, 'a', 'a', 'a', 'a');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (4, '', '', '', '');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (5, ' ', ' ', ' ', ' ');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (6, ' aaaaaaaaaaaaaaaaaaaa', ' aaaaaaaaaaaaaaaaaaaa', ' aaaaaaaaaaaaaaaaaaaa', ' aaaaaaaaaaaaaaaaaaaa');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (7, 'zzzzzzzzzzzzzzzzzzzz ', 'zzzzzzzzzzzzzzzzzzzz ', 'zzzzzzzzzzzzzzzzzzzz ', 'zzzzzzzzzzzzzzzzzzzz ');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (8, null,null,null,null);")
+    mssql_test.mssql_db.connection.commit()
+    mssql_test.designer_page.run_new_task()
+    mssql_test.monitor_page.wait_for_fl('3')
+    mssql_test.monitor_page.cdc_tab()
+    for i in range(1, 4):
+        mssql_test.mssql_db.cursor.execute(
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (9, 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (10, '!@#$%^&*()_-+=[]<>?.,1234567890', '!@#$%^&*()_-+=[]<>?.,1234567890', '!@#$%^&*()_-+=[]<>?.,1234567890', '!@#$%^&*()_-+=[]<>?.,1234567890');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (11, 'a', 'a', 'a', 'a');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (12, '', '', '', '');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (13, ' ', ' ', ' ', ' ');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (14, ' aaaaaaaaaaaaaaaaaaaa', ' aaaaaaaaaaaaaaaaaaaa', ' aaaaaaaaaaaaaaaaaaaa', ' aaaaaaaaaaaaaaaaaaaa');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (15, 'zzzzzzzzzzzzzzzzzzzz ', 'zzzzzzzzzzzzzzzzzzzz ', 'zzzzzzzzzzzzzzzzzzzz ', 'zzzzzzzzzzzzzzzzzzzz ');"
+            f"INSERT INTO \"{mssql_test.source_schema}\".test_table{i} VALUES (16, null,null,null,null);")
+    mssql_test.mssql_db.connection.commit()
+    for i in range(1, 4):
+        mssql_test.mssql_db.cursor.execute(
+        f"DELETE FROM \"{mssql_test.source_schema}\".test_table{i} WHERE A =5;"
+        f"UPDATE \"{mssql_test.source_schema}\".test_table{i} SET char1='', varchar1='', nchar1='', nvarchar1='' WHERE A=1;"
+	    f"UPDATE \"{mssql_test.source_schema}\".test_table{i} SET char1='amich',  varchar1='amich', nchar1='amich', nvarchar1='amich' WHERE A=4;"
+        )
+    mssql_test.mssql_db.connection.commit()
+    mssql_test.monitor_page.insert_check('8', '8', '8')
+    mssql_test.monitor_page.update_check('2', '2', '2')
+    mssql_test.monitor_page.delete_check('1', '1', '1')
+    mssql_test.monitor_page.stop_task()
+    mssql_test.monitor_page.stop_task_wait()
+    mssql_test.replicate_actions.navigate_to_main_page('tasks')
+    move_file_to_target_dir(mssql_test.config.source_tasklog_path(), mssql_test.task_logs_dir,f"reptask_{mssql_test.task_name}.log", mssql_test.config)
+    mssql_test.oracle_db.export_schema_data_to_csv(mssql_test.target_schema, mssql_test.good_files_dir + "\\SQL_2_Oracle_char_datatype.csv")
+    compare_files(mssql_test.good_files_dir + "\\SQL_2_Oracle_char_datatype.good", mssql_test.good_files_dir + "\\SQL_2_Oracle_char_datatype.csv")
+
 
 def test_number_datatype(mssql_test):
     create_task(mssql_test, "SQL2Oracle_Number_Datatype")

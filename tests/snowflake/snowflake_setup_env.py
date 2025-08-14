@@ -98,7 +98,9 @@ def reset_database_env(default_schemas, oracle, snowflake):
 
 # Per-test fixture to set up full test environment
 @pytest.fixture
-def snow_test(config_manager, snowflake, oracle, replicate_pages, default_schemas, default_table, reset_database_env, setup_browser):
+def snow_test(request, config_manager, snowflake, oracle, replicate_pages, default_schemas, default_table, reset_database_env, setup_browser):
+    test_dir = Path(request.fspath).parent  # <-- get test file folder as string
+
     env = SimpleNamespace(
         config=config_manager,
         **replicate_pages.__dict__,
@@ -110,9 +112,14 @@ def snow_test(config_manager, snowflake, oracle, replicate_pages, default_schema
         control_schema=default_schemas[2],
         snowflake_source_name= None,
         oracle_target_name= None,
-        task_name=None
+        task_name=None,
+        test_dir = str(test_dir),  # base test folder as string
+        task_logs_dir = str(test_dir / "task_logs"),  # full string path to task_logs
+        good_files_dir = str(test_dir / "good_files")  # now available as string
     )
+
     yield env
+
     replicate_pages.replicate_actions.delete_task_endpoint(env.task_name, env.snowflake_source_name, env.oracle_target_name)
     replicate_pages.replicate_actions.open_replicate_software()
     replicate_pages.replicate_actions.loader_icon_opening_replicate()

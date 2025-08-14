@@ -1,3 +1,4 @@
+import inspect
 from pathlib import Path
 import pytest
 from types import SimpleNamespace
@@ -69,9 +70,9 @@ def default_schemas(config_manager):
 
 # 6️⃣ Default table (Session level)
 @pytest.fixture(scope="session")
-def default_table(config_manager):
+def default_tables(config_manager):
     print("📦 Acquiring default table")
-    return config_manager.get_default_table()
+    return config_manager.get_default_tables()
 
 #🌐 Setup browser UI
 @pytest.fixture(scope="session")
@@ -84,8 +85,9 @@ def setup_browser(driver, replicate_pages):
 
 # 🔄 Clean database state before each test
 @pytest.fixture
-def reset_database_env(default_schemas,mssql, oracle):
+def reset_database_env(default_schemas, default_tables, mssql, oracle):
     source_schema, target_schema, control_schema = default_schemas
+    default_table, sync_table = default_tables
     print("🔁 Resetting database environment (per test)")
     mssql.drop_all_tables_in_schema(source_schema)
     mssql.drop_schema(source_schema)
@@ -96,24 +98,33 @@ def reset_database_env(default_schemas,mssql, oracle):
     mssql.create_schema(source_schema)
     oracle.create_user(target_schema)
     oracle.create_user(control_schema)
+    mssql.create_table(source_schema, sync_table, ["sync_col int IDENTITY(1,1) primary key"])
 
 # Per-test fixture to set up full test environment
 @pytest.fixture
-def mssql_test(config_manager, mssql, oracle, replicate_pages, default_schemas, default_table, reset_database_env, setup_browser):
+def mssql_test(request, config_manager, mssql, oracle, replicate_pages, default_schemas, default_tables, reset_database_env, setup_browser):
+    test_dir = Path(request.fspath).parent  # <-- get test file folder as string
+
     env = SimpleNamespace(
         config=config_manager,
         **replicate_pages.__dict__,
         mssql_db=mssql,
         oracle_db=oracle,
-        table=default_table,
         source_schema=default_schemas[0],
         target_schema=default_schemas[1],
         control_schema=default_schemas[2],
-        mssql_source_name= None,
-        oracle_target_name= None,
-        task_name=None
+        default_table=default_tables[0],
+        sync_table=default_tables[1],
+        mssql_source_name=None,
+        oracle_target_name=None,
+        task_name=None,
+        test_dir=str(test_dir),  # base test folder as string
+        task_logs_dir=str(test_dir / "task_logs"),  # full string path to task_logs
+        good_files_dir=str(test_dir / "good_files")  # now available as string
     )
+
     yield env
+
     mssql.drop_replication_constraint()
     replicate_pages.replicate_actions.delete_task_endpoint(env.task_name, env.mssql_source_name, env.oracle_target_name)
     replicate_pages.replicate_actions.open_replicate_software()

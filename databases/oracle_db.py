@@ -110,42 +110,83 @@ class OracleDatabase:
             print(f"Error while dropping tables in schema '{schema_name}':", e)
 
     def export_schema_data_to_csv(self, schema_name, output_file):
-        """ Export data from tables in a schema to a CSV file.
-            This method performs the following steps:
-            1. Queries the database to retrieve the names of all tables within the specified schema.
-            2. For each table, it retrieves the column names and data types.
-            3. Writes the table name along with column names and their data types to the CSV file.
-            4. Fetches all rows from the table and writes them to the CSV file.
-
-            The resulting CSV file will contain data from all tables in the specified schema, with each table's data
-            preceded by its name and column descriptions.
-
-            :param schema_name: The name of the schema containing the tables to export.
-            :param output_file: The name of the CSV file to write data to. """
-        get_tables_query = f"SELECT table_name FROM all_tables WHERE owner = '{schema_name}'"
+        """
+        Export schema data with table name, primary keys, column details, and data rows.
+        Replaces NULL values with the string 'NULL' in the CSV output.
+        """
+        get_tables_query = f"""
+            SELECT table_name 
+            FROM all_tables 
+            WHERE owner = '{schema_name}'
+            ORDER BY table_name
+        """
         try:
             with open(output_file, 'w', newline='', encoding="utf-8") as csvfile:
                 csvwriter = csv.writer(csvfile)
 
+                # Get all tables in the schema
                 self.execute_query(get_tables_query)
                 tables = self.fetch_results()
+
                 for table in tables:
                     table_name = table[0]
+                    if table_name.lower() == "sync_table":
+                        continue
 
-                    column_query = f"SELECT column_name, data_type, data_length FROM all_tab_columns WHERE table_name = '{table_name}' AND owner = '{schema_name}'"
+                    # 1. Write separator and table name
+                    csvfile.write("--------------\n")
+                    csvfile.write(f'Table: "{table_name}"\n')
+
+                    # 2. Get primary key(s)
+                    pk_query = f"""
+                        SELECT cols.column_name
+                        FROM all_constraints cons
+                        JOIN all_cons_columns cols 
+                            ON cons.constraint_name = cols.constraint_name
+                            AND cons.owner = cols.owner
+                        WHERE cons.constraint_type = 'P'
+                          AND cons.table_name = '{table_name}'
+                          AND cons.owner = '{schema_name}'
+                        ORDER BY cols.position
+                    """
+                    self.execute_query(pk_query)
+                    pk_columns = [row[0] for row in self.fetch_results()]
+                    csvfile.write(f"Primary Key: {', '.join(pk_columns) if pk_columns else 'None'}\n")
+
+                    # 3. Get column details with constraints
+                    column_query = f"""
+                        SELECT col.column_name, col.data_type, col.data_length, col.nullable
+                        FROM all_tab_columns col
+                        WHERE col.table_name = '{table_name}' 
+                          AND col.owner = '{schema_name}'
+                        ORDER BY col.column_id
+                    """
                     self.execute_query(column_query)
                     columns = self.fetch_results()
 
-                    csvwriter.writerow([f"{table_name} - {', '.join([f'{col[0]} (Data type: {col[1]}, Data length: {col[2]})' for col in columns])}"])
+                    for col_name, data_type, data_length, nullable in columns:
+                        allow_null = "True" if nullable == "Y" else "False"
+                        csvfile.write(
+                            f"Column: {col_name}, Type: {data_type}, Length: {data_length}, AllowDBNull: {allow_null}\n")
 
+                    csvfile.write("\n")
+
+                    # 4. Write column headers and data
                     select_query = f'SELECT * FROM "{schema_name}"."{table_name}"'
                     self.execute_query(select_query)
                     rows = self.fetch_results()
-                    csvwriter.writerow([col[0] for col in columns])
-                    csvwriter.writerows(rows)
-                    csvfile.write('\n')
+
+                    col_names = [col[0] for col in columns]
+                    csvwriter.writerow(col_names)
+
+                    # Replace None with 'NULL'
+                    for row in rows:
+                        csvwriter.writerow(['NULL' if val is None else val for val in row])
+
+                    csvfile.write("\n")
 
                 print(f"Data exported to '{output_file}' successfully.")
+
         except oracledb.DatabaseError as e:
             print(f"Error while exporting data for schema '{schema_name}':", e)
 
