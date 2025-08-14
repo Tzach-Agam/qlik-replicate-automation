@@ -17,7 +17,7 @@ class MonitorPage:
         """ Initialize the MonitorPage object
             :param driver: WebDriver instance for Selenium automation. """
         self.driver = driver
-        self.wait = WebDriverWait(self.driver, 20)
+        self.wait = WebDriverWait(self.driver, 60)
         self.actions = ActionChains(self.driver)
 
     def fl_tab(self):
@@ -29,6 +29,7 @@ class MonitorPage:
         """Click on 'Change Processing' tab to view that status of the CDC process."""
         cdc_tab = self.driver.find_element(By.CSS_SELECTOR, "[title='Change Processing']")
         safe_click(cdc_tab)
+        self.driver.execute_script("document.body.style.zoom='80%'")
 
     def enter_designer_page(self):
         """Enter to the task's 'Designer mode'"""
@@ -75,77 +76,41 @@ class MonitorPage:
         except:
             raise AssertionError(f"Full Load did not complete {number_of_tables} tables within {timeout} seconds.")
 
-    def inserts_check(self, *args: str):
-        """ Check the status of insert operations in the Monitor mode of Qlik Replicate for each of the specified tables
-            in the replication task.
-            It verifies if the expected insert status matches the actual status displayed in the UI. If a match is found,
-            it prints the result for each table.
+    def wait_for_cdc(self, timeout: int = 60):
+        """ Wait for the Change Processing (CDC) to complete."""
+        dynamic_wait = WebDriverWait(self.driver, timeout)
+        xpath = '//div[@id="Monitoring_CP_IncomingChanges"]/div/div[2]/div/div/div'
+        dynamic_wait.until(lambda d: d.find_element(By.XPATH, xpath).get_attribute("value") != "0")
+        dynamic_wait.until(lambda d: d.find_element(By.XPATH, xpath).get_attribute("value") == "0")
+        print("CDC completed")
 
-            :param args: Variable-length list of strings representing the expected insert status for each table in the
-            same order as they appear on the UI."""
+    def _check_operation_status(self, column_index: int, *expected_statuses: str):
+        """Check the status of operations (Insert/Update/Delete) for each specified table.
+        :param column_index: int - The index of the operation's status column (2=Insert, 3=Update, 4=Delete).
+        :param expected_statuses: variable-length list of expected statuses for each table.
+        """
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@id='scrollAreaID']/div/div/table/tbody/tr")))
+        tables = self.driver.find_elements(By.XPATH, "//att-tab/div/div/div/div/div/div/div/div/table/tbody/tr")
 
-        wait = WebDriverWait(self.driver, 60)
-
-        tables_inserts = list(args)
-
-        tables = self.driver.find_elements(By.XPATH, "//div[@data='taskServiceMonitoringData.currentTaskTablesStatus']/div/div/div/div/table/tbody/tr")
-        for table in range(1, len(tables) + 1):
+        for i, table in enumerate(tables):
             try:
-                table_name = self.driver.find_element(By.XPATH, f"//table/tbody/tr[{table}]/td[1]/div/div").text
-                inserts_status_element = (By.XPATH, f"//table/tbody/tr[{table}]/td[2]/div/div[text()='{tables_inserts[table - 1]}']")
-                wait.until(EC.visibility_of_element_located(inserts_status_element))
-                print(f"Inserts for table {table_name} are {tables_inserts[table - 1]}")
-                sleep(5)
-            except:
-                print("Inserts didn't complete within the timeout")
+                table_name = self.driver.find_element(By.XPATH,f"//att-tab/div/div/div/div/div/div/div/div/table/tbody/tr[{i + 1}]/td[1]/div/div").text
+                expected_status = expected_statuses[i]
+                status_locator = (By.XPATH,
+                                  f"//table/tbody/tr[{i + 1}]/td[{column_index}]/div/div[text()='{expected_status}']")
+                self.wait.until(EC.visibility_of_element_located(status_locator))
+                print(f"Status for table {table_name} is {expected_status}")
+            except Exception:
+                print(f"Operation status check did not complete within the timeout for table at index {i + 1}")
 
-    def updates_check(self, *args: str):
-        """ Check the status of update operations in the Monitor mode of Qlik Replicate for each of the specified tables
-            in the replication task.
-            It verifies if the expected update status matches the actual status displayed in the UI. If a match is found,
-            it prints the result for each table.
+    def insert_check(self, *expected_statuses: str):
+        self._check_operation_status(2, *expected_statuses)
 
-            :param args: Variable-length list of strings representing the expected update status for each table in the
-            same order as they appear on the UI."""
+    def update_check(self, *expected_statuses: str):
+        self._check_operation_status(3, *expected_statuses)
 
-        wait = WebDriverWait(self.driver, 60)
-
-        tables_updates = list(args)
-
-        tables = self.driver.find_elements(By.XPATH, "//table/tbody/tr")
-        for table in range(1, len(tables) + 1):
-            try:
-                table_name = self.driver.find_element(By.XPATH, f"//table/tbody/tr[{table}]/td[1]/div/div").text
-                updates_status_element = (By.XPATH, f"//table/tbody/tr[{table}]/td[3]/div/div[text()='{tables_updates[table - 1]}']")
-                wait.until(EC.visibility_of_element_located(updates_status_element))
-                print(f"Updates for table {table_name} are {tables_updates[table - 1]}")
-                sleep(5)
-            except:
-                print("Updates didn't complete within the timeout")
-
-    def delete_check(self, *args: str):
-        """ Check the status of delete operations in the Monitor mode of Qlik Replicate for each of the specified tables
-            in the replication task.
-            It verifies if the expected delete status matches the actual status displayed in the UI. If a match is found,
-            it prints the result for each table.
-
-            :param args: Variable-length list of strings representing the expected delete status for each table in the
-            same order as they appear on the UI."""
-
-        wait = WebDriverWait(self.driver, 60)
-
-        tables_deletes = list(args)
-
-        tables = self.driver.find_elements(By.XPATH, "//table/tbody/tr")
-        for table in range(1, len(tables) + 1):
-            try:
-                table_name = self.driver.find_element(By.XPATH, f"//table/tbody/tr[{table}]/td[1]/div/div").text
-                deletes_status_element = (By.XPATH, f"//table/tbody/tr[{table}]/td[4]/div/div[text()='{tables_deletes[table - 1]}']")
-                wait.until(EC.visibility_of_element_located(deletes_status_element))
-                print(f"Deletes for table {table_name} are {tables_deletes[table - 1]}")
-                sleep(5)
-            except:
-                print("Deletes didn't complete within the timeout")
+    def delete_check(self, *expected_statuses: str):
+        self._check_operation_status(4, *expected_statuses)
 
     def ddl_check(self, *args: str):
         """ Check the status of DDL operations in the Monitor mode of Qlik Replicate for each of the specified tables
@@ -173,6 +138,7 @@ class MonitorPage:
 
     def stop_task(self):
         """Stop the current replication task entirely."""
+        self.driver.execute_script("document.body.style.zoom=''")
         stop_task_element = self.driver.find_element(By.XPATH, "//span[text()='Stop']")
         safe_click(stop_task_element)
         yes_button = self.driver.find_element(By.XPATH, "//button[text()='Yes']")

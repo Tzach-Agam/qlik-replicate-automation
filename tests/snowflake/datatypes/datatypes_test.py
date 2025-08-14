@@ -1,10 +1,10 @@
 from tests.snowflake.snowflake_setup_env import *
 
-def test_number(snow_test):
+def test_number_datatype(snow_test):
     create_task(snow_test, "Snowflake_2_Oracle_Number")
-    snow_test.snowflake_db.execute(f"CREATE TABLE \"{snow_test.source_schema}\".\"{snow_test.table}\" (ID INT PRIMARY KEY, SMALL_NUM SMALLINT, TINY_NUM TINYINT, BYTE_NUM BYTEINT, INT_NUM INT, BIG_NUM BIGINT, DEC_NUM DECIMAL(10,4), NUMERIC_NUM NUMERIC(15,6), NUMBER_COL NUMBER(20,8)) WITH CHANGE_TRACKING = TRUE;")
-    snow_test.snowflake_db.cursor.execute(
-    f"""
+    snow_test.snowflake_db.execute(
+        f"CREATE TABLE \"{snow_test.source_schema}\".\"{snow_test.table}\" (ID INT PRIMARY KEY, SMALL_NUM SMALLINT, TINY_NUM TINYINT, BYTE_NUM BYTEINT, INT_NUM INT, BIG_NUM BIGINT, DEC_NUM DECIMAL(10,4), NUMERIC_NUM NUMERIC(15,6), NUMBER_COL NUMBER(20,8)) WITH CHANGE_TRACKING = TRUE;")
+    snow_test.snowflake_db.cursor.execute(f"""
     INSERT INTO \"{snow_test.source_schema}\".\"{snow_test.table}\" VALUES 
     (1, -32768, -128, -128, -2147483648, -9223372036854775808, -999999.9999, -999999999.999999, -999999999999.99999999),
     (2, 32767, 127, 127, 2147483647, 9223372036854775807, 999999.9999, 999999999.999999, 999999999999.99999999), 
@@ -17,8 +17,7 @@ def test_number(snow_test):
     (9, 7, 3, 5, 1234, 1234567890, 12.3400, 12.345678, 1234567890.98765432),
     (10, 32766, 126, 126, 2147483646, 9223372036854775806, 999999.9998, 999999999.999998, 999999999999.99999998), 
     (11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-    """
-    )
+    """)
     snow_test.snowflake_db.connection.commit()
     snow_test.designer_page.run_new_task()
     snow_test.monitor_page.wait_for_fl('1')
@@ -26,6 +25,11 @@ def test_number(snow_test):
     snow_test.monitor_page.stop_task()
     snow_test.monitor_page.stop_task_wait()
     snow_test.replicate_actions.navigate_to_main_page('tasks')
+    move_file_to_target_dir(snow_test.config.source_tasklog_path(), snow_test.task_logs_dir,
+                            f"reptask_{snow_test.task_name}.log", snow_test.config)
+    snow_test.oracle_db.export_schema_data_to_csv(snow_test.target_schema,
+                                                   snow_test.good_files_dir + "\\Snowflake2Oracle_Number_Datatype.csv")
+    compare_files(snow_test.good_files_dir + "\\Snowflake2Oracle_Number_Datatype.good", snow_test.good_files_dir + "\\Snowflake2Oracle_Number_Datatype.csv")
 
 def test_something2(snow_test):
     create_task(snow_test, "Snowflake_2_Oracle_Number")
