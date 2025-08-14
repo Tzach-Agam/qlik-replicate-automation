@@ -5,7 +5,7 @@ def create_endpoints(ims_test: SimpleNamespace):
     ims_test.ims_source_name = ims_test.manage_endpoints.random_endpoint_name('IMS_DB')
     ims_test.oracle_target_name = ims_test.manage_endpoints.random_endpoint_name('Oracle_DB')
     ims_test.manage_endpoints.create_custom_ims_source_endpoint(ims_test.ims_source_name, 'IMS Source Endpoint',
-                                                                "C:\\Users\juj\PycharmProjects\qlik-replicate-automation\\tests\ims\datatypes\DATATYPES.dbd",
+                                               str(ims_test.dbd_file),
                                                "DEVPCB", "DEVPSB", "VICTORK", "VICTORK", 5555, "zos9.qliktech.com", 50051, "localhost")
     ims_test.manage_endpoints.create_oracle_target_endpoint(ims_test.oracle_target_name)
     ims_test.manage_endpoints.close()

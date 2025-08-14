@@ -1,4 +1,6 @@
 import faulthandler
+import shutil
+
 faulthandler.disable()
 
 import pytest
@@ -9,6 +11,7 @@ from browsers.browsers import get_webdriver
 from databases.ims_db import IMSDatabase
 from databases.oracle_db import OracleDatabase
 from replicate_pages import *
+from utilities.ims_dbd_mapping import TEST_DBD_MAP
 
 # 1️⃣ Config Manager (Session level)
 @pytest.fixture(scope="session")
@@ -28,13 +31,27 @@ def driver(config_manager):
     driver.quit()
 
 # 3️⃣ IMS DB (Session level) - depends on jvm_manager
-@pytest.fixture(scope="session")
-def ims(config_manager):
+@pytest.fixture
+def ims(config_manager, request):
     print("💾 IMS setup")
-    # This fixture now assumes the JVM is already running.
+    test_file = Path(request.fspath)
+    test_dir_name = test_file.parent.name
+    dbd_name = TEST_DBD_MAP.get(test_dir_name)
+    if not dbd_name:
+        raise ValueError(f"No DBD mapping found for test folder: {test_dir_name}")
+    dbd_file = Path(__file__).resolve().parents / "dbd_files" / dbd_name
+    if not dbd_file.exists():
+        raise FileNotFoundError(f"DBD file not found: {dbd_file}")
+    ims_metadata_dir = Path(config_manager.get_section('IMS_DB')['xmlMetadataLocation']) / "DBD"
+    ims_metadata_dir.mkdir(parents=True, exist_ok=True)
+    dst_file = ims_metadata_dir / "IMSDEV.dbd"
+    shutil.copy(str(dbd_file), str(dst_file))
+    print(f"Copied DBD for test folder '{test_dir_name}': {dbd_file} → {dst_file}")
+
+    shutil.copy(dbd_file, ims_metadata_dir / dbd_file.name)
     ims_db = IMSDatabase(config_manager, 'IMS_DB')
     ims_db.connect()
-    yield ims_db
+    yield ims_db, dbd_file
     print("🧹 IMS teardown")
     ims_db.close()
 
@@ -96,17 +113,19 @@ def setup_browser(driver, replicate_pages):
 # 🧪 Per-test fixture to set up full test environment
 @pytest.fixture
 def ims_test(request, ims, oracle, replicate_pages, default_schemas, reset_database_env, setup_browser):
+    ims_db , dbd_file = ims
     test_dir = Path(request.fspath).parent
 
     env = SimpleNamespace(
         **replicate_pages.__dict__,
-        ims=ims,
-        oracle=oracle,
+        ims_db=ims,
+        oracle_db=oracle,
         target_schema=default_schemas[1],
         control_schema=default_schemas[2],
         ims_source_name=None,
         oracle_target_name=None,
         task_name=None,
+        dbd_file = dbd_file,  # full path to the DBD file
         test_dir = str(test_dir),  # base test folder as string
         task_logs_dir = str(test_dir / "task_logs"),  # full string path to task_logs
         good_files_dir = str(test_dir / "good_files")  # now available as string
