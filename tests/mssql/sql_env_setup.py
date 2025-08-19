@@ -98,7 +98,6 @@ def reset_database_env(default_schemas, default_tables, mssql, oracle):
     mssql.create_schema(source_schema)
     oracle.create_user(target_schema)
     oracle.create_user(control_schema)
-    mssql.create_table(source_schema, sync_table, ["sync_col int IDENTITY(1,1) primary key"])
 
 # Per-test fixture to set up full test environment
 @pytest.fixture

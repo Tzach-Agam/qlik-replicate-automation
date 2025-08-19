@@ -48,18 +48,19 @@ class TableSelection:
 
     def search_for_tables(self):
         """Click on the 'Search' button to search for tables under a chosen schema"""
-        search_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Search']")))
-        safe_click(search_button)
+        search_button = self.wait.until(EC.presence_of_element_located((By.XPATH, "//*[text()='Search']")))
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", search_button)
+        self.driver.execute_script("arguments[0].click();", search_button)
         self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[class='bottomButtons']>button:nth-child(3)")))
 
     def select_one_table(self):
         """Select one table of the tables available under a schema"""
-        one_table_button = self.driver.find_element((By.CSS_SELECTOR, "[class='bottomButtons']>button:nth-child(1)"))
+        one_table_button = self.driver.find_element(By.CSS_SELECTOR, "[class='bottomButtons']>button:nth-child(1)")
         safe_click(one_table_button)
 
     def select_all_tables(self):
         """Select all the tables of the tables available under a schema"""
-        all_tables_button = self.driver.find_element((By.CSS_SELECTOR, "[class='bottomButtons']>button:nth-child(3)"))
+        all_tables_button = self.driver.find_element(By.CSS_SELECTOR, "[class='bottomButtons']>button:nth-child(3)")
         safe_click(all_tables_button)
 
     def ok_button_click(self):
@@ -82,14 +83,15 @@ class TableSelection:
         self.ok_button_click()
 
     def select_chosen_tables(self, *tables):
-        """Selects the specified tables for replication. This method searches for the provided table names, clicks on
-           each matching table element, and confirms the selection for replication. It assumes that the necessary web
-           elements for table search and selection are available in the UI.
-           :param tables: Table names to be selected for replication. """
+        """Select specified tables for replication"""
         self.search_for_tables()
+
         for table in tables:
-            chosen_table = self.driver.find_element(By.XPATH, f"//*[text()='{table}']")
-            chosen_table.click()
+            chosen_table = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//span[text()='{table}']")))  # optional wait
+            self.driver.execute_script(
+                "arguments[0].parentElement.scrollTop = arguments[0].offsetTop;",
+                chosen_table
+            )
+            self.driver.execute_script("arguments[0].click();",chosen_table)
             self.select_one_table()
         self.ok_button_click()
-

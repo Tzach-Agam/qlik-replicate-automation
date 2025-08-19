@@ -12,6 +12,7 @@ class OracleDatabase:
         """ Initialize the OracleDatabase instance.
             :param config_manager: An instance of ConfigurationManager to retrieve database configuration.
             :param section: The name of the configuration section containing database connection details. """
+        self.section_name = section
         self.config = config_manager.get_section(section)
         self.connection = None
         self.cursor = None
@@ -54,7 +55,7 @@ class OracleDatabase:
         result = self.cursor.fetchone()
         return result is None
 
-    def create_user(self, user_name):
+    def create_schema(self, user_name):
         """ Create a new user in the Oracle database, and immediately give it Admin privileges. Users act like schemas
             In an oracle database.
             :param user_name: The name of the user to create. """
@@ -76,7 +77,7 @@ class OracleDatabase:
         create_table_query = f"CREATE TABLE {user_name}.{table_name} ({columns_definition})"
         self.execute_query(create_table_query)
 
-    def drop_user(self, user_name):
+    def drop_schema(self, user_name):
         """ Drop an existing user in the connected Oracle database.
             :param user_name: The name of the schema to drop. """
         if self.does_user_not_exist(user_name):

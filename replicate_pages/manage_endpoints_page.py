@@ -103,7 +103,7 @@ class ManageEndpoints:
         database_element = self.driver.find_element(By.CSS_SELECTOR, "[name='database']")
         database_element.send_keys(database)
 
-    def create_sql_server_source_endpoint(self, endpoint_name):
+    def create_mssql_source_endpoint(self, endpoint_name):
         """Creates a SQL Server source endpoint using the parameters in the config.ini file
         :param endpoint_name: The name of the endpoint. """
         self.new_endpoint_connection()
@@ -119,17 +119,17 @@ class ManageEndpoints:
         self.save()
         print("Created a SQL Server source endpoint:", endpoint_name)
 
-    def create_sql_server_target_endpoint(self, endpoint_name):
+    def create_mssql_target_endpoint(self, endpoint_name):
         """Creates a SQL Server source endpoint using the parameters in the config.ini file
         :param endpoint_name: The name of the endpoint"""
         self.new_endpoint_connection()
         self.choose_target_role()
         self.choose_sql_server_type()
         self.sql_auth_option()
-        self.enter_sql_server(self.config.get_section('MSSQL_DB')['server'])
-        self.enter_sql_username(self.config.get_section('MSSQL_DB')['username'])
-        self.enter_sql_password(self.config.get_section('MSSQL_DB')['password'])
-        self.enter_sql_database(self.config.get_section('MSSQL_DB')['database'])
+        self.enter_sql_server(self.config.get_section('MSSQL_DB_Trg')['server'])
+        self.enter_sql_username(self.config.get_section('MSSQL_DB_Trg')['username'])
+        self.enter_sql_password(self.config.get_section('MSSQL_DB_Trg')['password'])
+        self.enter_sql_database(self.config.get_section('MSSQL_DB_Trg')['database'])
         self.enter_endpoint_description('SQL Server Target Endpoint')
         self.enter_endpoint_name(endpoint_name)
         self.test_connection_valid()
@@ -184,9 +184,9 @@ class ManageEndpoints:
         self.new_endpoint_connection()
         self.choose_target_role()
         self.choose_oracle_type()
-        self.enter_oracle_server(self.config.get_section('Oracle_DB')['dsn'])
-        self.enter_oracle_username(self.config.get_section('Oracle_DB')['username'])
-        self.enter_oracle_password(self.config.get_section('Oracle_DB')['password'])
+        self.enter_oracle_server(self.config.get_section('Oracle_DB_Trg')['dsn'])
+        self.enter_oracle_username(self.config.get_section('Oracle_DB_Trg')['username'])
+        self.enter_oracle_password(self.config.get_section('Oracle_DB_Trg')['password'])
         self.enter_endpoint_description('Oracle Target Endpoint')
         self.enter_endpoint_name(endpoint_name)
         self.test_connection_valid()

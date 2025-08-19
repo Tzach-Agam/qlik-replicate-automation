@@ -14,7 +14,7 @@ def test_char_datatype(mssql_test):
         f"INSERT INTO \"{mssql_test.source_schema}\".test_table VALUES (8, null,null,null,null);")
     mssql_test.mssql_db.connection.commit()
     mssql_test.designer_page.run_new_task()
-    mssql_test.monitor_page.wait_for_fl('2')
+    mssql_test.monitor_page.wait_for_fl('1')
     mssql_test.monitor_page.cdc_tab()
     mssql_test.mssql_db.cursor.execute(
         f"INSERT INTO \"{mssql_test.source_schema}\".test_table VALUES (9, 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz');"
@@ -31,10 +31,9 @@ def test_char_datatype(mssql_test):
     f"UPDATE \"{mssql_test.source_schema}\".test_table SET char1='', varchar1='', nchar1='', nvarchar1='' WHERE A=1;"
 	f"UPDATE \"{mssql_test.source_schema}\".test_table SET char1='amich',  varchar1='amich', nchar1='amich', nvarchar1='amich' WHERE A=4;")
     mssql_test.mssql_db.connection.commit()
-    mssql_test.mssql_db.sync_command(mssql_test.source_schema, mssql_test.sync_table)
-    mssql_test.monitor_page.insert_check('1', '8')
-    mssql_test.monitor_page.update_check('0', '2')
-    mssql_test.monitor_page.delete_check('0', '1')
+    mssql_test.monitor_page.insert_check('8')
+    mssql_test.monitor_page.update_check('2')
+    mssql_test.monitor_page.delete_check('1')
     mssql_test.monitor_page.wait_for_cdc()
     mssql_test.monitor_page.stop_task()
     mssql_test.monitor_page.stop_task_wait()
@@ -82,12 +81,13 @@ def test_several_tables(mssql_test):
     mssql_test.monitor_page.insert_check('8', '8', '8')
     mssql_test.monitor_page.update_check('2', '2', '2')
     mssql_test.monitor_page.delete_check('1', '1', '1')
+    mssql_test.monitor_page.wait_for_cdc()
     mssql_test.monitor_page.stop_task()
     mssql_test.monitor_page.stop_task_wait()
     mssql_test.replicate_actions.navigate_to_main_page('tasks')
     move_file_to_target_dir(mssql_test.config.source_tasklog_path(), mssql_test.task_logs_dir,f"reptask_{mssql_test.task_name}.log", mssql_test.config)
-    mssql_test.oracle_db.export_schema_data_to_csv(mssql_test.target_schema, mssql_test.good_files_dir + "\\SQL_2_Oracle_char_datatype.csv")
-    compare_files(mssql_test.good_files_dir + "\\SQL_2_Oracle_char_datatype.good", mssql_test.good_files_dir + "\\SQL_2_Oracle_char_datatype.csv")
+    mssql_test.oracle_db.export_schema_data_to_csv(mssql_test.target_schema, mssql_test.good_files_dir + "\\SQL_2_Oracle_several_tables.csv")
+    compare_files(mssql_test.good_files_dir + "\\SQL_2_Oracle_several_tables.good", mssql_test.good_files_dir + "\\SQL_2_Oracle_several_tables.csv")
 
 
 def test_number_datatype(mssql_test):
