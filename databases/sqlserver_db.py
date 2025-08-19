@@ -1,5 +1,3 @@
-import configparser
-
 import pyodbc
 import csv
 from configurations.config_manager import ConfigurationManager
@@ -14,6 +12,7 @@ class SQLServerDatabase:
         """ Initialize the SQLServerDatabase instance.
             :param config_manager: An instance of ConfigurationManager to retrieve database configuration.
             :param section: The name of the configuration section containing database connection details. """
+        self.section_name = section
         self.config = config_manager.get_section(section)
         self.connection_string = f'DRIVER=SQL Server;SERVER={self.config["server"]};DATABASE={self.config["database"]};UID={self.config["username"]};PWD={self.config["password"]}'
         self.connection = None
@@ -82,7 +81,8 @@ class SQLServerDatabase:
         :param schema_name: The name of the schema where the sync table will be created. """
         sync_query = f"INSERT INTO {schema_name}.{sync_table} DEFAULT VALUES;"
         try:
-            self.execute_query(sync_query)
+            for i in range(1):
+                self.execute_query(sync_query)
         except pyodbc.Error as e:
             print(f"Error executing sync command on table '{sync_table}':", e)
 

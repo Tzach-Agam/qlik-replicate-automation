@@ -16,7 +16,6 @@ def safe_click(element):
         :param element: The web element to click.
         :raises NoSuchElementException: If the element is not found on the web page.
         :raises ElementClickInterceptedException: If the click is intercepted by another element."""
-
     try:
         element.click()
     except (NoSuchElementException, ElementClickInterceptedException,
@@ -27,7 +26,6 @@ def move_file_to_target_dir(source_dir: str, target_dir: str, file_name: str, co
     """ Copies a chosen file from source dir to target dir.
         If a file with the same name exists in the target, appends a random suffix to avoid overwriting.
         The source file remains intact.
-
         :param source_dir: the path of the source directory
         :param target_dir: the path of the target directory
         :param file_name: the name of the file that will be copied
@@ -72,7 +70,6 @@ def compare_files(good_file, data_file):
 
      If the data in the good and data files is identical, it means that all the data in all the tables was replicated
      from the source to the target successfully, which means successful result of the test."""
-
     if filecmp.cmp(good_file, data_file, shallow=False):
         os.remove(data_file)
         print(f"Data file is deleted since it's identical to the Good file")

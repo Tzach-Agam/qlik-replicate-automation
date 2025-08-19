@@ -78,3 +78,14 @@ class ConfigurationManager:
         (source path of task task_logs)."""
         source_log_path = self.config.get('Task_log_Path', 'source_directory')
         return source_log_path
+
+    def get_enabled_targets(self):
+        """Returns a list of targets that are enabled (True) in the [Targets] section."""
+        if 'Targets' not in self.config:
+            return []  # no targets section, return empty list
+
+        enabled_targets = [
+            target for target, value in self.config['Targets'].items()
+            if value.lower() == 'true'
+        ]
+        return enabled_targets

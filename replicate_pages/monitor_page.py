@@ -30,6 +30,7 @@ class MonitorPage:
         cdc_tab = self.driver.find_element(By.CSS_SELECTOR, "[title='Change Processing']")
         safe_click(cdc_tab)
         self.driver.execute_script("document.body.style.zoom='80%'")
+        sleep(5)
 
     def enter_designer_page(self):
         """Enter to the task's 'Designer mode'"""
@@ -79,9 +80,9 @@ class MonitorPage:
     def wait_for_cdc(self, timeout: int = 60):
         """ Wait for the Change Processing (CDC) to complete."""
         dynamic_wait = WebDriverWait(self.driver, timeout)
-        xpath = '//div[@id="Monitoring_CP_IncomingChanges"]/div/div[2]/div/div/div'
-        dynamic_wait.until(lambda d: d.find_element(By.XPATH, xpath).get_attribute("value") != "0")
-        dynamic_wait.until(lambda d: d.find_element(By.XPATH, xpath).get_attribute("value") == "0")
+        transferring_element = (By.XPATH, "//div[@id='taskFlowMapDirective'][@class='fullFlowMap RUNNING Transferring']")
+        dynamic_wait.until(EC.visibility_of_element_located(transferring_element))
+        dynamic_wait.until(EC.invisibility_of_element_located(transferring_element))
         print("CDC completed")
 
     def _check_operation_status(self, column_index: int, *expected_statuses: str):

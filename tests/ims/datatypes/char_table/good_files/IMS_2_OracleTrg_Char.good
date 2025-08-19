@@ -1,0 +1,31 @@
+--------------
+Table: "ALLTYPES"
+Primary Key: ROOTID, ID
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: ID, Type: NUMBER, Length: 22, AllowDBNull: False
+
+ROOTID,ID
+ROOT000000,1
+ROOT000000,2
+ROOT000000,3
+ROOT000000,4
+ROOT000000,5
+ROOT000000,6
+
+--------------
+Table: "CHAR_TABLE"
+Primary Key: ROOTID, ID, CHAR_TABLE_ROWNUM
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: ID, Type: NUMBER, Length: 22, AllowDBNull: False
+Column: CHAR_TABLE_ROWNUM, Type: NUMBER, Length: 22, AllowDBNull: False
+Column: CHAR_COL2, Type: NVARCHAR2, Length: 120, AllowDBNull: True
+Column: CHAR_COL1, Type: NVARCHAR2, Length: 120, AllowDBNull: True
+
+ROOTID,ID,CHAR_TABLE_ROWNUM,CHAR_COL2,CHAR_COL1
+ROOT000000,1,1,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz
+ROOT000000,2,1,"!@#$%^&*()_-+=[]<>?.,123456","!@#$%^&*()_-+=[]<>?.,123456"
+ROOT000000,3,1,a,a
+ROOT000000,4,1, , 
+ROOT000000,5,1, , 
+ROOT000000,6,1, , 
+
