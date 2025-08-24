@@ -21,13 +21,13 @@ def create_endpoints(ims_test: SimpleNamespace):
 
 def create_task(ims_test: SimpleNamespace):
     create_endpoints(ims_test)  # sets ims_test.target_name
-    task_name = f"IMS_2_{ims_test.target_db.config['endpoint']}_Char"
+    task_name = f"IMS_2_{ims_test.target_db.config['endpoint']}_Number"
     ims_test.tasks_general_page.create_new_task()
     new_task_name = ims_test.new_task_page.new_task_creation(task_name)
     ims_test.replicate_actions.task_data_loader()
     ims_test.designer_page.choose_source_target(ims_test.ims_source_name, ims_test.target_name)
     ims_test.designer_page.enter_table_selection()
-    ims_test.table_selection.select_chosen_tables("ALLTYPES", "CHAR_TABLE")
+    ims_test.table_selection.select_chosen_tables("ALLTYPES", "NUMBER_TABLE")
     ims_test.designer_page.enter_task_settings()
     ims_test.task_settings.set_task_settings_general()
     ims_test.task_name = new_task_name

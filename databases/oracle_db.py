@@ -114,6 +114,7 @@ class OracleDatabase:
         """
         Export schema data with table name, primary keys, column details, and data rows.
         Replaces NULL values with the string 'NULL' in the CSV output.
+        Orders rows by the primary key(s) if they exist.
         """
         get_tables_query = f"""
             SELECT table_name 
@@ -173,7 +174,12 @@ class OracleDatabase:
                     csvfile.write("\n")
 
                     # 4. Write column headers and data
-                    select_query = f'SELECT * FROM "{schema_name}"."{table_name}"'
+                    order_by_clause = ""
+                    if pk_columns:
+                        # Quote column names in case they are case-sensitive or special
+                        order_by_clause = " ORDER BY " + ", ".join([f'"{col}"' for col in pk_columns])
+
+                    select_query = f'SELECT * FROM "{schema_name}"."{table_name}"{order_by_clause}'
                     self.execute_query(select_query)
                     rows = self.fetch_results()
 

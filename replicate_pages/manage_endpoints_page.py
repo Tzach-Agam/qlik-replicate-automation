@@ -3,7 +3,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from selenium.webdriver import ActionChains
+from selenium.webdriver import ActionChains, Keys
 from utilities.utility_functions import safe_click
 from configurations.config_manager import ConfigurationManager
 import random
@@ -346,6 +346,18 @@ class ManageEndpoints:
         dbd_xml_element = self.driver.find_element(By.XPATH, "//*[@id='dbd']")
         dbd_xml_element.send_keys(xml_location)
 
+    def enter_logstream_name(self, logstream_name):
+        """Enter the name of the logstream for the IMS source endpoint."""
+        logstream_element = self.driver.find_element(By.XPATH, "//*[@id='logStreamName']")
+        logstream_element.send_keys(logstream_name)
+
+    def enter_max_segment_memory(self, max_seg_memory):
+        """Enter the maximum segment memory for the IMS source endpoint."""
+        max_seg_memory_element = self.driver.find_element(By.XPATH, "//att-field[@prop='fl_segment_allocation_mb']/div/div[2]/div/input")
+        max_seg_memory_element.send_keys(Keys.CONTROL + "a")
+        max_seg_memory_element.send_keys(Keys.DELETE)
+        max_seg_memory_element.send_keys(max_seg_memory)
+
     def create_ims_source_endpoint(self, endpoint_name):
         """Creates an IMS source endpoint using the parameters in the config.ini file"""
         self.new_endpoint_connection()
@@ -359,13 +371,14 @@ class ManageEndpoints:
         self.enter_ims_psb(self.config.get_section('IMS_DB')['psb'][0:6])
         self.enter_ims_pcb(self.config.get_section('IMS_DB')['schema'])
         self.enter_ims_dbd_xml(self.config.get_section('IMS_DB')['dbd_xml'])
+        self.enter_logstream_name(self.config.get_section('IMS_DB')['logstream_name'])
         self.enter_endpoint_description('IMS Source Endpoint')
         self.enter_endpoint_name(endpoint_name)
         self.test_connection_valid()
         self.save()
         print("Created a IMS source endpoint:", endpoint_name)
 
-    def create_custom_ims_source_endpoint(self, endpoint_name, description, dbd_xml, schema, psb, password, user, port, host, server_port, server):
+    def create_custom_ims_source_endpoint(self, endpoint_name, description, logstream_name, dbd_xml, schema, psb, password, user, port, host, server_port, server, max_seg_memory=5):
         """Creates custom IMS source endpoint using parameters inserted by the user"""
         self.new_endpoint_connection()
         self.choose_ims_type()
@@ -378,6 +391,8 @@ class ManageEndpoints:
         self.enter_ims_psb(psb)
         self.enter_ims_pcb(schema)
         self.enter_ims_dbd_xml(dbd_xml)
+        self.enter_logstream_name(logstream_name)
+        self.enter_max_segment_memory(max_seg_memory)
         self.enter_endpoint_description(description)
         self.enter_endpoint_name(endpoint_name)
         self.test_connection_valid()

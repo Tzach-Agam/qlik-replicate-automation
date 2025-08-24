@@ -93,11 +93,11 @@ def reset_database_env(default_schemas, default_tables, mssql, oracle):
     mssql.drop_schema(source_schema)
     oracle.drop_all_tables_in_schema(target_schema)
     oracle.drop_all_tables_in_schema(control_schema)
-    oracle.drop_user(target_schema)
-    oracle.drop_user(control_schema)
+    oracle.drop_schema(target_schema)
+    oracle.drop_schema(control_schema)
     mssql.create_schema(source_schema)
-    oracle.create_user(target_schema)
-    oracle.create_user(control_schema)
+    oracle.create_schema(target_schema)
+    oracle.create_schema(control_schema)
 
 # Per-test fixture to set up full test environment
 @pytest.fixture
@@ -133,7 +133,7 @@ def create_task(mssql_test: SimpleNamespace, task_name: str):
     mssql_test.tasks_general_page.enter_manage_endpoints()
     mssql_test.mssql_source_name = mssql_test.manage_endpoints.random_endpoint_name('MSSQL_DB')
     mssql_test.oracle_target_name = mssql_test.manage_endpoints.random_endpoint_name('Oracle_DB')
-    mssql_test.manage_endpoints.create_sql_server_source_endpoint(mssql_test.mssql_source_name)
+    mssql_test.manage_endpoints.create_mssql_source_endpoint(mssql_test.mssql_source_name)
     mssql_test.manage_endpoints.create_oracle_target_endpoint(mssql_test.oracle_target_name)
     mssql_test.manage_endpoints.close()
     mssql_test.tasks_general_page.create_new_task()

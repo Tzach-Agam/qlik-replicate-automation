@@ -138,6 +138,7 @@ class SQLServerDatabase:
         """
         Export schema data from SQL Server with table name, primary keys, column details, and data rows.
         Replaces NULL values with the string 'NULL' in the CSV output.
+        Orders rows by the primary key(s) if they exist.
         """
         get_tables_query = f"""
             SELECT table_name 
@@ -194,7 +195,12 @@ class SQLServerDatabase:
                     csvfile.write("\n")
 
                     # 4. Write column headers and data
-                    select_query = f'SELECT * FROM "{schema_name}"."{table_name}"'
+                    order_by_clause = ""
+                    if pk_columns:
+                        # Quote identifiers properly for SQL Server
+                        order_by_clause = " ORDER BY " + ", ".join([f'[{col}]' for col in pk_columns])
+
+                    select_query = f'SELECT * FROM [{schema_name}].[{table_name}]{order_by_clause}'
                     self.cursor.execute(select_query)
                     rows = self.fetch_results()
 

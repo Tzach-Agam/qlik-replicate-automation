@@ -11,6 +11,15 @@ ROOT000000,3
 ROOT000000,4
 ROOT000000,5
 ROOT000000,6
+ROOT000000,7
+ROOT000000,9
+ROOT000000,10
+ROOT000000,11
+ROOT000000,12
+ROOT000000,13
+ROOT000000,14
+ROOT000000,15
+ROOT000000,16
 
 --------------
 Table: "CHAR_TABLE"
@@ -27,5 +36,14 @@ ROOT000000,2,1,"!@#$%^&*()_-+=[]<>?.,123456","!@#$%^&*()_-+=[]<>?.,123456"
 ROOT000000,3,1,a,a
 ROOT000000,4,1, , 
 ROOT000000,5,1, , 
-ROOT000000,6,1, , 
+ROOT000000,6,1,updated_value,updated_value
+ROOT000000,7,1,updated_value2,updated_value2
+ROOT000000,9,1,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz
+ROOT000000,10,1,"!@#$%^&*()_-+=[]<>?.,123456","!@#$%^&*()_-+=[]<>?.,123456"
+ROOT000000,11,1,a,a
+ROOT000000,12,1, , 
+ROOT000000,13,1, , 
+ROOT000000,14,1,aaaaaaaaaaaaaaaaaaaa,aaaaaaaaaaaaaaaaaaaa
+ROOT000000,15,1,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz
+ROOT000000,16,1, , 
 
