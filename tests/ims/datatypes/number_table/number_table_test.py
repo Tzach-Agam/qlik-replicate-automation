@@ -1,0 +1,65 @@
+from settings import *
+
+def test_number_datatype(ims_test):
+    """Test for IMS NUMBER Data Type"""
+    create_task(ims_test)
+    ims_test.ims_db.cursor.execute("DELETE FROM \"DEVPCB\".\"ALLTYPES\"")
+    ims_test.ims_db.cursor.execute(
+        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, NUMBER_TABLE_1_USHORT, NUMBER_TABLE_1_ULONG, NUMBER_TABLE_1_UINT_COL, NUMBER_TABLE_1_SHORT_COL, NUMBER_TABLE_1_LONG_COL, NUMBER_TABLE_1_INT_COL, NUMBER_TABLE_1_UNSIGNED_DEC, NUMBER_TABLE_1_ZONE_DEC, NUMBER_TABLE_1_PACKED_DEC)"
+        f"VALUES ('ROOT000000', 1, 0, 0, 0, 0, 0, 0, 0.01, 0.01, 0.0001)")
+    ims_test.ims_db.cursor.execute(
+        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, NUMBER_TABLE_1_USHORT, NUMBER_TABLE_1_ULONG, NUMBER_TABLE_1_UINT_COL, NUMBER_TABLE_1_SHORT_COL, NUMBER_TABLE_1_LONG_COL, NUMBER_TABLE_1_INT_COL, NUMBER_TABLE_1_UNSIGNED_DEC, NUMBER_TABLE_1_ZONE_DEC, NUMBER_TABLE_1_PACKED_DEC)"
+        f"VALUES ('ROOT000000', 2, 65535, 18446744, 4294, 3276788, 92233720, 2147483647, 99.99, 99999.99, 9999.9999)")
+    ims_test.ims_db.cursor.execute(
+        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, NUMBER_TABLE_1_USHORT, NUMBER_TABLE_1_ULONG, NUMBER_TABLE_1_UINT_COL, NUMBER_TABLE_1_SHORT_COL, NUMBER_TABLE_1_LONG_COL, NUMBER_TABLE_1_INT_COL, NUMBER_TABLE_1_UNSIGNED_DEC, NUMBER_TABLE_1_ZONE_DEC, NUMBER_TABLE_1_PACKED_DEC)"
+        f"VALUES ('ROOT000000', 3, 1, 500000, 1234567890, -32768, -922337203, -2147483648, 0.10, 0.99, 0.0002)")
+    ims_test.ims_db.cursor.execute(
+        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, NUMBER_TABLE_1_USHORT, NUMBER_TABLE_1_ULONG, NUMBER_TABLE_1_UINT_COL, NUMBER_TABLE_1_SHORT_COL, NUMBER_TABLE_1_LONG_COL, NUMBER_TABLE_1_INT_COL, NUMBER_TABLE_1_UNSIGNED_DEC, NUMBER_TABLE_1_ZONE_DEC, NUMBER_TABLE_1_PACKED_DEC)"
+        f"VALUES ('ROOT000000', 4, 123, 999999, 987654321, 12345, 123456789, 123456789, 12.34, 56.78, 0.1234)")
+    ims_test.ims_db.cursor.execute(
+        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, NUMBER_TABLE_1_USHORT, NUMBER_TABLE_1_ULONG, NUMBER_TABLE_1_UINT_COL, NUMBER_TABLE_1_SHORT_COL, NUMBER_TABLE_1_LONG_COL, NUMBER_TABLE_1_INT_COL, NUMBER_TABLE_1_UNSIGNED_DEC, NUMBER_TABLE_1_ZONE_DEC, NUMBER_TABLE_1_PACKED_DEC)"
+        f"VALUES ('ROOT000000', 5, 500, 500000, 5000, -500, -500000, -5000, 50.50, 505.05, 5050.5050)")
+    ims_test.ims_db.cursor.execute(
+        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID)"
+        f"VALUES('ROOT000000', 6)")
+    ims_test.ims_db.connection.commit()
+    ims_test.designer_page.run_new_task()
+    ims_test.monitor_page.wait_for_fl('2')
+    ims_test.monitor_page.cdc_tab()
+    ims_test.ims_db.cursor.execute(
+        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, NUMBER_TABLE_1_USHORT, NUMBER_TABLE_1_ULONG, NUMBER_TABLE_1_UINT_COL, NUMBER_TABLE_1_SHORT_COL, NUMBER_TABLE_1_LONG_COL, NUMBER_TABLE_1_INT_COL, NUMBER_TABLE_1_UNSIGNED_DEC, NUMBER_TABLE_1_ZONE_DEC, NUMBER_TABLE_1_PACKED_DEC)"
+        f"VALUES ('ROOT000000', 7, 1000, 1000000, 10000, 1000, 1000000, 10000, 75.75, 7575.75, 7575.7575)")
+    ims_test.ims_db.cursor.execute(
+        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, NUMBER_TABLE_1_USHORT, NUMBER_TABLE_1_ULONG, NUMBER_TABLE_1_UINT_COL, NUMBER_TABLE_1_SHORT_COL, NUMBER_TABLE_1_LONG_COL, NUMBER_TABLE_1_INT_COL, NUMBER_TABLE_1_UNSIGNED_DEC, NUMBER_TABLE_1_ZONE_DEC, NUMBER_TABLE_1_PACKED_DEC)"
+        f"VALUES ('ROOT000000', 8, 32767, 1844674, 2147483647, -123, -87654321, -9876543, 12.34, 0.01, 0.4321)")
+    ims_test.ims_db.cursor.execute(
+        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, NUMBER_TABLE_1_USHORT, NUMBER_TABLE_1_ULONG, NUMBER_TABLE_1_UINT_COL, NUMBER_TABLE_1_SHORT_COL, NUMBER_TABLE_1_LONG_COL, NUMBER_TABLE_1_INT_COL, NUMBER_TABLE_1_UNSIGNED_DEC, NUMBER_TABLE_1_ZONE_DEC, NUMBER_TABLE_1_PACKED_DEC)"
+        f"VALUES ('ROOT000000', 9, 1000, 7654321, 123456789, 0, 12345678, 9876543, 99.99, 5432.10, 9.8765)")
+    ims_test.ims_db.cursor.execute(
+        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, NUMBER_TABLE_1_USHORT, NUMBER_TABLE_1_ULONG, NUMBER_TABLE_1_UINT_COL, NUMBER_TABLE_1_SHORT_COL, NUMBER_TABLE_1_LONG_COL, NUMBER_TABLE_1_INT_COL, NUMBER_TABLE_1_UNSIGNED_DEC, NUMBER_TABLE_1_ZONE_DEC, NUMBER_TABLE_1_PACKED_DEC)"
+        f"VALUES ('ROOT000000', 10, 50, 123456789, 987654321, -500, -12345678, -9876543, 0.50, 12.34, 0.0500)")
+    ims_test.ims_db.cursor.execute(
+        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, NUMBER_TABLE_1_USHORT, NUMBER_TABLE_1_ULONG, NUMBER_TABLE_1_UINT_COL, NUMBER_TABLE_1_SHORT_COL, NUMBER_TABLE_1_LONG_COL, NUMBER_TABLE_1_INT_COL, NUMBER_TABLE_1_UNSIGNED_DEC, NUMBER_TABLE_1_ZONE_DEC, NUMBER_TABLE_1_PACKED_DEC)"
+        f"VALUES ('ROOT000000', 11, 10, 10000, 100000, 10, 10000, 100000, 10.10, 1010.10, 1010.1010)")
+    ims_test.ims_db.cursor.execute(
+        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID) VALUES ('ROOT000000', 12)")
+    ims_test.ims_db.cursor.execute(
+        f"UPDATE  \"DEVPCB\".\"ALLTYPES\" SET NUMBER_TABLE_1_USHORT =10, NUMBER_TABLE_1_ULONG = 1000, NUMBER_TABLE_1_UINT_COL = 10000 , NUMBER_TABLE_1_SHORT_COL = 10, NUMBER_TABLE_1_LONG_COL = 10000 , NUMBER_TABLE_1_INT_COL = 100000,  NUMBER_TABLE_1_UNSIGNED_DEC = 10.10, NUMBER_TABLE_1_ZONE_DEC = 10.10, NUMBER_TABLE_1_PACKED_DEC = 1.10 WHERE ID = 6")
+    ims_test.ims_db.cursor.execute(
+        f"UPDATE  \"DEVPCB\".\"ALLTYPES\" SET NUMBER_TABLE_1_USHORT =10, NUMBER_TABLE_1_ULONG = 1000, NUMBER_TABLE_1_UINT_COL = 10000 , NUMBER_TABLE_1_SHORT_COL = 10, NUMBER_TABLE_1_LONG_COL = 10000 , NUMBER_TABLE_1_INT_COL = 100000,  NUMBER_TABLE_1_UNSIGNED_DEC = 10.10, NUMBER_TABLE_1_ZONE_DEC = 10.10, NUMBER_TABLE_1_PACKED_DEC = 1.10 WHERE ID = 5")
+    ims_test.ims_db.cursor.execute(
+        f"DELETE FROM \"DEVPCB\".\"ALLTYPES\" WHERE ID = 4")
+    ims_test.ims_db.connection.commit()
+    ims_test.ims_db.sync_command()
+    ims_test.monitor_page.insert_check('6', '6')
+    ims_test.monitor_page.update_check('0', '2')
+    ims_test.monitor_page.delete_check('1', '1')
+    ims_test.monitor_page.wait_for_cdc()
+    ims_test.monitor_page.stop_task()
+    ims_test.monitor_page.stop_task_wait()
+    ims_test.replicate_actions.navigate_to_main_page('tasks')
+    move_file_to_target_dir(ims_test.config.source_tasklog_path(), ims_test.task_logs_dir,f"reptask_{ims_test.task_name}.log", ims_test.config)
+    ims_test.target_db.export_schema_data_to_csv(ims_test.target_schema,
+                                                 ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_Number.csv")
+    compare_files(ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_Number.good",
+                  ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_Number.csv")

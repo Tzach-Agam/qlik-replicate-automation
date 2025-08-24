@@ -154,6 +154,7 @@ def ims_test(request, config_manager, ims, target_db, replicate_pages, default_s
         ims_db=ims_db,
         target_db=db,
         target_type=db_type,
+        source_schema=ims_db.section['schema'],
         target_schema=default_schemas[1],
         control_schema=default_schemas[2],
         ims_source_name=None,

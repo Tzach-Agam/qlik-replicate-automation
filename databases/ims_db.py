@@ -71,6 +71,15 @@ class IMSDatabase:
         self.cursor.execute(query)
         return self.cursor.fetchall()
 
+    def sync_command(self, schema_name=None, table_name=None, column_name=None, pk_column=None, value=None):
+        """Execute the SYNC command on the IMS database."""
+        for i in range(1, 20):
+            if schema_name is None and table_name is None:
+                ims_schema = self.section['schema']
+                self.execute_query(f"UPDATE \"{ims_schema}\".\"ROOT\" SET FILL_0 = 'SYNC' WHERE ROOTID = 'ROOT00000S'")
+            elif schema_name is not None and table_name is None:
+                self.execute_query(f"UPDATE \"{schema_name}\".\"{table_name}\" SET {column_name} = 'SYNC' WHERE {pk_column} = '{value}'")
+        print("SYNC Command executed successfully")
     def close(self):
         """Close the IMS database connection."""
         try:
@@ -81,3 +90,8 @@ class IMSDatabase:
             print("IMS connection closed.")
         except Exception as e:
             print("Error closing IMS connection:", e)
+
+config = ConfigurationManager("C:\\Users\\juj\PycharmProjects\qlik-replicate-automation\configurations\config.ini")
+ims_db = IMSDatabase(config, "IMS_DB")
+ims_db.connect()
+ims_db.cursor.execute("SELECT * FROM \"DEVPCB\".\"ALLTYPES\"")
