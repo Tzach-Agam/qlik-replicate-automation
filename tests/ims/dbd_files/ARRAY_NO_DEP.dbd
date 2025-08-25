@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:dbd xmlns:ns2="http://www.ibm.com/ims/DBD" dbdName="IMSDEV" encoding="CP1047" xmlSchemaVersion="1">
+    <access dbType="HDAM">
+        <hdam osAccess="VSAM" password="N" datxexit="N">
+            <rmName name="DFSHDC40">
+                <subOptions anchorPoints="40" maxRBN="100" bytes="-1"/>
+            </rmName>
+            <exitContainer>
+                <dataCaptureExitRoutine exitRoutineName="*" exitRoutineLog="Y">
+                    <exitRoutineSubOptions key="Y" path="N" data="Y"/>
+                    <cascade doCascade="Y">
+                        <subOptions key="Y" path="N" data="N"/>
+                    </cascade>
+                </dataCaptureExitRoutine>
+            </exitContainer>
+            <dataSetContainer>
+                <dataSet ddname="PRIME1" scan="3" searchA="0" device="3390">
+                    <block size="-1"/>
+                    <size size="-1"/>
+                    <frspc fbff="0" fspf="0"/>
+                </dataSet>
+            </dataSetContainer>
+        </hdam>
+    </access>
+    <segment name="ROOT" imsName="ROOT">
+        <hdam label="GENDS1">
+            <bytes maxBytes="100"/>
+            <pointer/>
+        </hdam>
+        <field name="ROOTID" imsName="ROOTID" seqType="U" imsDatatype="C">
+            <startPos>1</startPos>
+            <relativeStart>0</relativeStart>
+            <startAfter></startAfter>
+            <bytes>10</bytes>
+            <maxBytes>0</maxBytes>
+            <remarks></remarks>
+            <marshaller/>
+            <applicationDatatype datatype="CHAR"/>
+        </field>
+        <field name="ROOTID_NEW" imsName="">
+            <startPos>1</startPos>
+            <relativeStart>0</relativeStart>
+            <startAfter></startAfter>
+            <bytes>10</bytes>
+            <maxBytes>0</maxBytes>
+            <remarks></remarks>
+            <marshaller/>
+            <applicationDatatype datatype="CHAR"/>
+        </field>
+        <field name="FILL_0" imsName="">
+            <startPos>11</startPos>
+            <relativeStart>0</relativeStart>
+            <startAfter></startAfter>
+            <bytes>90</bytes>
+            <maxBytes>0</maxBytes>
+            <remarks></remarks>
+            <marshaller/>
+            <applicationDatatype datatype="CHAR"/>
+        </field>
+        <segment name="ALLTYPES" imsName="ALLTYPES">
+            <hdam label="GENDS1">
+                <bytes maxBytes="500"/>
+                <pointer/>
+            </hdam>
+            <field name="ID" imsName="ID" seqType="U" imsDatatype="X">
+                <startPos>1</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>4</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller/>
+                <applicationDatatype datatype="INT"/>
+            </field>
+        </segment>
+        <segment name="STRUCT1" imsName="STRUCT1">
+            <hdam label="GENDS1">
+                <bytes maxBytes="1000"/>
+                <pointer/>
+            </hdam>
+            <field name="SKEY" imsName="SKEY" seqType="U" imsDatatype="C">
+                <startPos>1</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>20</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller/>
+                <applicationDatatype datatype="CHAR"/>
+            </field>
+            <field name="NUM_DATES" imsName="">
+                <startPos>21</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>2</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller isSigned="N">
+                    <typeConverter>ZONEDDECIMAL</typeConverter>
+                </marshaller>
+                <applicationDatatype datatype="DECIMAL" precision="2" scale="0"/>
+            </field>
+            <field name="DATE_STRUCT" imsName="" dependsOn="NUM_DATES" minOccurs="1" maxOccurs="3">
+                <startPos>23</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>0</bytes>
+                <maxBytes>24</maxBytes>
+                <remarks></remarks>
+                <marshaller/>
+                <applicationDatatype datatype="ARRAY"/>
+                <field name="DATE_YY" imsName="" parentField="DATE_STRUCT">
+                    <relativeStart>1</relativeStart>
+                    <bytes>4</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller isSigned="N">
+                        <typeConverter>ZONEDDECIMAL</typeConverter>
+                    </marshaller>
+                    <applicationDatatype datatype="DECIMAL" precision="4" scale="0"/>
+                </field>
+                <field name="DATE_MM" imsName="" parentField="DATE_STRUCT">
+                    <relativeStart>5</relativeStart>
+                    <bytes>2</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller isSigned="N">
+                        <typeConverter>ZONEDDECIMAL</typeConverter>
+                    </marshaller>
+                    <applicationDatatype datatype="DECIMAL" precision="2" scale="0"/>
+                </field>
+                <field name="DATE_DD" imsName="" parentField="DATE_STRUCT">
+                    <relativeStart>7</relativeStart>
+                    <bytes>2</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller isSigned="N">
+                        <typeConverter>ZONEDDECIMAL</typeConverter>
+                    </marshaller>
+                    <applicationDatatype datatype="DECIMAL" precision="2" scale="0"/>
+                </field>
+            </field>
+            <field name="VARIANT_SELECTOR" imsName="">
+                <startPos>47</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>1</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller isPuredDBCS="N" url="" overflow=""/>
+                <applicationDatatype datatype="CHAR"/>
+            </field>
+            <mapping dependingOnField="VARIANT_SELECTOR" controlSegmentName="STRUCT1" name="VARIANT">
+                <remarks></remarks>
+                <case name="A">
+                    <dependingOnFieldValue valueDatatype="C" value="A"/>
+                    <remarks></remarks>
+                    <field name="VARIANT1" imsName="" dependsOn="" minOccurs="0">
+                        <startPos>48</startPos>
+                        <relativeStart>0</relativeStart>
+                        <startAfter></startAfter>
+                        <bytes>16</bytes>
+                        <maxBytes>0</maxBytes>
+                        <remarks></remarks>
+                        <marshaller isPuredDBCS="N" url="" overflow=""/>
+                        <applicationDatatype datatype="STRUCT"/>
+                        <field name="NUM_1" imsName="" parentField="VARIANT1" dependsOn="" minOccurs="0">
+                            <startPos>48</startPos>
+                            <bytes>6</bytes>
+                            <maxBytes>0</maxBytes>
+                            <remarks></remarks>
+                            <marshaller isPuredDBCS="N" url="" overflow="" isSigned="Y">
+<typeConverter>ZONEDDECIMAL</typeConverter>
+                            </marshaller>
+                            <applicationDatatype datatype="DECIMAL" precision="6" scale="0"/>
+                        </field>
+                        <field name="STR_1" imsName="" parentField="VARIANT1" dependsOn="" minOccurs="0">
+                            <startPos>54</startPos>
+                            <bytes>10</bytes>
+                            <maxBytes>0</maxBytes>
+                            <remarks></remarks>
+                            <marshaller isPuredDBCS="N" url="" overflow=""/>
+                            <applicationDatatype datatype="CHAR"/>
+                        </field>
+                    </field>
+                </case>
+                <case name="B">
+                    <dependingOnFieldValue valueDatatype="C" value="B"/>
+                    <remarks></remarks>
+                    <field name="VARIANT2" imsName="" dependsOn="" minOccurs="0">
+                        <startPos>48</startPos>
+                        <relativeStart>0</relativeStart>
+                        <startAfter></startAfter>
+                        <bytes>8</bytes>
+                        <maxBytes>0</maxBytes>
+                        <remarks></remarks>
+                        <marshaller isPuredDBCS="N" url="" overflow=""/>
+                        <applicationDatatype datatype="STRUCT"/>
+                        <field name="SHORT_2" imsName="" parentField="VARIANT2" dependsOn="" minOccurs="0">
+                            <startPos>48</startPos>
+                            <bytes>3</bytes>
+                            <maxBytes>0</maxBytes>
+                            <remarks></remarks>
+                            <marshaller isPuredDBCS="N" url="" overflow="" isSigned="Y">
+<typeConverter>ZONEDDECIMAL</typeConverter>
+                            </marshaller>
+                            <applicationDatatype datatype="DECIMAL" precision="3" scale="0"/>
+                        </field>
+                        <field name="STR_2" imsName="" parentField="VARIANT2" dependsOn="" minOccurs="0">
+                            <startPos>51</startPos>
+                            <bytes>5</bytes>
+                            <maxBytes>0</maxBytes>
+                            <remarks></remarks>
+                            <marshaller isPuredDBCS="N" url="" overflow=""/>
+                            <applicationDatatype datatype="CHAR"/>
+                        </field>
+                    </field>
+                </case>
+            </mapping>
+        </segment>
+        <segment name="STRUCT2" imsName="STRUCT2">
+            <hdam label="GENDS1">
+                <bytes maxBytes="1000"/>
+                <pointer/>
+            </hdam>
+            <field name="SKEY" imsName="SKEY" seqType="U" imsDatatype="C">
+                <startPos>1</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>20</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller/>
+                <applicationDatatype datatype="CHAR"/>
+            </field>
+            <field name="AR_NOD_1C_1E" imsName="" minOccurs="1" maxOccurs="1">
+                <startPos>21</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>5</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller isPuredDBCS="N" url="" overflow=""/>
+                <applicationDatatype datatype="ARRAY"/>
+                <field name="COL1" imsName="" parentField="AR_NOD_1C_1E" dependsOn="" minOccurs="0">
+                    <relativeStart>1</relativeStart>
+                    <bytes>5</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller isPuredDBCS="N" url="" overflow=""/>
+                    <applicationDatatype datatype="CHAR"/>
+                </field>
+            </field>
+            <field name="AR_NOD_1C_3E" imsName="" minOccurs="3" maxOccurs="3">
+                <startPos>26</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>15</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller isPuredDBCS="N" url="" overflow=""/>
+                <applicationDatatype datatype="ARRAY"/>
+                <field name="COL2" imsName="" parentField="AR_NOD_1C_3E" dependsOn="" minOccurs="0">
+                    <relativeStart>1</relativeStart>
+                    <bytes>5</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller isPuredDBCS="N" url="" overflow=""/>
+                    <applicationDatatype datatype="CHAR"/>
+                </field>
+            </field>
+            <field name="AR_NOD_3C_1E" imsName="" minOccurs="1" maxOccurs="1">
+                <startPos>41</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>15</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller isPuredDBCS="N" url="" overflow=""/>
+                <applicationDatatype datatype="ARRAY"/>
+                <field name="COL5" imsName="" parentField="AR_NOD_3C_1E" dependsOn="" minOccurs="0">
+                    <relativeStart>1</relativeStart>
+                    <bytes>5</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller isPuredDBCS="N" url="" overflow=""/>
+                    <applicationDatatype datatype="CHAR"/>
+                </field>
+                <field name="COL4" imsName="" parentField="AR_NOD_3C_1E" dependsOn="" minOccurs="0">
+                    <relativeStart>6</relativeStart>
+                    <bytes>5</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller isPuredDBCS="N" url="" overflow=""/>
+                    <applicationDatatype datatype="CHAR"/>
+                </field>
+                <field name="COL3" imsName="" parentField="AR_NOD_3C_1E" dependsOn="" minOccurs="0">
+                    <relativeStart>11</relativeStart>
+                    <bytes>5</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller isPuredDBCS="N" url="" overflow=""/>
+                    <applicationDatatype datatype="CHAR"/>
+                </field>
+            </field>
+            <field name="AR_NOD_3C_3E" imsName="" minOccurs="3" maxOccurs="3">
+                <startPos>56</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>45</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller isPuredDBCS="N" url="" overflow=""/>
+                <applicationDatatype datatype="ARRAY"/>
+                <field name="COL8" imsName="" parentField="AR_NOD_3C_3E" dependsOn="" minOccurs="0">
+                    <relativeStart>1</relativeStart>
+                    <bytes>5</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller isPuredDBCS="N" url="" overflow=""/>
+                    <applicationDatatype datatype="CHAR"/>
+                </field>
+                <field name="COL7" imsName="" parentField="AR_NOD_3C_3E" dependsOn="" minOccurs="0">
+                    <relativeStart>6</relativeStart>
+                    <bytes>5</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller isPuredDBCS="N" url="" overflow=""/>
+                    <applicationDatatype datatype="CHAR"/>
+                </field>
+                <field name="COL6" imsName="" parentField="AR_NOD_3C_3E" dependsOn="" minOccurs="0">
+                    <relativeStart>11</relativeStart>
+                    <bytes>5</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller isPuredDBCS="N" url="" overflow=""/>
+                    <applicationDatatype datatype="CHAR"/>
+                </field>
+            </field>
+        </segment>
+        <segment name="STRUCT3" imsName="STRUCT3">
+            <hdam label="GENDS1">
+                <bytes maxBytes="1000"/>
+                <pointer/>
+            </hdam>
+            <field name="SKEY" imsName="SKEY" seqType="U" imsDatatype="C">
+                <startPos>1</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>20</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller/>
+                <applicationDatatype datatype="CHAR"/>
+            </field>
+        </segment>
+        <segment name="STRUCT4" imsName="STRUCT4">
+            <hdam label="GENDS1">
+                <bytes maxBytes="1000"/>
+                <pointer/>
+            </hdam>
+            <field name="SKEY" imsName="SKEY" seqType="U" imsDatatype="C">
+                <startPos>1</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>20</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller/>
+                <applicationDatatype datatype="CHAR"/>
+            </field>
+        </segment>
+        <segment name="PARENT" imsName="PARENT">
+            <hdam label="GENDS1">
+                <bytes maxBytes="500"/>
+                <pointer/>
+            </hdam>
+            <field name="PKEY" imsName="PKEY" seqType="U" imsDatatype="C">
+                <startPos>1</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>10</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller/>
+                <applicationDatatype datatype="CHAR"/>
+            </field>
+            <field name="PNAME" imsName="">
+                <startPos>11</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>35</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller/>
+                <applicationDatatype datatype="STRUCT"/>
+                <field name="FIRST_NAME" imsName="" parentField="PNAME">
+                    <startPos>11</startPos>
+                    <bytes>10</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller/>
+                    <applicationDatatype datatype="CHAR"/>
+                </field>
+                <field name="MIDDLE_NAME" imsName="" parentField="PNAME">
+                    <startPos>21</startPos>
+                    <bytes>5</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller/>
+                    <applicationDatatype datatype="CHAR"/>
+                </field>
+                <field name="LAST_NAME" imsName="" parentField="PNAME">
+                    <startPos>26</startPos>
+                    <bytes>20</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller/>
+                    <applicationDatatype datatype="CHAR"/>
+                </field>
+            </field>
+            <segment name="CHILD" imsName="CHILD">
+                <hdam label="GENDS1">
+                    <bytes maxBytes="200"/>
+                    <pointer/>
+                </hdam>
+                <field name="CKEY" imsName="CKEY" seqType="U" imsDatatype="C">
+                    <startPos>1</startPos>
+                    <relativeStart>0</relativeStart>
+                    <startAfter></startAfter>
+                    <bytes>5</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller/>
+                    <applicationDatatype datatype="CHAR"/>
+                </field>
+                <field name="CADDRESS" imsName="">
+                    <startPos>6</startPos>
+                    <relativeStart>0</relativeStart>
+                    <startAfter></startAfter>
+                    <bytes>92</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller/>
+                    <applicationDatatype datatype="STRUCT"/>
+                    <field name="COUNTRY" imsName="" parentField="CADDRESS">
+                        <startPos>6</startPos>
+                        <bytes>25</bytes>
+                        <maxBytes>0</maxBytes>
+                        <remarks></remarks>
+                        <marshaller/>
+                        <applicationDatatype datatype="CHAR"/>
+                    </field>
+                    <field name="CITY" imsName="" parentField="CADDRESS">
+                        <startPos>31</startPos>
+                        <bytes>25</bytes>
+                        <maxBytes>0</maxBytes>
+                        <remarks></remarks>
+                        <marshaller/>
+                        <applicationDatatype datatype="CHAR"/>
+                    </field>
+                    <field name="STREET_ADDRESS" imsName="" parentField="CADDRESS">
+                        <startPos>56</startPos>
+                        <bytes>42</bytes>
+                        <maxBytes>0</maxBytes>
+                        <remarks></remarks>
+                        <marshaller/>
+                        <applicationDatatype datatype="STRUCT"/>
+                        <field name="STREET_NAME" imsName="" parentField="STREET_ADDRESS">
+                            <startPos>56</startPos>
+                            <bytes>25</bytes>
+                            <maxBytes>0</maxBytes>
+                            <remarks></remarks>
+                            <marshaller/>
+                            <applicationDatatype datatype="CHAR"/>
+                        </field>
+                        <field name="BUILDING_NO" imsName="" parentField="STREET_ADDRESS">
+                            <startPos>81</startPos>
+                            <bytes>5</bytes>
+                            <maxBytes>0</maxBytes>
+                            <remarks></remarks>
+                            <marshaller isSigned="N">
+<typeConverter>ZONEDDECIMAL</typeConverter>
+                            </marshaller>
+                            <applicationDatatype datatype="DECIMAL" precision="5" scale="0"/>
+                        </field>
+                        <field name="FLOOR" imsName="" parentField="STREET_ADDRESS">
+                            <startPos>86</startPos>
+                            <bytes>2</bytes>
+                            <maxBytes>0</maxBytes>
+                            <remarks></remarks>
+                            <marshaller isSigned="N">
+<typeConverter>ZONEDDECIMAL</typeConverter>
+                            </marshaller>
+                            <applicationDatatype datatype="DECIMAL" precision="2" scale="0"/>
+                        </field>
+                        <field name="ZIP_CODE" imsName="" parentField="STREET_ADDRESS">
+                            <startPos>88</startPos>
+                            <bytes>10</bytes>
+                            <maxBytes>0</maxBytes>
+                            <remarks></remarks>
+                            <marshaller isSigned="N">
+<typeConverter>ZONEDDECIMAL</typeConverter>
+                            </marshaller>
+                            <applicationDatatype datatype="DECIMAL" precision="10" scale="0"/>
+                        </field>
+                    </field>
+                </field>
+            </segment>
+        </segment>
+    </segment>
+</ns2:dbd>
