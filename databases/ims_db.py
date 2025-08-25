@@ -90,8 +90,3 @@ class IMSDatabase:
             print("IMS connection closed.")
         except Exception as e:
             print("Error closing IMS connection:", e)
-
-config = ConfigurationManager("C:\\Users\\juj\PycharmProjects\qlik-replicate-automation\configurations\config.ini")
-ims_db = IMSDatabase(config, "IMS_DB")
-ims_db.connect()
-ims_db.cursor.execute("SELECT * FROM \"DEVPCB\".\"ALLTYPES\"")

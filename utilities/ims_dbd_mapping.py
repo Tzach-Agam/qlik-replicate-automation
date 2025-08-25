@@ -9,4 +9,8 @@ TEST_DBD_MAP = {
     "number_table": "DATATYPES.dbd",
     "bit_table": "DATATYPES.dbd",
     "array_no_dep": "ARRAY_NO_DEP.dbd",
+    "array_with_dep": "ARRAY_WITH_DEP.dbd",
+    "array_dep_3_5": "ARRAY_DEP_3_5.dbd",
+    "array_in_array": "ARRAY_IN_ARRAY.dbd",
+    "array_datatypes": "ARRAY_DATATYPES.dbd",
 }
