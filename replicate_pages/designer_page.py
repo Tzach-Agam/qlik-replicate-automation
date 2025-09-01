@@ -57,6 +57,18 @@ class DesignerPage:
         target_element = self.driver.find_element(By.CSS_SELECTOR, ".dbItemDetails.ng-scope:nth-child(2)")
         self.actions.double_click(target_element).perform()
 
+    def enter_chosen_table_settings(self, table_name):
+        """Enters to certain tables table settings"""
+        full_table_list = self.driver.find_element(By.XPATH, "//*[@id='tabSwapper']/ul/li[2]/div[1]/a/span")
+        full_table_list.click()
+        table_element  = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//*[contains(text(), '{table_name}')]")))
+        table_element.click()
+        table_settings_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='Table Settings...']")))
+        table_settings_element.click()
+        self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[class='loader-inner ball-clip-rotate-multiple']")))
+        self.wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, "[class='loader-inner ball-clip-rotate-multiple']")))
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, f"//*[contains(text(), '{table_name}') and contains(text(), 'Table Settings')]")))
+
     def enter_monitor_page(self):
         """Enter to the task's 'Monitor Mode'."""
         monitor = self.driver.find_element(By.XPATH, "//span[text()='Monitor']")

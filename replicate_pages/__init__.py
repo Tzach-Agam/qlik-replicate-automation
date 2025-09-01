@@ -6,3 +6,4 @@ from replicate_pages.task_settings_page import TaskSettings
 from replicate_pages.table_selection_page import TableSelection
 from replicate_pages.designer_page import DesignerPage
 from replicate_pages.monitor_page import MonitorPage
+from replicate_pages.table_settings_page import TableSettings
