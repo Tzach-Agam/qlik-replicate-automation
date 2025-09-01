@@ -101,7 +101,8 @@ def replicate_pages(driver, config_manager):
         task_settings=TaskSettings(driver, config_manager),
         table_selection=TableSelection(driver, config_manager),
         designer_page=DesignerPage(driver),
-        monitor_page=MonitorPage(driver)
+        monitor_page=MonitorPage(driver),
+        table_settings=TableSettings(driver)
     )
 
 # ----------------------------------------

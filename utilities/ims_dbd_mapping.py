@@ -13,4 +13,7 @@ TEST_DBD_MAP = {
     "array_dep_3_5": "ARRAY_DEP_3_5.dbd",
     "array_in_array": "ARRAY_IN_ARRAY.dbd",
     "array_datatypes": "ARRAY_DATATYPES.dbd",
+    "struct_basic": "STRUCT_BASIC.dbd",
+    "struct_in_struct": "STRUCT_IN_STRUCT.dbd",
+    "add_column_transformation": "TRANSFORM_TABLE.dbd"
 }
