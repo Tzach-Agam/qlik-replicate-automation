@@ -32,7 +32,7 @@ def create_task(ims_test: SimpleNamespace):
     ims_test.task_settings.set_task_settings_general()
     ims_test.designer_page.enter_chosen_table_settings("TRANSFORM_TABLE")
     ims_test.table_settings.transform_section()
-    ims_test.table_settings.add_column_expression("NEW_COLUMN", "$TRANSFORM_TABLE_1_COL_NUM1+$TRANSFORM_TABLE_1_COL_NUM2")
+    ims_test.table_settings.add_column_expression("NEW_COLUMN", "$COL_NUM1+$COL_NUM2")
     ims_test.table_settings.ok_button()
     ims_test.task_name = new_task_name
     return new_task_name

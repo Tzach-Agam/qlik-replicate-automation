@@ -3,6 +3,7 @@ from settings import *
 def test_array_no_dep(ims_test):
     """Test for IMS ARRAY without dependency"""
     create_task(ims_test)
+
     ims_test.ims_db.cursor.execute("DELETE FROM \"DEVPCB\".\"STRUCT2\"")
     ims_test.ims_db.cursor.execute(
         f"INSERT INTO \"DEVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY, AR_NOD_1C_1E_1_COL1, AR_NOD_1C_3E_1_COL2, AR_NOD_1C_3E_2_COL2, AR_NOD_1C_3E_3_COL2, AR_NOD_3C_1E_1_COL3,AR_NOD_3C_1E_1_COL4,AR_NOD_3C_1E_1_COL5, AR_NOD_3C_3E_1_COL6,AR_NOD_3C_3E_1_COL7,AR_NOD_3C_3E_1_COL8,AR_NOD_3C_3E_2_COL6,AR_NOD_3C_3E_2_COL7,AR_NOD_3C_3E_2_COL8,AR_NOD_3C_3E_3_COL6,AR_NOD_3C_3E_3_COL7,AR_NOD_3C_3E_3_COL8) "
@@ -22,9 +23,11 @@ def test_array_no_dep(ims_test):
     ims_test.ims_db.cursor.execute(
         f"INSERT INTO \"DEVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY) VALUES ('ROOT000002', 'KEY6')")
     ims_test.ims_db.connection.commit()
+
     ims_test.designer_page.run_new_task()
     ims_test.monitor_page.wait_for_fl('3')
     ims_test.monitor_page.cdc_tab()
+
     ims_test.ims_db.cursor.execute(
         f"INSERT INTO \"DEVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY, AR_NOD_1C_1E_1_COL1, AR_NOD_1C_3E_1_COL2, AR_NOD_1C_3E_2_COL2, AR_NOD_1C_3E_3_COL2, AR_NOD_3C_1E_1_COL3,AR_NOD_3C_1E_1_COL4,AR_NOD_3C_1E_1_COL5, AR_NOD_3C_3E_1_COL6,AR_NOD_3C_3E_1_COL7,AR_NOD_3C_3E_1_COL8,AR_NOD_3C_3E_2_COL6,AR_NOD_3C_3E_2_COL7,AR_NOD_3C_3E_2_COL8,AR_NOD_3C_3E_3_COL6,AR_NOD_3C_3E_3_COL7,AR_NOD_3C_3E_3_COL8) "
         f"VALUES ('ROOT000002', 'KEY7', 'FFFFF', 'FFFFF', 'FFFFF', 'FFFFF', 'FFFFF', 'FFFFF', 'FFFFF', 'FFFFF', 'FFFFF', 'FFFFF', 'FFFFF', 'FFFFF', 'FFFFF', 'FFFFF', 'FFFFF', 'FFFFF')")
@@ -49,15 +52,19 @@ def test_array_no_dep(ims_test):
     ims_test.ims_db.cursor.execute(
         f"DELETE FROM \"DEVPCB\".\"STRUCT2\" WHERE SKEY = 'KEY5'")
     ims_test.ims_db.connection.commit()
+
     ims_test.ims_db.sync_command()
-    ims_test.monitor_page.insert_check('6', '18', '6')
+
+    ims_test.monitor_page.wait_for_cdc()
+    ims_test.monitor_page.insert_check('5', '15', '6')
     ims_test.monitor_page.update_check('2', '6', '2')
     ims_test.monitor_page.delete_check('1', '3', '1')
-    ims_test.monitor_page.wait_for_cdc()
     ims_test.monitor_page.stop_task()
     ims_test.monitor_page.stop_task_wait()
+
     ims_test.replicate_actions.navigate_to_main_page('tasks')
-    move_file_to_target_dir(ims_test.config.source_tasklog_path(), ims_test.task_logs_dir,f"reptask_{ims_test.task_name}.log", ims_test.config)
+    move_file_to_target_dir(ims_test.config.replicate_logs_path(), ims_test.task_logs_dir,
+                            f"reptask_{ims_test.task_name}.log", ims_test.config, ims_test.replicate_actions, ims_test.task_name)
     ims_test.target_db.export_schema_data_to_csv(ims_test.target_schema,
                                                  ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_ARRAY_NO_DEP.csv")
     compare_files(ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_ARRAY_NO_DEP.good",

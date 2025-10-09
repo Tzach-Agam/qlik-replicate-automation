@@ -1,5 +1,7 @@
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from utilities.utility_functions import safe_click
 
 class NewTaskPage:
@@ -12,12 +14,13 @@ class NewTaskPage:
         """ Initialize the NewTaskPage object
             :param driver: WebDriver instance for Selenium automation. """
         self.driver = driver
+        self.wait = WebDriverWait(self.driver, 30)
 
     def enter_task_name(self, task_name: str):
         """ Generates a random task name and inputs it into the task name input field.
             :param task_name: The name of the task to be entered. """
         from random import randint
-        random_number = randint(100000, 999999)
+        random_number = randint(10000, 99999)
         full_task_name = f"{task_name}{random_number}"
         task_name_input = self.driver.find_element(By.XPATH, "//*[@id='Name']")
         task_name_input.clear()
@@ -32,7 +35,7 @@ class NewTaskPage:
 
     def close_new_task(self):
         """Click the 'OK' button to close the new task creation dialog."""
-        close_button = self.driver.find_element(By.XPATH, "//*[text()='OK']")
+        close_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='OK']")))
         safe_click(close_button)
 
     def choose_store_changes(self):

@@ -16,9 +16,13 @@ def chrom_driver(config: ConfigurationManager):
     from selenium.webdriver.chrome.options import Options
     service = ChromeService(ChromeDriverManager().install())
     options = Options()
-    options.add_argument("--incognito")
     options.accept_insecure_certs = True
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option("prefs", {
+        "download.default_directory": config.downloaded_files_path(),
+        "download.prompt_for_download": False,
+        "safebrowsing.enabled": True
+    })
     if config.get_headless():
         options.add_argument('--headless=new')
     driver = webdriver.Chrome(service=service, options=options)
@@ -30,9 +34,13 @@ def edge_driver(config: ConfigurationManager):
     from selenium.webdriver.edge.options import Options
     service = EdgeService(EdgeChromiumDriverManager().install())
     options = Options()
-    options.add_argument("--incognito")
     options.accept_insecure_certs = True
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option("prefs", {
+        "download.default_directory": config.downloaded_files_path(),
+        "download.prompt_for_download": False,
+        "safebrowsing.enabled": True
+    })
     if config.get_headless():
         options.add_argument('--headless=new')
     driver = webdriver.Edge(service=service, options=options)
@@ -42,13 +50,19 @@ def firefox_driver(config: ConfigurationManager):
     from webdriver_manager.firefox import GeckoDriverManager
     from selenium.webdriver.firefox.service import Service as FirefoxService
     from selenium.webdriver.firefox.options import Options
+    from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
     service = FirefoxService(GeckoDriverManager().install())
     options = Options()
-    options.add_argument("--incognito")
     options.accept_insecure_certs = True
+    profile = FirefoxProfile()
+    profile.set_preference("browser.download.folderList", 2)  # 0=desktop,1=downloads,2=custom
+    profile.set_preference("browser.download.dir", config.downloaded_files_path())
+    profile.set_preference("browser.helperApps.neverAsk.saveToDisk",
+                           "application/pdf,application/octet-stream,text/csv,application/vnd.ms-excel")
+    profile.set_preference("pdfjs.disabled", True)  # Avoid opening PDFs in Firefox viewer
     if config.get_headless():
-        options.add_argument('--headless=new')
-    driver = webdriver.Firefox(service=service, options=options)
+        options.add_argument('--headless')
+    driver = webdriver.Firefox(service=service, options=options, firefox_profile=profile)
     return driver
 
 def get_webdriver(config: ConfigurationManager):
@@ -65,4 +79,3 @@ def get_webdriver(config: ConfigurationManager):
         return firefox_driver(config)
     else:
         raise ValueError(f"Unsupported browser specified in config: '{browser}'")
-

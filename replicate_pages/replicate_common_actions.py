@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from utilities.utility_functions import safe_click
 from selenium.common.exceptions import TimeoutException
 from configurations.config_manager import ConfigurationManager
 
@@ -55,16 +54,26 @@ class ReplicateCommonActions:
             This method opens the dropdown menu and selects the target page based on the provided 'target_page' argument,
             which can be "tasks" for 'Task View' or "server" for the 'Server page'.
             :param target_page : The name of the target page to navigate to (e.g., "tasks" or "server"). """
+        self.driver.execute_script("document.body.style.zoom=''")
         dropdown = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".dropdown-toggle.hiddenActionButton.right")))
-        safe_click(dropdown)
+        dropdown.click()
         if target_page == "tasks":
             page_link_text = "Tasks"
         elif target_page == "server":
             page_link_text = "Server"
         else:
             raise ValueError("Invalid target page name")
-        page_link = self.driver.find_element(By.XPATH, f"//a[text()='{page_link_text}']")
-        safe_click(page_link)
+        page_link = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//a[text()='{page_link_text}']")))
+        page_link.click()
+
+    def download_task_log(self, task_name):
+        """ Downloads the task log for a given task.
+        :param: task_name: The name of the task for which to download the log """
+        from replicate_pages import TasksPage
+        task_view = TasksPage(self.driver)
+        task_view.select_task(task_name)
+        task_view.download_logs(task_name)
+        print(f"Task {task_name} log downloaded.")
 
     def delete_task_endpoint(self, task_name, source_endpoint, target_endpoint):
         """ Deletes task and endpoint

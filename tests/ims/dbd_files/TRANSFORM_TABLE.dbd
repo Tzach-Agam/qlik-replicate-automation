@@ -237,7 +237,7 @@
                 <startPos>21</startPos>
                 <relativeStart>0</relativeStart>
                 <startAfter></startAfter>
-                <bytes>14</bytes>
+                <bytes>28</bytes>
                 <maxBytes>0</maxBytes>
                 <remarks></remarks>
                 <marshaller isPuredDBCS="N" url="" overflow=""/>
@@ -258,8 +258,8 @@
                     <marshaller isPuredDBCS="N" url="" overflow=""/>
                     <applicationDatatype datatype="INT"/>
                 </field>
-			<field name="COL_CHAR2" imsName="" parentField="TRANSFORM_TABLE" dependsOn="" minOccurs="0">
-                    <relativeStart>1</relativeStart>
+                <field name="COL_CHAR2" imsName="" parentField="TRANSFORM_TABLE" dependsOn="" minOccurs="0">
+                    <relativeStart>15</relativeStart>
                     <bytes>10</bytes>
                     <maxBytes>0</maxBytes>
                     <remarks></remarks>
@@ -267,7 +267,7 @@
                     <applicationDatatype datatype="CHAR"/>
                 </field>
                 <field name="COL_NUM2" imsName="" parentField="TRANSFORM_TABLE" dependsOn="" minOccurs="0">
-                    <relativeStart>11</relativeStart>
+                    <relativeStart>25</relativeStart>
                     <bytes>4</bytes>
                     <maxBytes>0</maxBytes>
                     <remarks></remarks>

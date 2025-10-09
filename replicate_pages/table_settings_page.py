@@ -1,8 +1,10 @@
 from time import sleep
 
+from numpy.ma.core import less_equal
+from selenium.common import StaleElementReferenceException, ElementNotInteractableException
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver import ActionChains
+from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from configurations.config_manager import ConfigurationManager
@@ -36,8 +38,10 @@ class TableSettings:
 
     def transform_section(self):
         """Clicks on General section"""
-        transform_sec = self.driver.find_element(By.XPATH, "//*[text()='Transform']")
+        transform_sec = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Transform']")))
         safe_click(transform_sec)
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Input']")))
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Output']")))
 
     def select_input_column(self, column_name:str):
         """Selects input column"""
@@ -51,8 +55,9 @@ class TableSettings:
 
     def add_column(self):
         """Adds column"""
-        add_column_element = self.driver.find_element(By.XPATH, f"//*[text()='Add Column']")
+        add_column_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//*[text()='Add Column']")))
         safe_click(add_column_element)
+        self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[ng-model='rowData.newColumnName']")))
 
     def enter_new_column_name(self, column_name:str):
         new_col_name = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[ng-model='rowData.newColumnName']")))
@@ -70,7 +75,7 @@ class TableSettings:
     def remove_column(self,column_name):
         """Removes a column"""
         self.select_output_column(column_name)
-        remove_col_element = self.driver.find_element(By.CSS_SELECTOR, "[ng-click='removeSingleColumn()']")
+        remove_col_element = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[ng-click='removeSingleColumn()']")))
         safe_click(remove_col_element)
 
     def add_column_expression(self, column_name:str, expression:str):
@@ -78,41 +83,82 @@ class TableSettings:
         self.add_column()
         self.enter_new_column_name(column_name)
         self.enter_expression_builder(column_name)
-        columns_title = self.driver.find_element(By.CSS_SELECTOR, "[title='Columns']>div>a>span")
+        columns_title = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[title='Columns']>div>a>span")))
         columns_title.click()
-        editor_container = self.driver.find_element(By.CSS_SELECTOR, ".CodeMirror")
-
+        editor_container = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".CodeMirror")))
         # Inject the expression with CodeMirror's API
         self.driver.execute_script(
             "arguments[0].CodeMirror.setValue(arguments[1]);",
             editor_container,
             expression
         )
-
         #expression_builder_input.send_keys(expression)
-        ok_button = self.driver.find_element(By.XPATH, "//*[text()='OK']")
-        safe_click(ok_button)
-        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@id='att-modal-div']/div/div/div[1]/span")))
+        try:
+            ok_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='OK']")))
+            safe_click(ok_button)
+        except (StaleElementReferenceException, ElementNotInteractableException):
+            ok_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='OK']")))
+            safe_click(ok_button)
 
-    def add_header(self, column_name:str, header_name:str):
-        """Adds header to the target table
-        :param column_name: The name of the header column
-        :param header_name: The name of the header"""
-        self.add_column()
-        self.enter_expression_builder(column_name)
-        headers_title = self.driver.find_element(By.CSS_SELECTOR, "[title='Headers']>div>a>span")
-        headers_title.click()
-        header_to_choose = self.driver.find_element(By.XPATH, f"//div[text()='{header_name}']")
-        safe_click(header_to_choose)
-        self.actions.double_click(header_to_choose)
-        ok_button = self.driver.find_element(By.XPATH, "//*[text()='OK']")
-        safe_click(ok_button)
-        self.enter_new_column_name(column_name)
+    def filter_section(self):
+        """Clicks on General section"""
+        transform_sec = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Filter']")))
+        safe_click(transform_sec)
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Data Columns']")))
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Filter Conditions']")))
+
+    def filter_select_column(self, column_name: str):
+        """Selects input column"""
+        column_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//*[contains(text(), '{column_name}')]")))
+        safe_click(column_element)
+        add_column = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@ng-click='onAddToFilter()']")))
+        safe_click(add_column)
+
+    def add_filter_less_or_equal(self,column_name: str, value: str):
+        self.filter_select_column(column_name)
+        ranges_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//tr[@sly-repeat='rowData in renderedRows ']/descendant::button[@class='attBtn glyphButton text-right ']/span[1]")))
+        safe_click(ranges_element)
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, f"//*[text()='{column_name} INCLUDE Ranges']")))
+        add_range = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//*[text()='Add Range']")))
+        safe_click(add_range)
+        less_equal_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Less than or equal to']")))
+        safe_click(less_equal_element)
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, f"//div[@title='Delete']")))
+        filter_value = self.wait.until(
+            EC.element_to_be_clickable((By.XPATH, "//link-text-input[@editable='true']"))
+        )
+        filter_value.click()
+        self.driver.execute_script(
+            """
+            const elem = arguments[0];
+            const value = arguments[1];
+            elem.focus();
+            elem.innerText = value;
+            elem.dispatchEvent(new Event('input', { bubbles: true }));
+            elem.dispatchEvent(new Event('change', { bubbles: true }));
+            elem.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true}));
+            elem.dispatchEvent(new KeyboardEvent('keyup', {key: 'Enter', bubbles: true}));
+            """,
+            filter_value, value
+        )
+        filter_value.click()
+        sleep(10)
+        try:
+            ok_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='OK'][1]")))
+            safe_click(ok_button)
+        except (StaleElementReferenceException, ElementNotInteractableException):
+            ok_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='OK'][1]")))
+            safe_click(ok_button)
+        sleep(5)
 
     def ok_button(self):
         """Clicks on the OK button"""
-        ok_button = self.driver.find_element(By.XPATH, "//*[text()='OK']")
-        safe_click(ok_button)
+        try:
+            ok_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='OK']")))
+            safe_click(ok_button)
+        except (StaleElementReferenceException, ElementNotInteractableException):
+            ok_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='OK']")))
+            safe_click(ok_button)
 
 
 

@@ -1,0 +1,78 @@
+--------------
+Table: "test_table1"
+Primary Key: A
+Column: A, Type: NUMBER, Length: 22, AllowDBNull: False
+Column: char1, Type: VARCHAR2, Length: 36, AllowDBNull: True
+Column: varchar1, Type: VARCHAR2, Length: 36, AllowDBNull: True
+Column: nchar1, Type: NVARCHAR2, Length: 72, AllowDBNull: True
+Column: nvarchar1, Type: NVARCHAR2, Length: 72, AllowDBNull: True
+
+A,char1,varchar1,nchar1,nvarchar1
+1, , , , 
+2,"!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890"
+3,a,a,a,a
+4,amich,amich,amich,amich
+6, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa
+7,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz ,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz 
+8,NULL,NULL,NULL,NULL
+11,a,a,a,a
+15,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz ,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz 
+16,NULL,NULL,NULL,NULL
+12, , , , 
+9,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz
+13, , , , 
+10,"!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890"
+14, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa
+
+--------------
+Table: "test_table2"
+Primary Key: A
+Column: A, Type: NUMBER, Length: 22, AllowDBNull: False
+Column: char1, Type: VARCHAR2, Length: 36, AllowDBNull: True
+Column: varchar1, Type: VARCHAR2, Length: 36, AllowDBNull: True
+Column: nchar1, Type: NVARCHAR2, Length: 72, AllowDBNull: True
+Column: nvarchar1, Type: NVARCHAR2, Length: 72, AllowDBNull: True
+
+A,char1,varchar1,nchar1,nvarchar1
+1, , , , 
+2,"!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890"
+3,a,a,a,a
+4,amich,amich,amich,amich
+6, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa
+7,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz ,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz 
+8,NULL,NULL,NULL,NULL
+11,a,a,a,a
+15,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz ,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz 
+16,NULL,NULL,NULL,NULL
+12, , , , 
+9,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz
+13, , , , 
+10,"!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890"
+14, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa
+
+--------------
+Table: "test_table3"
+Primary Key: A
+Column: A, Type: NUMBER, Length: 22, AllowDBNull: False
+Column: char1, Type: VARCHAR2, Length: 36, AllowDBNull: True
+Column: varchar1, Type: VARCHAR2, Length: 36, AllowDBNull: True
+Column: nchar1, Type: NVARCHAR2, Length: 72, AllowDBNull: True
+Column: nvarchar1, Type: NVARCHAR2, Length: 72, AllowDBNull: True
+
+A,char1,varchar1,nchar1,nvarchar1
+1, , , , 
+2,"!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890"
+3,a,a,a,a
+4,amich,amich,amich,amich
+6, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa
+7,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz ,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz 
+8,NULL,NULL,NULL,NULL
+11,a,a,a,a
+15,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz ,zzzzzzzzzzzzzzzzzzzz,zzzzzzzzzzzzzzzzzzzz 
+16,NULL,NULL,NULL,NULL
+12, , , , 
+9,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz,abcdefghijklmnopqrstuvwxyz
+13, , , , 
+10,"!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890","!@#$%^&*()_-+=[]<>?.,1234567890"
+14, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaaaaa
+

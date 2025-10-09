@@ -19,19 +19,30 @@ class ManageEndpoints:
         """ Initialize the ManageEndpoints object
             :param driver: WebDriver instance for Selenium automation. """
         self.driver = driver
-        self.wait = WebDriverWait(self.driver, 20)
+        self.wait = WebDriverWait(self.driver, 40)
         self.actions = ActionChains(self.driver)
         self.config = config
 
     def new_endpoint_connection(self):
         """Click the 'New Endpoint Connection' button to create a new endpoint."""
-        new_endpoint = self.wait.until(
-            EC.element_to_be_clickable((By.XPATH, "//button/span[text()='New Endpoint Connection']"))
-        )
+        try:
+            new_endpoint = self.wait.until(
+                EC.element_to_be_clickable((By.XPATH, "//button/span[text()='New Endpoint Connection']")))
+        except (StaleElementReferenceException, ElementNotInteractableException):
+            new_endpoint = self.wait.until(
+                EC.element_to_be_clickable((By.XPATH, "//button/span[text()='New Endpoint Connection']")))
         safe_click(new_endpoint)
-        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@id='endpointName']")))
-        self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[name='endpointDescription']")))
-        self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[class='textInputInRowWrap']>[type='text']")))
+        endpoint_name = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@id='endpointName']")))
+        endpoint_description = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[name='endpointDescription']")))
+        endpoint_type = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[class='textInputInRowWrap']>[type='text']")))
+        try:
+            safe_click(endpoint_name)
+            safe_click(endpoint_description)
+            safe_click(endpoint_type)
+        except (StaleElementReferenceException, ElementNotInteractableException):
+            safe_click(endpoint_name)
+            safe_click(endpoint_description)
+            safe_click(endpoint_type)
 
     def random_endpoint_name(self, config_section):
         """Creates a random name of the endpoint by appending a 6-digit random number.
@@ -184,10 +195,10 @@ class ManageEndpoints:
         self.new_endpoint_connection()
         self.choose_target_role()
         self.choose_oracle_type()
+        self.enter_endpoint_description('Oracle Target Endpoint')
         self.enter_oracle_server(self.config.get_section('Oracle_DB_Trg')['dsn'])
         self.enter_oracle_username(self.config.get_section('Oracle_DB_Trg')['username'])
         self.enter_oracle_password(self.config.get_section('Oracle_DB_Trg')['password'])
-        self.enter_endpoint_description('Oracle Target Endpoint')
         self.enter_endpoint_name(endpoint_name)
         self.test_connection_valid()
         self.save()
@@ -303,22 +314,30 @@ class ManageEndpoints:
         self.choose_endpoint_type("IBM IMS")
         ims_type = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//li//*[text()='IBM IMS']")))
         safe_click(ims_type)
-        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='IMS Connect']")))
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Save']")))
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Test Connection']")))
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Advanced']")))
 
-    def enter_ims_server(self, name: str):
-        server = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='server']")))
+    def enter_ims_host(self, name: str):
+        server = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='host']")))
         server.send_keys(name)
 
     def enter_ims_port(self, port):
-        port_element = self.driver.find_element(By.CSS_SELECTOR, "[label='port']>div>div:nth-of-type(2)>div>input")
+        port_element = self.driver.find_element(By.CSS_SELECTOR, "[prop='port']>div>div:nth-of-type(2)>div>input")
         port_element.clear()
         port_element.send_keys(port)
 
-    def enter_ims_connect_server(self, server):
-        connect_server = self.driver.find_element(By.XPATH, "//*[@id='imsConnectServer']")
+    def open_ims_connect(self):
+        ims_connect_section = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='IMS Connect']")))
+        safe_click(ims_connect_section)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='imsConnectHost']")))
+        self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[number-data='model.imsConnectPort']>input")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='user']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='password']")))
+
+    def enter_ims_connect_host(self, server):
+        connect_server = self.driver.find_element(By.XPATH, "//*[@id='imsConnectHost']")
         connect_server.send_keys(server)
 
     def enter_ims_connect_port(self, port):
@@ -334,6 +353,14 @@ class ManageEndpoints:
         password_element = self.driver.find_element(By.XPATH, "//*[@id='password']")
         password_element.send_keys(password)
 
+    def open_database_settings(self):
+        database_settings_section = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Database settings']")))
+        safe_click(database_settings_section)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='psb']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='pcb']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Browse...']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='dbd']")))
+
     def enter_ims_psb(self, psb):
         psb_element = self.driver.find_element(By.XPATH, "//*[@id='psb']")
         psb_element.send_keys(psb)
@@ -346,26 +373,68 @@ class ManageEndpoints:
         dbd_xml_element = self.driver.find_element(By.XPATH, "//*[@id='dbd']")
         dbd_xml_element.send_keys(xml_location)
 
+    def open_change_data_capture_settings(self):
+        cdc_settings_section = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Change Data Capture settings']")))
+        safe_click(cdc_settings_section)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='logStreamName']")))
+
     def enter_logstream_name(self, logstream_name):
         """Enter the name of the logstream for the IMS source endpoint."""
         logstream_element = self.driver.find_element(By.XPATH, "//*[@id='logStreamName']")
         logstream_element.send_keys(logstream_name)
 
+    def open_security(self):
+        security_section = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Security']")))
+        safe_click(security_section)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='clientAuthCert']")))
+
+    def enter_client_certificate(self, certificate):
+        """Enter the client certificate for the IMS source endpoint."""
+        client_cert_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='clientAuthCert']")))
+        client_cert_element.send_keys(certificate)
+
+    def enter_client_password(self, password):
+        """Enter the client certificate for the IMS source endpoint."""
+        client_pk_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='clientCertPassword']")))
+        client_pk_element.send_keys(password)
+
+    def enter_trusted_ca(self, trusted_ca):
+        """Enter the trusted CA for the IMS source endpoint."""
+        trusted_ca_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='serverCertCA']")))
+        trusted_ca_element.send_keys(trusted_ca)
+
+    def move_to_advanced(self):
+        """switch to Advanced section in UI."""
+        advanced_section = self.driver.find_element(By.XPATH, "//*[text()='Advanced']")
+        safe_click(advanced_section)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Internal Parameters']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='More Options']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Settings Summary']")))
+
     def enter_max_segment_memory(self, max_seg_memory):
         """Enter the maximum segment memory for the IMS source endpoint."""
-        max_seg_memory_element = self.driver.find_element(By.XPATH, "//att-field[@prop='fl_segment_allocation_mb']/div/div[2]/div/input")
+        max_seg_memory_element = self.driver.find_element(By.CSS_SELECTOR, "[number-data='model.flSegmentAllocationMB']>input")
         max_seg_memory_element.send_keys(Keys.CONTROL + "a")
         max_seg_memory_element.send_keys(Keys.DELETE)
         max_seg_memory_element.send_keys(max_seg_memory)
+
+    def move_to_general(self):
+        """switch to General section in UI."""
+        general_section = self.driver.find_element(By.XPATH, "//*[text()='General']")
+        safe_click(general_section)
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Name:']")))
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Description:']")))
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Role:']")))
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Type:']")))
 
     def create_ims_source_endpoint(self, endpoint_name):
         """Creates an IMS source endpoint using the parameters in the config.ini file"""
         self.new_endpoint_connection()
         self.choose_ims_type()
-        self.enter_ims_server(self.config.get_section('IMS_DB')['server'])
-        self.enter_ims_port(self.config.get_section('IMS_DB')['server_port'])
-        self.enter_ims_connect_server(self.config.get_section('IMS_DB')['host'])
-        self.enter_ims_connect_port(self.config.get_section('IMS_DB')['port'])
+        self.enter_ims_host(self.config.get_section('IMS_DB')['host'])
+        self.enter_ims_port(self.config.get_section('IMS_DB')['port'])
+        self.enter_ims_connect_host(self.config.get_section('IMS_DB')['ims_connect_host'])
+        self.enter_ims_connect_port(self.config.get_section('IMS_DB')['ims_connect_port'])
         self.enter_ims_username(self.config.get_section('IMS_DB')['user'])
         self.enter_ims_password(self.config.get_section('IMS_DB')['password'])
         self.enter_ims_psb(self.config.get_section('IMS_DB')['psb'][0:6])
@@ -378,25 +447,66 @@ class ManageEndpoints:
         self.save()
         print("Created a IMS source endpoint:", endpoint_name)
 
-    def create_custom_ims_source_endpoint(self, endpoint_name, description, logstream_name, dbd_xml, schema, psb, password, user, port, host, server_port, server, max_seg_memory=5):
+    def create_custom_ims_source_endpoint(self, endpoint_name, description, host=None, port=None, ims_connect_host=None, ims_connect_port=None, user=None, password=None,
+                                          psb=None, schema=None, dbd_xml=None, logstream_name=None,
+                                          trusted_ca=None, client_password=None, client_certificate=None, max_seg_memory=5):
         """Creates custom IMS source endpoint using parameters inserted by the user"""
         self.new_endpoint_connection()
         self.choose_ims_type()
-        self.enter_ims_server(server)
-        self.enter_ims_port(server_port)
-        self.enter_ims_connect_server(host)
-        self.enter_ims_connect_port(port)
-        self.enter_ims_username(user)
-        self.enter_ims_password(password)
-        self.enter_ims_psb(psb)
-        self.enter_ims_pcb(schema)
-        self.enter_ims_dbd_xml(dbd_xml)
-        self.enter_logstream_name(logstream_name)
+        self.enter_ims_host(host or self.config.get_section('IMS_DB')['host'])
+        self.enter_ims_port(port or self.config.get_section('IMS_DB')['port'])
+        self.open_ims_connect()
+        self.enter_ims_connect_host(ims_connect_host or self.config.get_section('IMS_DB')['ims_connect_host'])
+        self.enter_ims_connect_port(ims_connect_port or self.config.get_section('IMS_DB')['ims_connect_port'])
+        self.enter_ims_username(user or self.config.get_section('IMS_DB')['user'])
+        self.enter_ims_password(password or self.config.get_section('IMS_DB')['password'])
+        self.open_database_settings()
+        self.enter_ims_psb(psb or self.config.get_section('IMS_DB')['psb'][0:6])
+        self.enter_ims_pcb(schema or self.config.get_section('IMS_DB')['schema'])
+        self.enter_ims_dbd_xml(dbd_xml or self.config.get_section('IMS_DB')['dbd_xml'])
+        self.open_change_data_capture_settings()
+        self.enter_logstream_name(logstream_name or self.config.get_section('IMS_DB')['logstream_name'])
+        self.open_security()
+        self.enter_client_certificate(client_certificate or self.config.get_section('IMS_DB')['client_certificate'])
+        self.enter_client_password(client_password or self.config.get_section('IMS_DB')['client_password'])
+        self.enter_trusted_ca(trusted_ca or self.config.get_section('IMS_DB')['trusted_ca'])
+        self.move_to_advanced()
         self.enter_max_segment_memory(max_seg_memory)
+        self.move_to_general()
         self.enter_endpoint_description(description)
         self.enter_endpoint_name(endpoint_name)
         self.test_connection_valid()
         self.save()
+        print("Created a IMS source endpoint:", endpoint_name)
+
+    def create_custom_ims_source_endpoint2(self, endpoint_name, description, host=None, port=None, ims_connect_host=None, ims_connect_port=None, user=None, password=None,
+                                          psb=None, pcb=None, dbd_xml=None, logstream_name=None,
+                                          trusted_ca=None, client_password=None, client_certificate=None, max_seg_memory=5):
+        """Creates custom IMS source endpoint using parameters inserted by the user"""
+        self.new_endpoint_connection()
+        self.choose_ims_type()
+        self.enter_ims_host(host or self.config.get_section('IMS_DB')['host'])
+        self.enter_ims_port(port or self.config.get_section('IMS_DB')['port'])
+        self.open_ims_connect()
+        self.enter_ims_connect_host(ims_connect_host or self.config.get_section('IMS_DB')['ims_connect_host'])
+        self.enter_ims_connect_port(ims_connect_port or self.config.get_section('IMS_DB')['ims_connect_port'])
+        self.enter_ims_username(user or self.config.get_section('IMS_DB')['user'])
+        self.enter_ims_password(password or self.config.get_section('IMS_DB')['password'])
+        self.open_database_settings()
+        self.enter_ims_psb(psb or self.config.get_section('IMS_DB')['psb'][0:6])
+        self.enter_ims_pcb(pcb or self.config.get_section('IMS_DB')['schema'])
+        self.enter_ims_dbd_xml(dbd_xml or self.config.get_section('IMS_DB')['dbd_xml'])
+        self.open_change_data_capture_settings()
+        self.enter_logstream_name(logstream_name or self.config.get_section('IMS_DB')['logstream_name'])
+        self.open_security()
+        self.enter_client_certificate(client_certificate or self.config.get_section('IMS_DB')['client_certificate'])
+        self.enter_client_password(client_password or self.config.get_section('IMS_DB')['client_password'])
+        self.enter_trusted_ca(trusted_ca or self.config.get_section('IMS_DB')['trusted_ca'])
+        self.move_to_advanced()
+        self.enter_max_segment_memory(max_seg_memory)
+        self.move_to_general()
+        self.enter_endpoint_description(description)
+        self.enter_endpoint_name(endpoint_name)
         print("Created a IMS source endpoint:", endpoint_name)
 
     def test_connection(self):
@@ -423,16 +533,22 @@ class ManageEndpoints:
         """Click the 'Close' button to close 'Manage Endpoints Connection' page."""
         close_button = self.driver.find_element(By.XPATH, "//*[text()='Close']")
         safe_click(close_button)
+        self.wait.until(EC.invisibility_of_element_located((By.XPATH, "//*[text()='Manage Endpoint Connections']")))
 
     def delete_endpoint(self, endpoint_name):
         """ Delete an endpoint entirely using a different method.
             :param endpoint_name: The name of the endpoint to be deleted. """
-        endpoint = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//*[text()='{endpoint_name}']")))
+        endpoint = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//span[text()='{endpoint_name}']")))
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", endpoint)
         endpoint.click()
-        delete_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Delete']")))
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, f"//label[text()='{endpoint_name}']")))
+        delete_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='Delete']")))
         delete_button.click()
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()=' Are you sure you want to delete {endpoint_name}?']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Cancel']")))
         ok_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='OK']")))
         ok_button.click()
-        self.wait.until(EC.invisibility_of_element_located((By.XPATH, f"//*[text()='{endpoint_name}']")))
+        self.wait.until(EC.invisibility_of_element_located((By.XPATH, f"//button[text()='OK']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//button/span[text()='New Endpoint Connection']")))
         print("Deleted endpoint:", endpoint_name)
 

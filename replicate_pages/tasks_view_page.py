@@ -1,3 +1,5 @@
+from time import sleep
+
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
@@ -17,18 +19,20 @@ class TasksPage:
         """ Initialize the TasksPage object
             :param driver: WebDriver instance for Selenium automation. """
         self.driver = driver
-        self.wait = WebDriverWait(self.driver, 20)
+        self.wait = WebDriverWait(self.driver, 60)
         self.actions = ActionChains(self.driver)
 
     def create_new_task(self):
         """Click on the New Task button in the General task page and enters to the 'New Task' page"""
-        create_new_task = self.driver.find_element(By.XPATH, "//span[text()='New Task...']")
+        create_new_task = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='New Task...']")))
         safe_click(create_new_task)
 
     def enter_manage_endpoints(self):
         """Click on the Manage endpoints button and enters to the 'Manage endpoints' page"""
-        manage_endpoints = self.driver.find_element(By.XPATH, "//span[text()='Manage Endpoint Connections...']")
+        manage_endpoints = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='Manage Endpoint Connections...']")))
         safe_click(manage_endpoints)
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//span[text()='Manage Endpoint Connections']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='New Endpoint Connection']")))
 
     def import_task(self):
         """Click on the import task button, which provide an ability to import a task to Replicate with a Jason file"""
@@ -44,7 +48,7 @@ class TasksPage:
         """ Find and return a task element on the page by its name.
             :param task_name: The name of the task to locate.
             :return: The WebElement representing the task element, or None if not found. """
-        task = self.driver.find_element(By.XPATH, f"//*[@class='taskImageName ellipsisStyle ng-binding' and text()='{task_name}']")
+        task = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//*[@class='taskImageName ellipsisStyle ng-binding' and text()='{task_name}']")))
         return task
 
     def select_task(self, task_name: str):
@@ -57,37 +61,45 @@ class TasksPage:
         """ Open a task by name on the page and enter to the tasks configurations and design.
             :param task_name: The name of the task to open. """
         self.select_task(task_name)
-        open_task_option = self.driver.find_element(By.XPATH, "//span[text()='Open']")
-        safe_click(open_task_option)
+        open_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='Open']")))
+        safe_click(open_element)
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//span[text()='Designer']")))
 
     def delete_task(self, task_name: str):
         """ Delete a task entirely from Qlik Replicate by name on the page.
             :param task_name: The name of the task to delete. """
         self.select_task(task_name)
-        delete_task_button = self.driver.find_element(By.XPATH, "//span[text()='Delete...']")
+        delete_task_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='Delete...']")))
         safe_click(delete_task_button)
-        ok_button = self.driver.find_element(By.XPATH, "//button[text()='OK']")
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//span[text()='Delete Task']")))
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//span[text()='Delete task log files also?']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Cancel']")))
+        ok_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='OK']")))
         safe_click(ok_button)
         self.wait.until(EC.invisibility_of_element_located((By.XPATH, f"//*[text()='{task_name}']")))
         print(f"Task {task_name} successfully deleted")
 
-    def double_click_task(self, task_name: str):
-        """ Double-click on a task by its name and entering to the task page.
-            :param task_name: The name of the task to double-click. """
-        task = self.find_task_element(task_name)
-        self.actions.double_click(task)
-
-    def enter_view_logs(self):
+    def enter_view_logs(self, task_name: str):
         """Click on the View logs button that allow viewing the task log"""
-        view_logs = self.driver.find_element(By.XPATH, "//span[text()='View Logs...']")
+        view_logs = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='View Logs...']")))
         safe_click(view_logs)
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Log Viewer']")))
+        task_log = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//*[text()='Task']")))
+        task_log.click()
+        sleep(1)
+        inner_task_log = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//li/span[text()='Task']")))
+        inner_task_log.click()
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, f"//*[text()='reptask_{task_name}.log']")))
 
-    def download_logs(self):
+    def download_logs(self, task_name: str):
         """Enter to the task log and download them to the machine"""
-        self.enter_view_logs()
-        download_logs_icon = self.driver.find_element(By.CSS_SELECTOR,
-                                                      "[class='bootstrapGlyphicon glyphicon-download-alt']")
+        self.enter_view_logs(task_name)
+        download_logs_icon = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR,
+                                                      "[class='bootstrapGlyphicon glyphicon-download-alt']")))
         safe_click(download_logs_icon)
+        close_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Close']")))
+        safe_click(close_button)
+        self.wait.until(EC.invisibility_of_element_located((By.XPATH, "//*[text()='Log Viewer']")))
 
     def run_task_dropdown(self, task_name: str):
         """ Open the task's Run options dropdown menu by clicking on it, as part of the run task management.
@@ -104,7 +116,7 @@ class TasksPage:
                                                     "//li[@title='Start Processing']/a[text()='Start Processing']")
         safe_click(start_processing)
 
-    def reload_task(self, task_name: str):
+    def reload_task(self, task_name: str, timeout=40):
         """ Start a task again by reloading it with the 'Reload task' option in the run options dropdown.
             :param task_name: The name of the task to reload."""
         self.run_task_dropdown(task_name)
@@ -114,6 +126,14 @@ class TasksPage:
         yes_button = self.driver.find_element(By.XPATH,
                                                     "//button[text()='Yes']")
         safe_click(yes_button)
+        try:
+            dynamic_wait = WebDriverWait(self.driver, timeout)
+            dynamic_wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Starting task']")))
+            print("Starting task")
+            dynamic_wait.until(EC.invisibility_of_element_located((By.XPATH, "//*[text()='Starting task']")))
+            print("Task started")
+        except:
+            print("Element did not become visible within the timeout or became stale.")
 
     def stop_task(self, task_name: str):
         """ Stop a task entirely by clicking on the 'Stop task' options in the run options dropdown.

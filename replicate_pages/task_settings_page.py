@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from configurations.config_manager import ConfigurationManager
 from utilities.utility_functions import safe_click
 
+
 class TaskSettings:
     """ The TaskSettings class represents the 'Task Settings' dialog box on Qlik Replicate. In it, you configure
         task-specific replication settings.
@@ -16,6 +17,7 @@ class TaskSettings:
         """ Initialize the TaskSettings object
             :param driver: WebDriver instance for Selenium automation. """
         self.driver = driver
+        self.wait = WebDriverWait(self.driver, 20)
         self.actions = ActionChains(driver)
         self.config = config
 
@@ -73,8 +75,26 @@ class TaskSettings:
 
     def full_load_tab(self):
         """Click on the 'Full Load' tab for configuration of FL-related settings."""
-        fl_tab_element = self.driver.find_element(By.XPATH, "//*[text()='Full Load']" )
+        fl_tab_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Full Load']")))
         safe_click(fl_tab_element)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='DROP and CREATE table']")))
+
+    def set_fl_method(self, fl_method: str):
+        """ Select the Full Load settings for the replication task. The Full Load settings determine how the tables will
+            be created in the target database during the Full Load phase of the replication task.
+            :param fl_method: The Full Load settings to be applied. Supported settings are 'DROP and CREATE table',
+            'TRUNCATE before loading', and 'Do nothing'. """
+        fl_options_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='DROP and CREATE table' and @ng-show]")))
+        fl_options_element.click()
+        if fl_method == "DROP and CREATE table":
+            chosen_fl_method = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//li/*[text()='DROP and CREATE table' and @class]")))
+            safe_click(chosen_fl_method)
+        elif fl_method == "TRUNCATE before loading":
+            chosen_fl_method = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//li/*[text()='TRUNCATE before loading' and @class]")))
+            safe_click(chosen_fl_method)
+        elif fl_method == "Do nothing":
+            chosen_fl_method = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//li/*[text()='Do nothing' and @class]")))
+            safe_click(chosen_fl_method)
 
     def change_processing(self):
         """Click on the 'Change Processing' tab for configuration of CDC-related settings."""

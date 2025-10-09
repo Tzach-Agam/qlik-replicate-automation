@@ -147,7 +147,8 @@ def setup_browser(driver, replicate_pages):
 def ims_test(request, config_manager, ims, target_db, replicate_pages, default_schemas, reset_database_env, setup_browser):
     ims_db, dbd_file = ims
     db_type, db = target_db
-    test_dir = Path(request.fspath).parent
+    test_dir_path = Path(request.fspath).parent
+    test_dir_name = Path(request.fspath).parent.name
 
     env = SimpleNamespace(
         config=config_manager,
@@ -162,10 +163,12 @@ def ims_test(request, config_manager, ims, target_db, replicate_pages, default_s
         target_name=None,
         task_name=None,
         dbd_file=str(dbd_file),
-        test_dir=str(test_dir),
-        task_logs_dir=str(test_dir / "task_logs"),
-        good_files_dir=str(test_dir / "good_files")
+        test_dir_path=str(test_dir_path),
+        test_dir_name = str(test_dir_name),
+        task_logs_dir=str(test_dir_path / "task_logs"),
+        good_files_dir=str(test_dir_path / "good_files")
     )
+
     yield env
 
     replicate_pages.replicate_actions.delete_task_endpoint(

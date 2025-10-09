@@ -1,0 +1,60 @@
+--------------
+Table: "BASIC_TABLE"
+Primary Key: ROOTID, SKEY, BASIC_TABLE_ROWNUM
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
+Column: BASIC_TABLE_ROWNUM, Type: NUMBER, Length: 22, AllowDBNull: False
+Column: COL5_CHAR, Type: NVARCHAR2, Length: 100, AllowDBNull: True
+Column: COL4_DECIMAL, Type: NUMBER, Length: 22, AllowDBNull: True
+Column: COL3_CHAR, Type: NVARCHAR2, Length: 100, AllowDBNull: True
+Column: COL2_DECIMAL, Type: NUMBER, Length: 22, AllowDBNull: True
+Column: COL1_CHAR, Type: NVARCHAR2, Length: 100, AllowDBNull: True
+
+ROOTID,SKEY,BASIC_TABLE_ROWNUM,COL5_CHAR,COL4_DECIMAL,COL3_CHAR,COL2_DECIMAL,COL1_CHAR
+ROOT000002,KEY1,1,Full_Load,1111,Full_Load,1111,Full_Load
+ROOT000002,KEY11,1,Full_Load,1111,Full_Load,1111,Full_Load
+ROOT000002,KEY12,1,Full_Load,2222,Full_Load,2222,Full_Load
+ROOT000002,KEY13,1,Full_Load,3333,Full_Load,3333,Full_Load
+ROOT000002,KEY14,1,Full_Load,4444,Full_Load,4444,Full_Load
+ROOT000002,KEY15,1,Full_Load,5555,Full_Load,5555,Full_Load
+ROOT000002,KEY16,1,Full_Load,1111,Full_Load,NULL,Full_Load
+ROOT000002,KEY17,1,Full_Load,NULL,Full_Load,2222,Full_Load
+ROOT000002,KEY18,1,Full_Load,NULL,Full_Load,NULL,Full_Load
+ROOT000002,KEY2,1,Full_Load,2222,Full_Load,2222,Full_Load
+ROOT000002,KEY3,1,Full_Load,3333,Full_Load,3333,Full_Load
+ROOT000002,KEY4,1,Full_Load,4444,Full_Load,4444,Full_Load
+ROOT000002,KEY5,1,Full_Load,5555,Full_Load,5555,Full_Load
+ROOT000002,KEY6,1,Full_Load,1111,Full_Load,NULL,Full_Load
+ROOT000002,KEY7,1,Full_Load,NULL,Full_Load,2222,Full_Load
+ROOT000002,KEY8,1,Full_Load,NULL,Full_Load,NULL,Full_Load
+
+--------------
+Table: "STRUCT2"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
+
+ROOTID,SKEY
+ROOT000002,KEY1
+ROOT000002,KEY10
+ROOT000002,KEY11
+ROOT000002,KEY12
+ROOT000002,KEY13
+ROOT000002,KEY14
+ROOT000002,KEY15
+ROOT000002,KEY16
+ROOT000002,KEY17
+ROOT000002,KEY18
+ROOT000002,KEY19
+ROOT000002,KEY2
+ROOT000002,KEY20
+ROOT000002,KEY3
+ROOT000002,KEY4
+ROOT000002,KEY5
+ROOT000002,KEY6
+ROOT000002,KEY7
+ROOT000002,KEY8
+ROOT000002,KEY9
+
+']W:  Unloading of segment 'STRUCT2' finished with 4 data errors' found 1 times in the log file.
+']W:  Error converting field 'COL2_DECIMAL', error message: 'An error occurred converting the field COL2_DECIMAL in the struct STRUCT2.BASIC_TABLE' found 2 times in the log file.

@@ -25,7 +25,7 @@ def test_number_datatype(snow_test):
     snow_test.monitor_page.stop_task()
     snow_test.monitor_page.stop_task_wait()
     snow_test.replicate_actions.navigate_to_main_page('tasks')
-    move_file_to_target_dir(snow_test.config.source_tasklog_path(), snow_test.task_logs_dir,
+    move_file_to_target_dir(snow_test.config.replicate_logs_path(), snow_test.task_logs_dir,
                             f"reptask_{snow_test.task_name}.log", snow_test.config)
     snow_test.oracle_db.export_schema_data_to_csv(snow_test.target_schema,
                                                    snow_test.good_files_dir + "\\Snowflake2Oracle_Number_Datatype.csv")

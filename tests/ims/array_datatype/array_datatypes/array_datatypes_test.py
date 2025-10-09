@@ -1,8 +1,9 @@
 from settings import *
 
 def test_array_datatypes(ims_test):
-    """Test for IMS ARRAY with several datatypes"""
+    """Test for IMS ARRAY with several sql_server_datatypes"""
     create_task(ims_test)
+
     ims_test.ims_db.cursor.execute("DELETE FROM \"DEVPCB\".\"STRUCT2\"")
     ims_test.ims_db.cursor.execute(
         f"INSERT INTO  \"DEVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY, ARRAY_DATATYPES_1_CHAR_COL, ARRAY_DATATYPES_2_CHAR_COL, ARRAY_DATATYPES_1_INT_COL, ARRAY_DATATYPES_2_INT_COL, ARRAY_DATATYPES_1_DATE_COL, ARRAY_DATATYPES_2_DATE_COL, ARRAY_DATATYPES_1_BINARY_COL, ARRAY_DATATYPES_2_BINARY_COL)"
@@ -23,9 +24,11 @@ def test_array_datatypes(ims_test):
         f"INSERT INTO  \"DEVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY)" 
         "VALUES ('ROOT000002', 'KEY6')")
     ims_test.ims_db.connection.commit()
+
     ims_test.designer_page.run_new_task()
     ims_test.monitor_page.wait_for_fl('2')
     ims_test.monitor_page.cdc_tab()
+
     ims_test.ims_db.cursor.execute(
         f"INSERT INTO  \"DEVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY, ARRAY_DATATYPES_1_CHAR_COL, ARRAY_DATATYPES_2_CHAR_COL, ARRAY_DATATYPES_1_INT_COL, ARRAY_DATATYPES_2_INT_COL, ARRAY_DATATYPES_1_DATE_COL, ARRAY_DATATYPES_2_DATE_COL, ARRAY_DATATYPES_1_BINARY_COL, ARRAY_DATATYPES_2_BINARY_COL)"
         "VALUES ('ROOT000002', 'KEY7', 'AAAAA', 'AAAAA', 1 ,2, '1999-08-26', '1999-08-25', X'000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D', X'000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D')")
@@ -51,15 +54,19 @@ def test_array_datatypes(ims_test):
     ims_test.ims_db.cursor.execute(f"DELETE FROM \"DEVPCB\".\"STRUCT2\" WHERE SKEY = 'KEY1'")
     ims_test.ims_db.cursor.execute(f"DELETE FROM \"DEVPCB\".\"STRUCT2\" WHERE SKEY = 'KEY2'")
     ims_test.ims_db.connection.commit()
+
     ims_test.ims_db.sync_command()
+
+    ims_test.monitor_page.wait_for_cdc()
     ims_test.monitor_page.insert_check('12', '6')
     ims_test.monitor_page.update_check('2', '0')
     ims_test.monitor_page.delete_check('4', '2')
-    ims_test.monitor_page.wait_for_cdc()
     ims_test.monitor_page.stop_task()
     ims_test.monitor_page.stop_task_wait()
+
     ims_test.replicate_actions.navigate_to_main_page('tasks')
-    move_file_to_target_dir(ims_test.config.source_tasklog_path(), ims_test.task_logs_dir,f"reptask_{ims_test.task_name}.log", ims_test.config)
+    move_file_to_target_dir(ims_test.config.replicate_logs_path(), ims_test.task_logs_dir,
+                            f"reptask_{ims_test.task_name}.log", ims_test.config, ims_test.replicate_actions, ims_test.task_name)
     ims_test.target_db.export_schema_data_to_csv(ims_test.target_schema,
                                                  ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_ARRAY_DATATYPES.csv")
     compare_files(ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_ARRAY_DATATYPES.good",

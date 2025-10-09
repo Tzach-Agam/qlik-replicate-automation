@@ -71,15 +71,16 @@ class DesignerPage:
 
     def enter_monitor_page(self):
         """Enter to the task's 'Monitor Mode'."""
-        monitor = self.driver.find_element(By.XPATH, "//span[text()='Monitor']")
+        monitor = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='Monitor']")))
         safe_click(monitor)
+        self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[title='Full Load']")))
 
     def run_task_dropdown(self):
         """Click the 'Run' task dropdown menu."""
         run_dropdown = self.driver.find_element(By.CSS_SELECTOR, "button[data-toggle='dropdown']>[class='caret']")
         safe_click(run_dropdown)
 
-    def run_new_task(self, timeout=40):
+    def run_new_task(self, timeout=60):
         """ Start a new task by clicking on the 'Start Processing' option in the run options dropdown. """
         self.run_task_dropdown()
         start_processing = self.driver.find_element(By.XPATH,
@@ -108,5 +109,6 @@ class DesignerPage:
             print("Stopping task.")
             self.wait.until(EC.invisibility_of_element_located((By.XPATH, "//*[text()='Stopping task']")))
             print("Task stopped")
+            self.wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, "div[uib-modal-backdrop='modal-backdrop']")))
         except:
             print("Element did not become visible within the timeout or became stale.")

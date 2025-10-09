@@ -1,3 +1,5 @@
+from time import sleep
+
 from tests.ims.ims_setup_env import *
 
 def create_endpoints(ims_test: SimpleNamespace):
@@ -21,14 +23,18 @@ def create_endpoints(ims_test: SimpleNamespace):
 
 def create_task(ims_test: SimpleNamespace):
     create_endpoints(ims_test)  # sets ims_test.target_name
-    task_name = f"IMS_2_{ims_test.target_db.config['endpoint']}_Binary"
+    task_name = f"IMS_2_{ims_test.target_db.config['endpoint']}Filter"
     ims_test.tasks_general_page.create_new_task()
     new_task_name = ims_test.new_task_page.new_task_creation(task_name)
     ims_test.replicate_actions.task_data_loader()
     ims_test.designer_page.choose_source_target(ims_test.ims_source_name, ims_test.target_name)
     ims_test.designer_page.enter_table_selection()
-    ims_test.table_selection.select_chosen_tables("ALLTYPES", "BINARY_TABLE")
+    ims_test.table_selection.select_chosen_tables("STRUCT2", "FILTER_TABLE")
     ims_test.designer_page.enter_task_settings()
     ims_test.task_settings.set_task_settings_general()
+    ims_test.designer_page.enter_chosen_table_settings("FILTER_TABLE")
+    ims_test.table_settings.filter_section()
+    ims_test.table_settings.add_filter_less_or_equal("COL_NUM", '7')
+    ims_test.table_settings.ok_button()
     ims_test.task_name = new_task_name
     return new_task_name

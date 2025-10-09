@@ -3,6 +3,7 @@ from settings import *
 def test_array_with_dep_3_5(ims_test):
     """Test for IMS ARRAY WITH dependency between 3 and 5"""
     create_task(ims_test)
+
     ims_test.ims_db.cursor.execute("DELETE FROM \"DEVPCB\".\"STRUCT2\"")
     ims_test.ims_db.cursor.execute(
         f"INSERT INTO \"DEVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY, DATES_NUM, DATE_ARRAY_1_DATE_YY, DATE_ARRAY_1_DATE_MM, DATE_ARRAY_1_DATE_DD, DATE_ARRAY_1COL_1_COL1)"
@@ -35,9 +36,11 @@ def test_array_with_dep_3_5(ims_test):
         f"INSERT INTO \"DEVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY, DATE_ARRAY_1_DATE_YY, DATE_ARRAY_1_DATE_MM, DATE_ARRAY_1_DATE_DD, DATE_ARRAY_2_DATE_YY, DATE_ARRAY_2_DATE_MM, DATE_ARRAY_2_DATE_DD, DATE_ARRAY_3_DATE_YY, DATE_ARRAY_3_DATE_MM, DATE_ARRAY_3_DATE_DD, DATE_ARRAY_1COL_1_COL1, DATE_ARRAY_1COL_2_COL1, DATE_ARRAY_1COL_3_COL1)"
         "VALUES ('ROOT000002', 'KEY10', 99, 08, 26, 01, 12, 27, 22, 10, 12, 'AAAAA', 'BBBBB', 'CCCCC')")
     ims_test.ims_db.connection.commit()
+
     ims_test.designer_page.run_new_task()
     ims_test.monitor_page.wait_for_fl('2')
     ims_test.monitor_page.cdc_tab()
+
     ims_test.ims_db.cursor.execute(
         f"INSERT INTO \"DEVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY, DATES_NUM, DATE_ARRAY_1_DATE_YY, DATE_ARRAY_1_DATE_MM, DATE_ARRAY_1_DATE_DD, DATE_ARRAY_1COL_1_COL1)"
         "VALUES ('ROOT000002', 'KEY11', 1, 99, 08, 26, 'AAAAA')")
@@ -77,15 +80,19 @@ def test_array_with_dep_3_5(ims_test):
     ims_test.ims_db.cursor.execute(f"DELETE FROM \"DEVPCB\".\"STRUCT2\" WHERE SKEY = 'KEY10'")
     ims_test.ims_db.cursor.execute(f"DELETE FROM \"DEVPCB\".\"STRUCT2\" WHERE SKEY = 'KEY3'")
     ims_test.ims_db.connection.commit()
+
     ims_test.ims_db.sync_command()
-    ims_test.monitor_page.insert_check('18', '10')
-    ims_test.monitor_page.update_check('3', '3')
-    ims_test.monitor_page.delete_check('5', '2')
+
     ims_test.monitor_page.wait_for_cdc()
+    ims_test.monitor_page.insert_check('25', '10')
+    ims_test.monitor_page.update_check('4', '3')
+    ims_test.monitor_page.delete_check('5', '2')
     ims_test.monitor_page.stop_task()
     ims_test.monitor_page.stop_task_wait()
+
     ims_test.replicate_actions.navigate_to_main_page('tasks')
-    move_file_to_target_dir(ims_test.config.source_tasklog_path(), ims_test.task_logs_dir,f"reptask_{ims_test.task_name}.log", ims_test.config)
+    move_file_to_target_dir(ims_test.config.replicate_logs_path(), ims_test.task_logs_dir,
+                            f"reptask_{ims_test.task_name}.log", ims_test.config, ims_test.replicate_actions, ims_test.task_name)
     ims_test.target_db.export_schema_data_to_csv(ims_test.target_schema,
                                                  ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_ARRAY_DEP_3_5.csv")
     compare_files(ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_ARRAY_DEP_3_5.good",

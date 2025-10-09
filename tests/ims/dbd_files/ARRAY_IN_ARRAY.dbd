@@ -233,76 +233,6 @@
                 <marshaller/>
                 <applicationDatatype datatype="CHAR"/>
             </field>
-            <field name="DATES_NUM" imsName="" dependsOn="" minOccurs="0">
-                <startPos>21</startPos>
-                <relativeStart>0</relativeStart>
-                <startAfter></startAfter>
-                <bytes>2</bytes>
-                <maxBytes>0</maxBytes>
-                <remarks></remarks>
-                <marshaller isPuredDBCS="N" url="" overflow="" isSigned="N">
-                    <typeConverter>ZONEDDECIMAL</typeConverter>
-                </marshaller>
-                <applicationDatatype datatype="DECIMAL" precision="2" scale="0"/>
-            </field>
-            <field name="DATE_ARRAY" imsName="" dependsOn="DATES_NUM" minOccurs="1" maxOccurs="3">
-                <startPos>23</startPos>
-                <relativeStart>0</relativeStart>
-                <startAfter></startAfter>
-                <bytes>0</bytes>
-                <maxBytes>18</maxBytes>
-                <remarks></remarks>
-                <marshaller isPuredDBCS="N" url="" overflow=""/>
-                <applicationDatatype datatype="ARRAY"/>
-                <field name="DATE_YY" imsName="" parentField="DATE_ARRAY" dependsOn="" minOccurs="0">
-                    <relativeStart>1</relativeStart>
-                    <bytes>2</bytes>
-                    <maxBytes>0</maxBytes>
-                    <remarks></remarks>
-                    <marshaller isPuredDBCS="N" url="" overflow="" isSigned="N">
-                        <typeConverter>ZONEDDECIMAL</typeConverter>
-                    </marshaller>
-                    <applicationDatatype datatype="DECIMAL" precision="2" scale="0"/>
-                </field>
-                <field name="DATE_MM" imsName="" parentField="DATE_ARRAY" dependsOn="" minOccurs="0">
-                    <relativeStart>3</relativeStart>
-                    <bytes>2</bytes>
-                    <maxBytes>0</maxBytes>
-                    <remarks></remarks>
-                    <marshaller isPuredDBCS="N" url="" overflow="" isSigned="N">
-                        <typeConverter>ZONEDDECIMAL</typeConverter>
-                    </marshaller>
-                    <applicationDatatype datatype="DECIMAL" precision="2" scale="0"/>
-                </field>
-                <field name="DATE_DD" imsName="" parentField="DATE_ARRAY" dependsOn="" minOccurs="0">
-                    <relativeStart>5</relativeStart>
-                    <bytes>2</bytes>
-                    <maxBytes>0</maxBytes>
-                    <remarks></remarks>
-                    <marshaller isPuredDBCS="N" url="" overflow="" isSigned="N">
-                        <typeConverter>ZONEDDECIMAL</typeConverter>
-                    </marshaller>
-                    <applicationDatatype datatype="DECIMAL" precision="2" scale="0"/>
-                </field>
-            </field>
-            <field name="DATE_ARRAY_1COL" imsName="" dependsOn="DATES_NUM" minOccurs="1" maxOccurs="3">
-                <startPos>41</startPos>
-                <relativeStart>0</relativeStart>
-                <startAfter></startAfter>
-                <bytes>0</bytes>
-                <maxBytes>15</maxBytes>
-                <remarks></remarks>
-                <marshaller isPuredDBCS="N" url="" overflow=""/>
-                <applicationDatatype datatype="ARRAY"/>
-                <field name="COL1" imsName="" parentField="DATE_ARRAY_1COL" dependsOn="" minOccurs="0">
-                    <relativeStart>1</relativeStart>
-                    <bytes>5</bytes>
-                    <maxBytes>0</maxBytes>
-                    <remarks></remarks>
-                    <marshaller isPuredDBCS="N" url="" overflow=""/>
-                    <applicationDatatype datatype="CHAR"/>
-                </field>
-            </field>
         </segment>
         <segment name="STRUCT3" imsName="STRUCT3">
             <hdam label="GENDS1">
@@ -323,28 +253,52 @@
                 <startPos>21</startPos>
                 <relativeStart>0</relativeStart>
                 <startAfter></startAfter>
-                <bytes>20</bytes>
+                <bytes>30</bytes>
                 <maxBytes>0</maxBytes>
                 <remarks></remarks>
                 <marshaller isPuredDBCS="N" url="" overflow=""/>
                 <applicationDatatype datatype="ARRAY"/>
-                <field name="ARRAY_1" imsName="" parentField="ARRAY_BASE" minOccurs="1" maxOccurs="1">
+                <field name="CHAR_COL_BASE" imsName="" parentField="ARRAY_BASE" dependsOn="" minOccurs="0">
                     <relativeStart>1</relativeStart>
-                    <bytes>15</bytes>
+                    <bytes>5</bytes>
+                    <maxBytes>0</maxBytes>
+                    <remarks></remarks>
+                    <marshaller isPuredDBCS="N" url="" overflow=""/>
+                    <applicationDatatype datatype="CHAR"/>
+                </field>
+                <field name="ARRAY_1" imsName="" parentField="ARRAY_BASE" minOccurs="1" maxOccurs="1">
+                    <relativeStart>6</relativeStart>
+                    <bytes>25</bytes>
                     <maxBytes>0</maxBytes>
                     <remarks></remarks>
                     <marshaller isPuredDBCS="N" url="" overflow=""/>
                     <applicationDatatype datatype="ARRAY"/>
-                    <field name="ARRAY_2" imsName="" parentField="ARRAY_1" minOccurs="1" maxOccurs="1">
+                    <field name="CHAR_COL_1" imsName="" parentField="ARRAY_1" dependsOn="" minOccurs="0">
                         <relativeStart>1</relativeStart>
-                        <bytes>10</bytes>
+                        <bytes>5</bytes>
+                        <maxBytes>0</maxBytes>
+                        <remarks></remarks>
+                        <marshaller isPuredDBCS="N" url="" overflow=""/>
+                        <applicationDatatype datatype="CHAR"/>
+                    </field>
+                    <field name="ARRAY_2" imsName="" parentField="ARRAY_1" minOccurs="1" maxOccurs="1">
+                        <relativeStart>6</relativeStart>
+                        <bytes>20</bytes>
                         <maxBytes>0</maxBytes>
                         <remarks></remarks>
                         <marshaller isPuredDBCS="N" url="" overflow=""/>
                         <applicationDatatype datatype="ARRAY"/>
-                        <field name="ARRAY_3" imsName="" parentField="ARRAY_2" minOccurs="1" maxOccurs="1">
+                        <field name="CHAR_COL_2" imsName="" parentField="ARRAY_2" dependsOn="" minOccurs="0">
                             <relativeStart>1</relativeStart>
                             <bytes>5</bytes>
+                            <maxBytes>0</maxBytes>
+                            <remarks></remarks>
+                            <marshaller isPuredDBCS="N" url="" overflow=""/>
+                            <applicationDatatype datatype="CHAR"/>
+                        </field>
+                        <field name="ARRAY_3" imsName="" parentField="ARRAY_2" minOccurs="1" maxOccurs="1">
+                            <relativeStart>6</relativeStart>
+                            <bytes>15</bytes>
                             <maxBytes>0</maxBytes>
                             <remarks></remarks>
                             <marshaller isPuredDBCS="N" url="" overflow=""/>
@@ -357,32 +311,40 @@
 <marshaller isPuredDBCS="N" url="" overflow=""/>
 <applicationDatatype datatype="CHAR"/>
                             </field>
-                        </field>
-                        <field name="CHAR_COL_2" imsName="" parentField="ARRAY_2" dependsOn="" minOccurs="0">
-                            <relativeStart>6</relativeStart>
-                            <bytes>5</bytes>
-                            <maxBytes>0</maxBytes>
-                            <remarks></remarks>
-                            <marshaller isPuredDBCS="N" url="" overflow=""/>
-                            <applicationDatatype datatype="CHAR"/>
+                            <field name="ARRAY_4" imsName="" parentField="ARRAY_3" minOccurs="1" maxOccurs="1">
+<relativeStart>6</relativeStart>
+<bytes>10</bytes>
+<maxBytes>0</maxBytes>
+<remarks></remarks>
+<marshaller isPuredDBCS="N" url="" overflow=""/>
+<applicationDatatype datatype="ARRAY"/>
+<field name="CHAR_COL_4" imsName="" parentField="ARRAY_4" dependsOn="" minOccurs="0">
+    <relativeStart>1</relativeStart>
+    <bytes>5</bytes>
+    <maxBytes>0</maxBytes>
+    <remarks></remarks>
+    <marshaller isPuredDBCS="N" url="" overflow=""/>
+    <applicationDatatype datatype="CHAR"/>
+</field>
+<field name="ARRAY_5" imsName="" parentField="ARRAY_4" minOccurs="1" maxOccurs="1">
+    <relativeStart>6</relativeStart>
+    <bytes>5</bytes>
+    <maxBytes>0</maxBytes>
+    <remarks></remarks>
+    <marshaller isPuredDBCS="N" url="" overflow=""/>
+    <applicationDatatype datatype="ARRAY"/>
+    <field name="CHAR_COL_5" imsName="" parentField="ARRAY_5" dependsOn="" minOccurs="0">
+        <relativeStart>1</relativeStart>
+        <bytes>5</bytes>
+        <maxBytes>0</maxBytes>
+        <remarks></remarks>
+        <marshaller isPuredDBCS="N" url="" overflow=""/>
+        <applicationDatatype datatype="CHAR"/>
+    </field>
+</field>
+                            </field>
                         </field>
                     </field>
-                    <field name="CHAR_COL_1" imsName="" parentField="ARRAY_1" dependsOn="" minOccurs="0">
-                        <relativeStart>11</relativeStart>
-                        <bytes>5</bytes>
-                        <maxBytes>0</maxBytes>
-                        <remarks></remarks>
-                        <marshaller isPuredDBCS="N" url="" overflow=""/>
-                        <applicationDatatype datatype="CHAR"/>
-                    </field>
-                </field>
-                <field name="CHAR_COL_BASE" imsName="" parentField="ARRAY_BASE" dependsOn="" minOccurs="0">
-                    <relativeStart>16</relativeStart>
-                    <bytes>5</bytes>
-                    <maxBytes>0</maxBytes>
-                    <remarks></remarks>
-                    <marshaller isPuredDBCS="N" url="" overflow=""/>
-                    <applicationDatatype datatype="CHAR"/>
                 </field>
             </field>
         </segment>

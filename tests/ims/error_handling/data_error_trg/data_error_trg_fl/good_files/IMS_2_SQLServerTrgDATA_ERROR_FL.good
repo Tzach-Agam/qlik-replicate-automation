@@ -1,0 +1,27 @@
+--------------
+Table: "BASIC_TABLE"
+Primary Key: ROOTID, SKEY, BASIC_TABLE_ROWNUM
+Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: SKEY, Type: nvarchar, Length: 40, AllowDBNull: False
+Column: BASIC_TABLE_ROWNUM, Type: numeric, Length: None, AllowDBNull: False
+Column: COL5_CHAR, Type: nvarchar, Length: 50, AllowDBNull: True
+Column: COL4_DECIMAL, Type: numeric, Length: None, AllowDBNull: True
+Column: COL3_CHAR, Type: nvarchar, Length: 50, AllowDBNull: True
+Column: COL2_DECIMAL, Type: numeric, Length: None, AllowDBNull: False
+Column: COL1_CHAR, Type: nvarchar, Length: 50, AllowDBNull: True
+
+ROOTID,SKEY,BASIC_TABLE_ROWNUM,COL5_CHAR,COL4_DECIMAL,COL3_CHAR,COL2_DECIMAL,COL1_CHAR
+
+--------------
+Table: "STRUCT2"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: SKEY, Type: nvarchar, Length: 40, AllowDBNull: False
+
+ROOTID,SKEY
+ROOT000002,KEY1
+ROOT000002,KEY2
+ROOT000002,KEY3
+
+']W:  Table 'public'.'STRUCT2' (subtask 1 thread 1) is suspended' found 1 times in the log file.
+']E:  Handling End of table 'replicate_selenium_target'.'BASIC_TABLE' loading failed' found 1 times in the log file.

@@ -1,3 +1,4 @@
+from selenium.common import TimeoutException
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
@@ -58,6 +59,31 @@ class MonitorPage:
         download_logs_icon = self.driver.find_element(By.CSS_SELECTOR, "[class='bootstrapGlyphicon glyphicon-download-alt']")
         safe_click(download_logs_icon)
 
+    def run_task_dropdown(self):
+        """Click the 'Run' task dropdown menu."""
+        run_dropdown = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[data-toggle='dropdown']>[class='caret']")))
+        safe_click(run_dropdown)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH,
+                                                    "//*[@title='Reload Target...']/a[text()='Reload Target...']")))
+
+    def reload_task(self, timeout=40):
+        """ Start a task again by reloading it with the 'Reload task' option in the run options dropdown."""
+        self.run_task_dropdown()
+        reload_task = self.wait.until(EC.element_to_be_clickable((By.XPATH,
+                                                    "//*[@title='Reload Target...']/a[text()='Reload Target...']")))
+        safe_click(reload_task)
+        yes_button = self.wait.until(EC.element_to_be_clickable((By.XPATH,
+                                                    "//button[text()='Yes']")))
+        safe_click(yes_button)
+        try:
+            dynamic_wait = WebDriverWait(self.driver, timeout)
+            dynamic_wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Starting task']")))
+            print("Starting task")
+            dynamic_wait.until(EC.invisibility_of_element_located((By.XPATH, "//*[text()='Starting task']")))
+            print("Task started")
+        except:
+            print("Element did not become visible within the timeout or became stale.")
+
     def wait_for_fl(self, number_of_tables: str, timeout: int = 30):
         """ Wait for the specified number of tables to complete in Full Load (FL) mode.
             This method waits for a specific number of tables to complete their Full Load operation in the Monitor mode
@@ -80,7 +106,7 @@ class MonitorPage:
     def wait_for_cdc(self, timeout: int = 60):
         """ Wait for the Change Processing (CDC) to complete."""
         dynamic_wait = WebDriverWait(self.driver, timeout)
-        transferring_element = (By.XPATH, "//div[@id='taskFlowMapDirective'][@class='fullFlowMap RUNNING Transferring']")
+        transferring_element = (By.XPATH, "//div[@id='taskFlowMapDirective'][contains(@class, 'RUNNING') and contains(@class, 'Transferring')]")
         dynamic_wait.until(EC.visibility_of_element_located(transferring_element))
         dynamic_wait.until(EC.invisibility_of_element_located(transferring_element))
         print("CDC completed")
@@ -145,13 +171,34 @@ class MonitorPage:
         yes_button = self.driver.find_element(By.XPATH, "//button[text()='Yes']")
         safe_click(yes_button)
 
-    def stop_task_wait(self):
+    def stop_task_wait(self, timeout=60):
         """Wait for the replication task to stop."""
-        wait = WebDriverWait(self.driver, 20)
+        wait = WebDriverWait(self.driver, timeout)
         wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Stopping task']")))
         print("Stopping task")
         wait.until(EC.invisibility_of_element_located((By.XPATH, "//*[text()='Stopping task']")))
         print("Task stopped")
+        self.wait.until(
+            EC.invisibility_of_element_located((By.CSS_SELECTOR, "div[uib-modal-backdrop='modal-backdrop']")))
+
+    def wait_for_message_in_ui(self, search_text: str):
+        """ Wait for a specific message text in the 3rd column of any row. """
+        def check_text_in_third_column(driver):
+            rows = driver.find_elements(By.XPATH, '//*[@id="scrollAreaID"]/div/div/table/tbody/tr')
+            for i, row in enumerate(rows, start=1):
+                try:
+                    cell = row.find_element(By.XPATH, './td[3]//div')
+                    if search_text in cell.text.strip():
+                        print(f"✅ Message found in row {i}, column 3")
+                        return True
+                except:
+                    continue
+            return False
+
+        try:
+            self.wait.until(check_text_in_third_column)
+        except TimeoutException:
+            raise AssertionError(f"Message '{search_text}' not found Monitor UI after 60 seconds.")
 
 
 

@@ -20,7 +20,7 @@ class IMSDatabase:
         jdbc_driver_class = self.section['jdbc_driver_class']
         jdbc_jar = self.section['jdbc_jar']
         jdbc_url = (
-            f"jdbc:ims://{self.section['host']}:{self.section['port']}/xml://{self.section['psb']}:"
+            f"jdbc:ims://{self.section['ims_connect_host']}:{self.section['ims_connect_port']}/xml://{self.section['psb']}:"
             f"xmlMetadataLocation={self.section['xmlMetadataLocation']};"
             "dpsbOnCommit=true;"
             "treatInvalidDecimalAsNull=true;"
@@ -73,13 +73,14 @@ class IMSDatabase:
 
     def sync_command(self, schema_name=None, table_name=None, column_name=None, pk_column=None, value=None):
         """Execute the SYNC command on the IMS database."""
-        for i in range(1, 20):
+        for i in range(1, 30):
             if schema_name is None and table_name is None:
                 ims_schema = self.section['schema']
                 self.execute_query(f"UPDATE \"{ims_schema}\".\"ROOT\" SET FILL_0 = 'SYNC' WHERE ROOTID = 'ROOT00000S'")
             elif schema_name is not None and table_name is None:
                 self.execute_query(f"UPDATE \"{schema_name}\".\"{table_name}\" SET {column_name} = 'SYNC' WHERE {pk_column} = '{value}'")
         print("SYNC Command executed successfully")
+
     def close(self):
         """Close the IMS database connection."""
         try:

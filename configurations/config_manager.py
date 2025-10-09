@@ -73,11 +73,17 @@ class ConfigurationManager:
         sync_table_name = self.config.get('Default_Tables', 'sync_table_name')
         return default_table_name, sync_table_name
 
-    def source_tasklog_path(self):
+    def replicate_logs_path(self):
         """Gets and returns the path to the directory with all the task task_logs of replicate software
         (source path of task task_logs)."""
-        source_log_path = self.config.get('Task_log_Path', 'source_directory')
+        source_log_path = self.config.get('Paths', 'replicate_logs_directory')
         return source_log_path
+
+    def downloaded_files_path(self):
+        """Gets the downloads path from the 'Paths' section in config.ini, for the dir in which all the downloaded files
+        will be replicates to."""
+        downloads_path = self.config.get('Paths', 'download_directory')
+        return downloads_path
 
     def get_enabled_targets(self):
         """Returns a list of targets that are enabled (True) in the [Targets] section."""

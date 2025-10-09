@@ -2,7 +2,10 @@ import os
 import shutil
 import filecmp
 import random
+import time
+
 from configurations.config_manager import ConfigurationManager
+from replicate_pages import ReplicateCommonActions
 from selenium.common.exceptions import *
 
 """
@@ -22,43 +25,83 @@ def safe_click(element):
             ElementNotInteractableException, ElementNotSelectableException) as e:
         print(f"Error clicking element: {e}")
 
-def move_file_to_target_dir(source_dir: str, target_dir: str, file_name: str, config: ConfigurationManager):
-    """ Copies a chosen file from source dir to target dir.
-        If a file with the same name exists in the target, appends a random suffix to avoid overwriting.
-        The source file remains intact.
-        :param source_dir: the path of the source directory
-        :param target_dir: the path of the target directory
-        :param file_name: the name of the file that will be copied
-        :param config: the configuration manager object for the base_url value
+
+def move_file_to_target_dir(source_dir: str, target_dir: str, file_name: str,
+                            config: ConfigurationManager, rep_common_actions: ReplicateCommonActions, task_name=None,
+                            retries: int = 10, delay: float = 1.0):
+    """Copies a chosen file from source dir to target dir with retries if the file is still locked.
+
+    :param source_dir: path of the source directory
+    :param target_dir: path of the target directory
+    :param file_name: name of the file to be copied
+    :param config: ConfigurationManager for base_url
+    :param rep_common_actions: ReplicateCommonActions for downloading logs
+    :param task_name: task name (used when downloading logs remotely)
+    :param retries: number of retries while waiting for file
+    :param delay: delay (seconds) between retries
     """
 
     hostname = os.environ.get('COMPUTERNAME')
     source_path = os.path.join(source_dir, file_name)
     target_path = os.path.join(target_dir, file_name)
 
-    if not os.path.exists(source_path):
-        print(f"Source file {source_path} does not exist. Skipping file transfer.")
-        return
-
     if hostname is None:
         print("Hostname could not be determined. Skipping file transfer.")
         return
 
-    if hostname.lower() not in config.get_base_url().lower():
-        print(f"Test runs on a Replicate machine that is not project host machine: {hostname}. Skipping file transfer.")
-        return
+    def wait_for_file_ready(path: str) -> bool:
+        """Wait until file exists and is readable."""
+        for _ in range(retries):
+            if os.path.exists(path):
+                try:
+                    with open(path, "rb"):
+                        return True
+                except PermissionError:
+                    pass
+            time.sleep(delay)
+        return False
 
-    if os.path.exists(target_path):
+    def handle_existing_target(path: str):
+        """Rename existing target file to avoid overwriting."""
         base_name, extension = os.path.splitext(file_name)
         while True:
             random_suffix = str(random.randint(1, 99999))
-            new_file_name = f"{base_name}_{random_suffix}{extension}"
-            target_path = os.path.join(target_dir, new_file_name)
-            if not os.path.exists(target_path):
+            renamed_file = f"{base_name}_{random_suffix}{extension}"
+            renamed_path = os.path.join(target_dir, renamed_file)
+            if not os.path.exists(renamed_path):
+                os.rename(path, renamed_path)
+                print(f"Renamed existing target file to: {renamed_path}")
                 break
 
-    shutil.copy(source_path, target_path)
-    print(f"Copied '{file_name}' to '{target_path}'")
+    # Remote machine branch
+    if hostname.lower() not in config.get_base_url().lower():
+        print(f"Test runs on a Replicate machine that is NOT project host machine: {hostname}.")
+        source_path = os.path.join(config.downloaded_files_path(), file_name)
+        if os.path.exists(source_path):
+            print(f"Deleting existing file in source dir: {source_path}")
+            os.remove(source_path)
+        rep_common_actions.download_task_log(task_name)
+
+        if os.path.exists(target_path):
+            handle_existing_target(target_path)
+
+        if not wait_for_file_ready(source_path):
+            raise FileNotFoundError(f"File not ready after waiting: {source_path}")
+
+        shutil.copy(source_path, target_path)
+        print(f"Copied '{file_name}' to '{target_path}'")
+
+    # Local machine branch
+    else:
+        print(f"Test runs on the same Replicate machine that is on project host machine: {hostname}.")
+        if os.path.exists(target_path):
+            handle_existing_target(target_path)
+
+        if not wait_for_file_ready(source_path):
+            raise FileNotFoundError(f"File not ready after waiting: {source_path}")
+
+        shutil.copy(source_path, target_path)
+        print(f"Copied '{file_name}' to '{target_path}'")
 
 
 def compare_files(good_file, data_file):
