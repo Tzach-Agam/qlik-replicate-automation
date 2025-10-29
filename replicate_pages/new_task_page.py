@@ -49,18 +49,40 @@ class NewTaskPage:
             functionality (if it is already selected) or add it (if it's not selected)."""
         full_load = self.driver.find_element(By.CSS_SELECTOR, "[class='FullLoad toggleButton on']")
         safe_click(full_load)
+        self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[class='FullLoad toggleButton']")))
 
     def cdc_button(self):
         """ Click the 'Apply Changes' toggle button which is turned on by default. Will either remove the CDC
             functionality (if it is already selected), or add it (if it's not selected)."""
         cdc = self.driver.find_element(By.CSS_SELECTOR, "[class='ApplyChanges toggleButton on']")
         safe_click(cdc)
+        self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[class='ApplyChanges toggleButton']")))
 
     def new_task_creation(self, task_name: str):
         """ Create a new task by entering the task name and description and then closing the dialog. This method combines
             previous methods and allows creation of a task with default configurations.
             :param task_name: The name of the task to be entered."""
         new_task_name = self.enter_task_name(task_name)
+        self.close_new_task()
+        print(f"Task {new_task_name} created")
+        return new_task_name
+
+    def fl_only_task_creation(self, task_name: str):
+        """ Create a new task by entering the task name and description and then closing the dialog. This method combines
+            previous methods and allows creation of a task with default configurations.
+            :param task_name: The name of the task to be entered."""
+        new_task_name = self.enter_task_name(task_name)
+        self.cdc_button()
+        self.close_new_task()
+        print(f"Task {new_task_name} created")
+        return new_task_name
+
+    def cdc_only_task_creation(self, task_name: str):
+        """ Create a new task by entering the task name and description and then closing the dialog. This method combines
+            previous methods and allows creation of a task with default configurations.
+            :param task_name: The name of the task to be entered."""
+        new_task_name = self.enter_task_name(task_name)
+        self.fl_button()
         self.close_new_task()
         print(f"Task {new_task_name} created")
         return new_task_name

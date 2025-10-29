@@ -73,6 +73,18 @@ class TaskSettings:
             else:
                 control_schema_element.send_keys(self.config.get_default_schemas()[2])
 
+    def choose_control_tables(self, status: str = None, suspend: str = None, history: str = None):
+        """Select the checkbox of the wanted control tables"""
+        status_table = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[ng-model='vm.currentFullTask.task_settings.common_settings.status_table_enabled']>div>span[class='checkBoxSpan ']")))
+        suspend_table = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[ng-model='vm.currentFullTask.task_settings.common_settings.suspended_tables_table_enabled']>div>span[class='checkBoxSpan ']")))
+        history_table = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[ng-model='vm.currentFullTask.task_settings.common_settings.history_table_enabled']>div>span[class='checkBoxSpan ']")))
+        if status == "status":
+            safe_click(status_table)
+        if suspend == "suspend":
+            safe_click(suspend_table)
+        if history == "history":
+            safe_click(history_table)
+
     def full_load_tab(self):
         """Click on the 'Full Load' tab for configuration of FL-related settings."""
         fl_tab_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Full Load']")))

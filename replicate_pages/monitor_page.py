@@ -66,7 +66,25 @@ class MonitorPage:
         self.wait.until(EC.element_to_be_clickable((By.XPATH,
                                                     "//*[@title='Reload Target...']/a[text()='Reload Target...']")))
 
-    def reload_task(self, timeout=40):
+    def resume_task(self, timeout=60):
+        """ Start a task again by reloading it with the 'Reload task' option in the run options dropdown."""
+        self.run_task_dropdown()
+        resume_task = self.wait.until(EC.element_to_be_clickable((By.XPATH,
+                                                    "//*[@title='Resume Processing...']/a[text()='Resume Processing...']")))
+        safe_click(resume_task)
+        yes_button = self.wait.until(EC.element_to_be_clickable((By.XPATH,
+                                                    "//button[text()='Yes']")))
+        safe_click(yes_button)
+        try:
+            dynamic_wait = WebDriverWait(self.driver, timeout)
+            dynamic_wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Starting task']")))
+            print("Starting task")
+            dynamic_wait.until(EC.invisibility_of_element_located((By.XPATH, "//*[text()='Starting task']")))
+            print("Task started")
+        except:
+            print("Element did not become visible within the timeout or became stale.")
+
+    def reload_task(self, timeout=60):
         """ Start a task again by reloading it with the 'Reload task' option in the run options dropdown."""
         self.run_task_dropdown()
         reload_task = self.wait.until(EC.element_to_be_clickable((By.XPATH,
@@ -84,7 +102,7 @@ class MonitorPage:
         except:
             print("Element did not become visible within the timeout or became stale.")
 
-    def wait_for_fl(self, number_of_tables: str, timeout: int = 30):
+    def wait_for_fl(self, number_of_tables: str, timeout: int = 60):
         """ Wait for the specified number of tables to complete in Full Load (FL) mode.
             This method waits for a specific number of tables to complete their Full Load operation in the Monitor mode
             of Qlik Replicate. It checks if the expected number of tables have reached completion status within the given

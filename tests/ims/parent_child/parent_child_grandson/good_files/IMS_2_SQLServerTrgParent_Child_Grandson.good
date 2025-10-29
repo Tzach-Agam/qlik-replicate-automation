@@ -1,0 +1,67 @@
+--------------
+Table: "CHILD"
+Primary Key: ROOTID, PKEY, CKEY
+Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: PKEY, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: CKEY, Type: nvarchar, Length: 10, AllowDBNull: False
+Column: COUNTRY, Type: nvarchar, Length: 50, AllowDBNull: True
+Column: CITY, Type: nvarchar, Length: 50, AllowDBNull: True
+Column: STREET_NAME, Type: nvarchar, Length: 50, AllowDBNull: True
+Column: BUILDING_NO, Type: numeric, Length: None, AllowDBNull: True
+Column: FLOOR, Type: numeric, Length: None, AllowDBNull: True
+Column: ZIP_CODE, Type: numeric, Length: None, AllowDBNull: True
+
+ROOTID,PKEY,CKEY,COUNTRY,CITY,STREET_NAME,BUILDING_NO,FLOOR,ZIP_CODE
+ROOT000PC3,PKEY13,CKEY5,Israel,Lod,Hubert Humphry 3,3556,NULL,21340
+ROOT000PC3,PKEY13,CKEY6,Spain,Madrid,Gran Vía,45,NULL,28013
+ROOT000PC3,PKEY13,CKEY7,Brazil,Rio de Janeiro,Avenida Atlântica,1702,NULL,22021001
+ROOT000PC3,PKEY13,CKEY8,India,Mumbai,Bandra Kurla Complex,101,NULL,400051
+ROOT000PC4,PKEY14,CKEY5,Israel,Lod,Hubert Humphry 3,3556,NULL,21340
+ROOT000PC4,PKEY14,CKEY6,Ireland,Dublin,OConnell Street,83,NULL,11223
+ROOT000PC4,PKEY14,CKEY7,Portugal,Lisbon,Rua Augusta,250,NULL,1100055
+ROOT000PC4,PKEY14,CKEY8,South Korea,Seoul,Gangnam-daero,420,NULL,6197
+
+--------------
+Table: "PARENT"
+Primary Key: ROOTID, PKEY
+Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: PKEY, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: FIRST_NAME, Type: nvarchar, Length: 20, AllowDBNull: True
+Column: MIDDLE_NAME, Type: nvarchar, Length: 10, AllowDBNull: True
+Column: LAST_NAME, Type: nvarchar, Length: 40, AllowDBNull: True
+
+ROOTID,PKEY,FIRST_NAME,MIDDLE_NAME,LAST_NAME
+ROOT000PC3,PKEY1,Dor,David,Agam
+ROOT000PC3,PKEY11,Dor,David,Agam
+ROOT000PC3,PKEY12,Dor,David,Agam
+ROOT000PC3,PKEY13,Dor,David,Agam
+ROOT000PC3,PKEY14,Dor,David,Agam
+ROOT000PC3,PKEY2,Dor,David,Agam
+ROOT000PC3,PKEY4,Dor,David,Agam
+ROOT000PC4,PKEY1,Shai,Shalo,Agam
+ROOT000PC4,PKEY11,Shai,Shalo,Agam
+ROOT000PC4,PKEY12,Shai,Shalo,Agam
+ROOT000PC4,PKEY13,Shai,Shalo,Agam
+ROOT000PC4,PKEY14,Shai,Shalo,Agam
+ROOT000PC4,PKEY2,Shai,Shalo,Agam
+ROOT000PC4,PKEY4,Shai,Shalo,Agam
+
+--------------
+Table: "ROOT"
+Primary Key: ROOTID
+Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: ROOTID_NEW, Type: nvarchar, Length: 20, AllowDBNull: True
+Column: FILL_0, Type: nvarchar, Length: 180, AllowDBNull: True
+
+ROOTID,ROOTID_NEW,FILL_0
+ROOT000000,ROOT000000,ALLTYPES
+ROOT000001,ROOT000001,STRUCT1
+ROOT000002,ROOT000002,STRUCT2
+ROOT000003,ROOT000003,STRUCT3
+ROOT000004,ROOT000004,STRUCT4
+ROOT00000S,ROOT00000S,SYNC
+ROOT0000PC,ROOT0000PC,Parent_Child
+ROOT000PC2,ROOT000PC2,Parent_Child2
+ROOT000PC3,ROOT000PC3,Parent_Child3
+ROOT000PC4,ROOT000PC4,Parent_Child4
+

@@ -19,30 +19,28 @@ class ManageEndpoints:
         """ Initialize the ManageEndpoints object
             :param driver: WebDriver instance for Selenium automation. """
         self.driver = driver
-        self.wait = WebDriverWait(self.driver, 40)
+        self.wait = WebDriverWait(self.driver, 20)
         self.actions = ActionChains(self.driver)
         self.config = config
 
     def new_endpoint_connection(self):
         """Click the 'New Endpoint Connection' button to create a new endpoint."""
-        try:
-            new_endpoint = self.wait.until(
-                EC.element_to_be_clickable((By.XPATH, "//button/span[text()='New Endpoint Connection']")))
-        except (StaleElementReferenceException, ElementNotInteractableException):
-            new_endpoint = self.wait.until(
-                EC.element_to_be_clickable((By.XPATH, "//button/span[text()='New Endpoint Connection']")))
-        safe_click(new_endpoint)
-        endpoint_name = self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@id='endpointName']")))
-        endpoint_description = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[name='endpointDescription']")))
-        endpoint_type = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[class='textInputInRowWrap']>[type='text']")))
-        try:
-            safe_click(endpoint_name)
-            safe_click(endpoint_description)
-            safe_click(endpoint_type)
-        except (StaleElementReferenceException, ElementNotInteractableException):
-            safe_click(endpoint_name)
-            safe_click(endpoint_description)
-            safe_click(endpoint_type)
+        from selenium.common.exceptions import StaleElementReferenceException
+
+        def click_with_retry(by, locator, max_retries=5):
+            for attempt in range(max_retries):
+                try:
+                    element = self.wait.until(EC.element_to_be_clickable((by, locator)))
+                    element.click()
+                    return
+                except StaleElementReferenceException:
+                    if attempt == max_retries - 1:
+                        raise
+
+        click_with_retry(By.XPATH, "//button/span[text()='New Endpoint Connection']")
+        click_with_retry(By.XPATH, "//*[@id='endpointName']")
+        click_with_retry(By.CSS_SELECTOR, "[name='endpointDescription']")
+        click_with_retry(By.CSS_SELECTOR, "[class='textInputInRowWrap']>[type='text']")
 
     def random_endpoint_name(self, config_section):
         """Creates a random name of the endpoint by appending a 6-digit random number.
@@ -136,7 +134,8 @@ class ManageEndpoints:
         self.new_endpoint_connection()
         self.choose_target_role()
         self.choose_sql_server_type()
-        self.sql_auth_option()
+        if not self.config.get_is_os_linux():
+            self.sql_auth_option()
         self.enter_sql_server(self.config.get_section('MSSQL_DB_Trg')['server'])
         self.enter_sql_username(self.config.get_section('MSSQL_DB_Trg')['username'])
         self.enter_sql_password(self.config.get_section('MSSQL_DB_Trg')['password'])

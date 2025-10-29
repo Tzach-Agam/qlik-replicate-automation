@@ -76,7 +76,8 @@ class TasksPage:
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Cancel']")))
         ok_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='OK']")))
         safe_click(ok_button)
-        self.wait.until(EC.invisibility_of_element_located((By.XPATH, f"//*[text()='{task_name}']")))
+        self.wait.until(EC.invisibility_of_element_located((By.XPATH, f"//button[text()='OK']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[text()='Manage Endpoint Connections...']")))
         print(f"Task {task_name} successfully deleted")
 
     def enter_view_logs(self, task_name: str):

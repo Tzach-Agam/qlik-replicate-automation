@@ -1,0 +1,98 @@
+--------------
+Table: "BASIC_TABLE"
+Primary Key: ROOTID, SKEY, BASIC_TABLE_ROWNUM
+Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: SKEY, Type: nvarchar, Length: 40, AllowDBNull: False
+Column: BASIC_TABLE_ROWNUM, Type: int, Length: None, AllowDBNull: False
+Column: COL5_CHAR, Type: nvarchar, Length: 50, AllowDBNull: True
+Column: COL4_NUM, Type: int, Length: None, AllowDBNull: True
+Column: COL3_CHAR, Type: nvarchar, Length: 50, AllowDBNull: True
+Column: COL2_NUM, Type: int, Length: None, AllowDBNull: True
+Column: COL1_CHAR, Type: nvarchar, Length: 50, AllowDBNull: True
+
+ROOTID,SKEY,BASIC_TABLE_ROWNUM,COL5_CHAR,COL4_NUM,COL3_CHAR,COL2_NUM,COL1_CHAR
+ROOT000002,KEY1,1,Full_Load,1111,Full_Load,1111,UPDATE
+ROOT000002,KEY10,1,Capture_Changes,5555,Capture_Changes,5555,Capture_Changes
+ROOT000002,KEY2,1,Full_Load,2222,Full_Load,2222,UPDATE
+ROOT000002,KEY4,1,Full_Load,4444,Full_Load,4444,Full_Load
+ROOT000002,KEY5,1,Full_Load,5555,Full_Load,5555,Full_Load
+ROOT000002,KEY6,1,Capture_Changes,1111,Capture_Changes,1111,UPDATE
+ROOT000002,KEY7,1,Capture_Changes,2222,Capture_Changes,2222,UPDATE
+ROOT000002,KEY9,1,Capture_Changes,4444,Capture_Changes,4444,Capture_Changes
+
+--------------
+Table: "STRUCT2"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: SKEY, Type: nvarchar, Length: 40, AllowDBNull: False
+
+ROOTID,SKEY
+ROOT000002,KEY1
+ROOT000002,KEY10
+ROOT000002,KEY2
+ROOT000002,KEY4
+ROOT000002,KEY5
+ROOT000002,KEY6
+ROOT000002,KEY7
+ROOT000002,KEY9
+
+--------------
+Table: "attrep_apply_exceptions"
+Primary Key: None
+Column: TASK_NAME, Type: varchar, Length: 128, AllowDBNull: False
+Column: TABLE_OWNER, Type: varchar, Length: 128, AllowDBNull: False
+Column: TABLE_NAME, Type: varchar, Length: 128, AllowDBNull: False
+Column: ERROR_TIME, Type: datetime2, Length: None, AllowDBNull: False
+Column: STATEMENT, Type: varchar, Length: -1, AllowDBNull: True
+Column: ERROR, Type: varchar, Length: -1, AllowDBNull: True
+
+TASK_NAME,TABLE_OWNER,TABLE_NAME,ERROR_TIME,STATEMENT,ERROR
+
+--------------
+Table: "attrep_history"
+Primary Key: None
+Column: server_name, Type: varchar, Length: 128, AllowDBNull: False
+Column: task_name, Type: varchar, Length: 128, AllowDBNull: False
+Column: timeslot_type, Type: varchar, Length: 32, AllowDBNull: False
+Column: timeslot, Type: datetime2, Length: None, AllowDBNull: False
+Column: timeslot_duration, Type: bigint, Length: None, AllowDBNull: True
+Column: timeslot_latency, Type: bigint, Length: None, AllowDBNull: True
+Column: timeslot_records, Type: bigint, Length: None, AllowDBNull: True
+Column: timeslot_volume, Type: bigint, Length: None, AllowDBNull: True
+
+server_name,task_name,timeslot_type,timeslot,timeslot_duration,timeslot_latency,timeslot_records,timeslot_volume
+ISRKS-JUJ.qliktech.com,control_tables25971,FULL LOAD,2025-10-20 13:47:36,0,0,0,0
+ISRKS-JUJ.qliktech.com,control_tables25971,CHANGE PROCESSING,2025-10-20 13:47:36,0,0,0,0
+ISRKS-JUJ.qliktech.com,control_tables25971,FULL LOAD,2025-10-20 13:47:52,0,0,5,0
+
+--------------
+Table: "attrep_status"
+Primary Key: None
+Column: server_name, Type: varchar, Length: 128, AllowDBNull: False
+Column: task_name, Type: varchar, Length: 128, AllowDBNull: False
+Column: task_status, Type: varchar, Length: 32, AllowDBNull: True
+Column: status_time, Type: datetime2, Length: None, AllowDBNull: True
+Column: pending_changes, Type: bigint, Length: None, AllowDBNull: True
+Column: disk_swap_size, Type: bigint, Length: None, AllowDBNull: True
+Column: task_memory, Type: bigint, Length: None, AllowDBNull: True
+Column: source_current_position, Type: varchar, Length: 128, AllowDBNull: True
+Column: source_current_timestamp, Type: datetime2, Length: None, AllowDBNull: True
+Column: source_tail_position, Type: varchar, Length: 128, AllowDBNull: True
+Column: source_tail_timestamp, Type: datetime2, Length: None, AllowDBNull: True
+Column: source_timestamp_applied, Type: datetime2, Length: None, AllowDBNull: True
+
+server_name,task_name,task_status,status_time,pending_changes,disk_swap_size,task_memory,source_current_position,source_current_timestamp,source_tail_position,source_tail_timestamp,source_timestamp_applied
+ISRKS-JUJ.qliktech.com,control_tables25971,FULL LOAD,2025-10-20 13:47:36,0,0,61,,2025-10-20 13:47:36,,2025-10-20 13:47:36,1970-01-01 00:00:00
+
+--------------
+Table: "attrep_suspended_tables"
+Primary Key: None
+Column: server_name, Type: varchar, Length: 128, AllowDBNull: False
+Column: task_name, Type: varchar, Length: 128, AllowDBNull: False
+Column: table_owner, Type: varchar, Length: 128, AllowDBNull: False
+Column: table_name, Type: varchar, Length: 128, AllowDBNull: False
+Column: suspend_reason, Type: varchar, Length: 32, AllowDBNull: True
+Column: suspend_timestamp, Type: datetime2, Length: None, AllowDBNull: True
+
+server_name,task_name,table_owner,table_name,suspend_reason,suspend_timestamp
+

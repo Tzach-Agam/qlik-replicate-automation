@@ -1,0 +1,35 @@
+--------------
+Table: "HEBREW_TABLE"
+Primary Key: ROOTID, SKEY, HEBREW_TABLE_ROWNUM
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
+Column: HEBREW_TABLE_ROWNUM, Type: NUMBER, Length: 22, AllowDBNull: False
+Column: COL1, Type: NVARCHAR2, Length: 40, AllowDBNull: True
+Column: COL2, Type: NVARCHAR2, Length: 40, AllowDBNull: True
+
+ROOTID,SKEY,HEBREW_TABLE_ROWNUM,COL1,COL2
+ROOT000002,KEY1,1,קקקקק,עברית
+ROOT000002,KEY2,1,קקקקק,שפההה
+ROOT000002,KEY3,1,קשההה,קשההה
+ROOT000002,KEY5,1,שפההה,שפההה
+ROOT000002,KEY6,1,קשההה,קשההה
+ROOT000002,KEY7,1,עברית,עברית
+ROOT000002,KEY8,1,שפההה,שפההה
+ROOT000002,KEY9,1,קשההה,קשההה
+
+--------------
+Table: "STRUCT2"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
+
+ROOTID,SKEY
+ROOT000002,KEY1
+ROOT000002,KEY2
+ROOT000002,KEY3
+ROOT000002,KEY5
+ROOT000002,KEY6
+ROOT000002,KEY7
+ROOT000002,KEY8
+ROOT000002,KEY9
+

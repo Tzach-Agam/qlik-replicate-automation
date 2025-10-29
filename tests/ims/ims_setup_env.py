@@ -24,7 +24,7 @@ ENABLED_TARGETS = CONFIG.get_enabled_targets()
 # ----------------------------------------
 # 1️⃣ Config Manager
 # ----------------------------------------
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def config_manager():
     print("🛠️ Config Manager setup")
     return CONFIG
@@ -43,8 +43,6 @@ def driver(config_manager):
 # ----------------------------------------
 # 3️⃣ IMS DB (per test)
 # ----------------------------------------
-
-# 3️⃣ IMS DB (Session level) - depends on jvm_manager
 @pytest.fixture
 def ims(config_manager, request):
     print("💾 IMS setup")
@@ -63,6 +61,9 @@ def ims(config_manager, request):
     print(f"Copied DBD for test folder '{test_dir_name}': {dbd_file} → {dst_file}")
     ims_db = IMSDatabase(config_manager, 'IMS_DB')
     ims_db.connect()
+    if config_manager.get_is_os_linux():
+        dbd_file  = f"{config_manager.get_linux_dbd_dir()}{dbd_name}"
+        print("Test runs on Linux - For IMS source endpoint using DBD path:", dbd_file)
     yield ims_db, dbd_file
     print("🧹 IMS teardown")
     ims_db.close()
@@ -116,7 +117,7 @@ def default_schemas(config_manager):
 # ----------------------------------------
 # 7️⃣ Reset DB before each test
 # ----------------------------------------
-@pytest.fixture
+@pytest.fixture(scope="function")
 def reset_database_env(default_schemas, target_db):
     _, db = target_db
     source_schema, target_schema, control_schema = default_schemas
@@ -143,7 +144,7 @@ def setup_browser(driver, replicate_pages):
 # ----------------------------------------
 # 9️⃣ Full test environment
 # ----------------------------------------
-@pytest.fixture
+@pytest.fixture(scope="function")
 def ims_test(request, config_manager, ims, target_db, replicate_pages, default_schemas, reset_database_env, setup_browser):
     ims_db, dbd_file = ims
     db_type, db = target_db
@@ -171,6 +172,8 @@ def ims_test(request, config_manager, ims, target_db, replicate_pages, default_s
 
     yield env
 
-    replicate_pages.replicate_actions.delete_task_endpoint(
-        env.task_name, env.ims_source_name, env.target_name
-    )
+    if env.task_name:
+        replicate_pages.replicate_actions.delete_task_endpoint(
+            env.task_name, env.ims_source_name, env.target_name)
+    else:
+        print("⚠️ Skipping task deletion - task was never created", flush=True)

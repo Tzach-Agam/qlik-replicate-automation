@@ -57,4 +57,4 @@ ROOT000002,KEY8
 ROOT000002,KEY9
 
 ']W:  Unloading of segment 'STRUCT2' finished with 4 data errors' found 1 times in the log file.
-']W:  Error converting field 'COL2_DECIMAL', error message: 'An error occurred converting the field COL2_DECIMAL in the struct STRUCT2.BASIC_TABLE' found 2 times in the log file.
+']W:  Error converting field 'COL2_DECIMAL', error message: 'An error occurred converting the field COL2_DECIMAL in the struct STRUCT2.BASIC_TABLE' found 1 times in the log file.

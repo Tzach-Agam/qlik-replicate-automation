@@ -28,4 +28,4 @@ ROOT000002,KEY6
 ROOT000002,KEY7
 
 ']W:  A data error was encountered' found 1 times in the log file.
-']W:  Error converting field 'COL2_DECIMAL', error message: 'An error occurred converting the field COL2_DECIMAL in the struct STRUCT2.BASIC_TABLE: ' found 1 times in the log file.
+']W:  Error converting field 'COL2_DECIMAL', error message: 'An error occurred converting the field COL2_DECIMAL in the struct STRUCT2.BASIC_TABLE: ' not found in the log file.

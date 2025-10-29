@@ -197,6 +197,96 @@ class OracleDatabase:
         except oracledb.DatabaseError as e:
             print(f"Error while exporting data for schema '{schema_name}':", e)
 
+    def append_schema_data_to_csv(self, schema_name, output_file):
+        """
+        Export schema data with table name, primary keys, column details, and data rows.
+        Appends the output to an existing file.
+        Replaces NULL values with the string 'NULL' in the CSV output.
+        Orders rows by the primary key(s) if they exist.
+        """
+        get_tables_query = f"""
+            SELECT table_name 
+            FROM all_tables 
+            WHERE owner = '{schema_name}'
+            ORDER BY table_name
+        """
+        try:
+            # --- KEY CHANGE: Used 'a' (append) instead of 'w' (write) ---
+            with open(output_file, 'a', newline='', encoding="utf-8") as csvfile:
+                csvwriter = csv.writer(csvfile)
+
+                # Get all tables in the schema
+                self.execute_query(get_tables_query)
+                tables = self.fetch_results()
+
+                for table in tables:
+                    table_name = table[0]
+                    if table_name.lower() == "sync_table":
+                        continue
+
+                    # 1. Write separator and table name
+                    csvfile.write("--------------\n")
+                    csvfile.write(f'Table: "{table_name}"\n')
+
+                    # 2. Get primary key(s)
+                    pk_query = f"""
+                        SELECT cols.column_name
+                        FROM all_constraints cons
+                        JOIN all_cons_columns cols 
+                            ON cons.constraint_name = cols.constraint_name
+                            AND cons.owner = cols.owner
+                        WHERE cons.constraint_type = 'P'
+                          AND cons.table_name = '{table_name}'
+                          AND cons.owner = '{schema_name}'
+                        ORDER BY cols.position
+                    """
+                    self.execute_query(pk_query)
+                    pk_columns = [row[0] for row in self.fetch_results()]
+                    csvfile.write(f"Primary Key: {', '.join(pk_columns) if pk_columns else 'None'}\n")
+
+                    # 3. Get column details with constraints
+                    column_query = f"""
+                        SELECT col.column_name, col.data_type, col.data_length, col.nullable
+                        FROM all_tab_columns col
+                        WHERE col.table_name = '{table_name}' 
+                          AND col.owner = '{schema_name}'
+                        ORDER BY col.column_id
+                    """
+                    self.execute_query(column_query)
+                    columns = self.fetch_results()
+
+                    for col_name, data_type, data_length, nullable in columns:
+                        allow_null = "True" if nullable == "Y" else "False"
+                        csvfile.write(
+                            f"Column: {col_name}, Type: {data_type}, Length: {data_length}, AllowDBNull: {allow_null}\n")
+
+                    csvfile.write("\n")
+
+                    # 4. Write column headers and data
+                    order_by_clause = ""
+                    if pk_columns:
+                        # Quote column names in case they are case-sensitive or special
+                        order_by_clause = " ORDER BY " + ", ".join([f'"{col}"' for col in pk_columns])
+
+                    select_query = f'SELECT * FROM "{schema_name}"."{table_name}"{order_by_clause}'
+                    self.execute_query(select_query)
+                    rows = self.fetch_results()
+
+                    col_names = [col[0] for col in columns]
+                    csvwriter.writerow(col_names)
+
+                    # Replace None with 'NULL'
+                    for row in rows:
+                        csvwriter.writerow(['NULL' if val is None else val for val in row])
+
+                    csvfile.write("\n")
+
+                print(f"Data appended to '{output_file}' successfully.")
+
+        except oracledb.DatabaseError as e:
+            # Note: oracledb is assumed based on the query structure, but needs to be imported/defined.
+            print(f"Error while exporting data for schema '{schema_name}':", e)
+
     def close(self):
         """ Close the database connection and associated cursor.
             Closing the connection and cursor is important to ensure that database resources are freed when they are no

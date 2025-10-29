@@ -21,6 +21,14 @@ class ConfigurationManager:
             :param section: The name of the section in the configuration file"""
         return self.config[section]
 
+    def get_is_os_linux(self):
+        """Gets the operating system from the configuration file (config file)."""
+        return self.config.getboolean("OS", "Linux")
+
+    def get_linux_dbd_dir(self):
+        """Gets the dbd files directory for Linux from the configuration file (config file)."""
+        return self.config.get("Paths", "linux_dbd_files_dir")
+
     def get_driver(self):
         """Gets a specific driver from the configuration file (config file)."""
         return self.config.get("Browser", "driver")
@@ -56,7 +64,7 @@ class ConfigurationManager:
         base_url = self.get_base_url()
         username = self.get_username()
         password = self.get_password()
-        login_url = base_url[0:8] + username + ':' + password + '@' + base_url[8:] + '/login/'
+        login_url = base_url[0:8] + username + ':' + password + '@' + base_url[8:]
         return login_url
 
     def get_default_schemas(self):

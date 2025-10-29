@@ -1,0 +1,41 @@
+--------------
+Table: "STRUCT2"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
+
+ROOTID,SKEY
+ROOT000002,KE11
+ROOT000002,KEY1
+ROOT000002,KEY10
+ROOT000002,KEY12
+ROOT000002,KEY2
+ROOT000002,KEY3
+ROOT000002,KEY5
+ROOT000002,KEY6
+ROOT000002,KEY7
+ROOT000002,KEY8
+ROOT000002,KEY9
+
+--------------
+Table: "UNICODE_TABLE"
+Primary Key: ROOTID, SKEY, UNICODE_TABLE_ROWNUM
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
+Column: UNICODE_TABLE_ROWNUM, Type: NUMBER, Length: 22, AllowDBNull: False
+Column: COL1, Type: NVARCHAR2, Length: 280, AllowDBNull: True
+Column: COL2, Type: NVARCHAR2, Length: 280, AllowDBNull: True
+
+ROOTID,SKEY,UNICODE_TABLE_ROWNUM,COL1,COL2
+ROOT000002,KE11,1,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀
+ROOT000002,KEY1,1,🚀Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀
+ROOT000002,KEY10,1,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀
+ROOT000002,KEY12,1,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀
+ROOT000002,KEY2,1,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀😀,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀
+ROOT000002,KEY3,1,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀
+ROOT000002,KEY5,1,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀
+ROOT000002,KEY6,1,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀
+ROOT000002,KEY7,1,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀
+ROOT000002,KEY8,1,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀
+ROOT000002,KEY9,1,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀,Hello𝜮𝜯𝜰★✨☯❤️🕉אבגδπ∞≠½€¥₪😀🚀
+

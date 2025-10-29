@@ -1,0 +1,67 @@
+--------------
+Table: "ROOT"
+Primary Key: ROOTID
+Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: ROOTID_NEW, Type: nvarchar, Length: 20, AllowDBNull: True
+Column: FILL_0, Type: nvarchar, Length: 180, AllowDBNull: True
+
+ROOTID,ROOTID_NEW,FILL_0
+ROOT000000,ROOT000000,ALLTYPES
+ROOT000001,ROOT000001,STRUCT1
+ROOT000002,ROOT000002,STRUCT2
+ROOT000003,ROOT000003,STRUCT3
+ROOT000004,ROOT000004,STRUCT4
+ROOT00000S,ROOT00000S,SYNC
+ROOT0000PC,ROOT0000PC,Parent_Child
+ROOT000PC2,ROOT000PC2,Parent_Child2
+ROOT000PC3,ROOT000PC3,Parent_Child3
+ROOT000PC4,ROOT000PC4,Parent_Child4
+
+--------------
+Table: "STRUCT2"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: SKEY, Type: nvarchar, Length: 40, AllowDBNull: False
+Column: COL1_NUM, Type: int, Length: None, AllowDBNull: True
+Column: COL2_CHAR, Type: nvarchar, Length: 20, AllowDBNull: True
+
+ROOTID,SKEY,COL1_NUM,COL2_CHAR
+ROOT000PC2,KEY1,1111,AAAAA
+ROOT000PC2,KEY2,2222,BBBBB
+ROOT000PC2,KEY3,3333,CCCCC
+ROOT000PC2,KEY4,1111,AAAAA
+ROOT000PC2,KEY5,2222,BBBBB
+ROOT000PC2,KEY6,3333,CCCCC
+
+--------------
+Table: "STRUCT3"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: SKEY, Type: nvarchar, Length: 40, AllowDBNull: False
+Column: COL1_NUM, Type: int, Length: None, AllowDBNull: True
+Column: COL2_CHAR, Type: nvarchar, Length: 20, AllowDBNull: True
+
+ROOTID,SKEY,COL1_NUM,COL2_CHAR
+ROOT000PC3,KEY1,1111,AAAAA
+ROOT000PC3,KEY2,2222,BBBBB
+ROOT000PC3,KEY3,3333,CCCCC
+ROOT000PC3,KEY4,1111,AAAAA
+ROOT000PC3,KEY5,2222,BBBBB
+ROOT000PC3,KEY6,3333,CCCCC
+
+--------------
+Table: "STRUCT4"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: SKEY, Type: nvarchar, Length: 40, AllowDBNull: False
+Column: COL1_NUM, Type: int, Length: None, AllowDBNull: True
+Column: COL2_CHAR, Type: nvarchar, Length: 20, AllowDBNull: True
+
+ROOTID,SKEY,COL1_NUM,COL2_CHAR
+ROOT000PC4,KEY1,1111,AAAAA
+ROOT000PC4,KEY2,2222,BBBBB
+ROOT000PC4,KEY3,3333,CCCCC
+ROOT000PC4,KEY4,1111,AAAAA
+ROOT000PC4,KEY5,2222,BBBBB
+ROOT000PC4,KEY6,3333,CCCCC
+

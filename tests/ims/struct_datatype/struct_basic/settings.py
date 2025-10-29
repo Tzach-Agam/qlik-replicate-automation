@@ -8,10 +8,7 @@ def create_endpoints(ims_test: SimpleNamespace):
     ims_test.target_name = ims_test.manage_endpoints.random_endpoint_name(target_section)
 
     ims_test.manage_endpoints.create_custom_ims_source_endpoint(
-        ims_test.ims_source_name, 'IMS Source Endpoint', "ATTUNITY.IMS.DCAPDATA",
-        ims_test.dbd_file,
-        "DEVPCB", "DEVPSB", "VICTORK", "VICTORK", 5555, "zos9.qliktech.com", 50052, "zos9.qliktech.com"
-    )
+        ims_test.ims_source_name, 'IMS Source Endpoint', dbd_xml=ims_test.dbd_file)
 
     create_method_name = ims_test.target_db.config["create_endpoint_method"]
     create_method = getattr(ims_test.manage_endpoints, create_method_name)

@@ -14,16 +14,27 @@ This module contains a set of utility functions to simplify common tasks in the 
 These functions are designed to provide error handling and make it easier to interact with web elements files and task_logs.
 """
 
-def safe_click(element):
-    """ Safely clicks a web element while handling common exceptions.
-        :param element: The web element to click.
-        :raises NoSuchElementException: If the element is not found on the web page.
-        :raises ElementClickInterceptedException: If the click is intercepted by another element."""
-    try:
-        element.click()
-    except (NoSuchElementException, ElementClickInterceptedException,
-            ElementNotInteractableException, ElementNotSelectableException) as e:
-        print(f"Error clicking element: {e}")
+
+def safe_click(element, max_retries=3):
+    """Safely clicks a web element while handling common exceptions.
+    :param element: The web element to click.
+    :param max_retries: Number of retries for stale elements.
+    """
+    from selenium.common.exceptions import StaleElementReferenceException
+    import time
+
+    for attempt in range(max_retries):
+        try:
+            element.click()
+            return
+        except StaleElementReferenceException:
+            if attempt == max_retries - 1:
+                raise
+            time.sleep(0.3)
+        except (NoSuchElementException, ElementClickInterceptedException,
+                ElementNotInteractableException, ElementNotSelectableException) as e:
+            print(f"Error clicking element: {e}")
+            raise
 
 
 def move_file_to_target_dir(source_dir: str, target_dir: str, file_name: str,
