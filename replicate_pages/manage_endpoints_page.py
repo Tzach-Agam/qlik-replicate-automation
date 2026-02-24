@@ -358,7 +358,7 @@ class ManageEndpoints:
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='psb']")))
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='pcb']")))
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Browse...']")))
-        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='dbd']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@name='dbd']")))
 
     def enter_ims_psb(self, psb):
         psb_element = self.driver.find_element(By.XPATH, "//*[@id='psb']")
@@ -369,7 +369,7 @@ class ManageEndpoints:
         pcb_element.send_keys(pcb)
 
     def enter_ims_dbd_xml(self, xml_location):
-        dbd_xml_element = self.driver.find_element(By.XPATH, "//*[@id='dbd']")
+        dbd_xml_element = self.driver.find_element(By.XPATH, "//input[@name='dbd']")
         dbd_xml_element.send_keys(xml_location)
 
     def open_change_data_capture_settings(self):
@@ -385,11 +385,11 @@ class ManageEndpoints:
     def open_security(self):
         security_section = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Security']")))
         safe_click(security_section)
-        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='clientAuthCert']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@errlabel='clientAuthCert']")))
 
     def enter_client_certificate(self, certificate):
         """Enter the client certificate for the IMS source endpoint."""
-        client_cert_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='clientAuthCert']")))
+        client_cert_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@errlabel='clientAuthCert']")))
         client_cert_element.send_keys(certificate)
 
     def enter_client_password(self, password):
@@ -399,7 +399,7 @@ class ManageEndpoints:
 
     def enter_trusted_ca(self, trusted_ca):
         """Enter the trusted CA for the IMS source endpoint."""
-        trusted_ca_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='serverCertCA']")))
+        trusted_ca_element = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@errlabel='serverCertCA']")))
         trusted_ca_element.send_keys(trusted_ca)
 
     def move_to_advanced(self):

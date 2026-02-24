@@ -125,7 +125,7 @@ class MonitorPage:
         """ Wait for the Change Processing (CDC) to complete."""
         dynamic_wait = WebDriverWait(self.driver, timeout)
         transferring_element = (By.XPATH, "//div[@id='taskFlowMapDirective'][contains(@class, 'RUNNING') and contains(@class, 'Transferring')]")
-        dynamic_wait.until(EC.visibility_of_element_located(transferring_element))
+        #dynamic_wait.until(EC.visibility_of_element_located(transferring_element))
         dynamic_wait.until(EC.invisibility_of_element_located(transferring_element))
         print("CDC completed")
 
