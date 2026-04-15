@@ -4,7 +4,7 @@ def test_variant_with_array(ims_test):
     """Test for variant with ARRAY scenario"""
     create_task(ims_test)
 
-    ims_test.ims_db.cursor.execute("DELETE FROM \"DEVPCB\".\"STRUCT1\"")
+    ims_test.ims_db.cursor.execute("DELETE FROM \"DVPCB\".\"STRUCT1\"")
     for i in range(1, 20):
         ims_test.ims_db.cursor.execute(
             f"INSERT INTO STRUCT1 (ROOT_ROOTID, SKEY, NUM_DATES, VARIANT_SELECTOR, NUM_1, STR_1, DATE_STRUCT_1_DATE_YY, DATE_STRUCT_1_DATE_MM, DATE_STRUCT_1_DATE_DD )"

@@ -3,41 +3,41 @@ from settings import *
 def test_struct_basic(ims_test):
     """Test for IMS STRUCT datatype"""
     create_task(ims_test)
-    ims_test.ims_db.cursor.execute("DELETE FROM \"DEVPCB\".\"STRUCT4\"")
+    ims_test.ims_db.cursor.execute("DELETE FROM \"DVPCB\".\"STRUCT4\"")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY1', 22, 'AAAAA')")
+        f"INSERT INTO \"DVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY1', 22, 'AAAAA')")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY2', 22, 'AAAAA')")
+        f"INSERT INTO \"DVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY2', 22, 'AAAAA')")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY3', 22, 'AAAAA')")
+        f"INSERT INTO \"DVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY3', 22, 'AAAAA')")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY4', 22, 'AAAAA')")
+        f"INSERT INTO \"DVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY4', 22, 'AAAAA')")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY5', 22, 'AAAAA')")
+        f"INSERT INTO \"DVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY5', 22, 'AAAAA')")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY6', 22, 'AAAAA')")
+        f"INSERT INTO \"DVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY6', 22, 'AAAAA')")
     ims_test.ims_db.connection.commit()
     ims_test.designer_page.run_new_task()
     ims_test.monitor_page.wait_for_fl('1')
     ims_test.monitor_page.cdc_tab()
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY7', 22, 'AAAAA')")
+        f"INSERT INTO \"DVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY7', 22, 'AAAAA')")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY8', 22, 'AAAAA')")
+        f"INSERT INTO \"DVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY8', 22, 'AAAAA')")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY9', 22, 'AAAAA')")
+        f"INSERT INTO \"DVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY9', 22, 'AAAAA')")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY10', 22, 'AAAAA')")
+        f"INSERT INTO \"DVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY10', 22, 'AAAAA')")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY11', 22, 'AAAAA')")
+        f"INSERT INTO \"DVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY11', 22, 'AAAAA')")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY12', 22, 'AAAAA')")
+        f"INSERT INTO \"DVPCB\".\"STRUCT4\" (ROOT_ROOTID, SKEY, S_NUM_COL, S_CHAR_COL) VALUES ('ROOT000004', 'KEY12', 22, 'AAAAA')")
     ims_test.ims_db.cursor.execute(
-        f"UPDATE \"DEVPCB\".\"STRUCT4\" SET S_NUM_COL = 99, S_CHAR_COL = 'UPDAT' WHERE SKEY = 'KEY1'")
+        f"UPDATE \"DVPCB\".\"STRUCT4\" SET S_NUM_COL = 99, S_CHAR_COL = 'UPDAT' WHERE SKEY = 'KEY1'")
     ims_test.ims_db.cursor.execute(
-        f"UPDATE \"DEVPCB\".\"STRUCT4\" SET S_NUM_COL = 99, S_CHAR_COL = 'UPDAT' WHERE SKEY = 'KEY2'")
-    ims_test.ims_db.cursor.execute(f"DELETE FROM \"DEVPCB\".\"STRUCT4\" WHERE SKEY = 'KEY3'")
-    ims_test.ims_db.cursor.execute(f"DELETE FROM \"DEVPCB\".\"STRUCT4\" WHERE SKEY = 'KEY4'")
+        f"UPDATE \"DVPCB\".\"STRUCT4\" SET S_NUM_COL = 99, S_CHAR_COL = 'UPDAT' WHERE SKEY = 'KEY2'")
+    ims_test.ims_db.cursor.execute(f"DELETE FROM \"DVPCB\".\"STRUCT4\" WHERE SKEY = 'KEY3'")
+    ims_test.ims_db.cursor.execute(f"DELETE FROM \"DVPCB\".\"STRUCT4\" WHERE SKEY = 'KEY4'")
     ims_test.ims_db.connection.commit()
     ims_test.ims_db.sync_command()
     ims_test.monitor_page.insert_check('6')

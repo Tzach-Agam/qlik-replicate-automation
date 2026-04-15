@@ -356,17 +356,12 @@ class ManageEndpoints:
         database_settings_section = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Database settings']")))
         safe_click(database_settings_section)
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='psb']")))
-        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='pcb']")))
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Browse...']")))
         self.wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@name='dbd']")))
 
     def enter_ims_psb(self, psb):
         psb_element = self.driver.find_element(By.XPATH, "//*[@id='psb']")
         psb_element.send_keys(psb)
-
-    def enter_ims_pcb(self, pcb):
-        pcb_element = self.driver.find_element(By.XPATH, "//*[@id='pcb']")
-        pcb_element.send_keys(pcb)
 
     def enter_ims_dbd_xml(self, xml_location):
         dbd_xml_element = self.driver.find_element(By.XPATH, "//input[@name='dbd']")
@@ -436,8 +431,7 @@ class ManageEndpoints:
         self.enter_ims_connect_port(self.config.get_section('IMS_DB')['ims_connect_port'])
         self.enter_ims_username(self.config.get_section('IMS_DB')['user'])
         self.enter_ims_password(self.config.get_section('IMS_DB')['password'])
-        self.enter_ims_psb(self.config.get_section('IMS_DB')['psb'][0:6])
-        self.enter_ims_pcb(self.config.get_section('IMS_DB')['schema'])
+        self.enter_ims_psb(self.config.get_section('IMS_DB')['psb'][0:7])
         self.enter_ims_dbd_xml(self.config.get_section('IMS_DB')['dbd_xml'])
         self.enter_logstream_name(self.config.get_section('IMS_DB')['logstream_name'])
         self.enter_endpoint_description('IMS Source Endpoint')
@@ -460,8 +454,7 @@ class ManageEndpoints:
         self.enter_ims_username(user or self.config.get_section('IMS_DB')['user'])
         self.enter_ims_password(password or self.config.get_section('IMS_DB')['password'])
         self.open_database_settings()
-        self.enter_ims_psb(psb or self.config.get_section('IMS_DB')['psb'][0:6])
-        self.enter_ims_pcb(schema or self.config.get_section('IMS_DB')['schema'])
+        self.enter_ims_psb(psb or self.config.get_section('IMS_DB')['psb'][0:7])
         self.enter_ims_dbd_xml(dbd_xml or self.config.get_section('IMS_DB')['dbd_xml'])
         self.open_change_data_capture_settings()
         self.enter_logstream_name(logstream_name or self.config.get_section('IMS_DB')['logstream_name'])
@@ -492,8 +485,7 @@ class ManageEndpoints:
         self.enter_ims_username(user or self.config.get_section('IMS_DB')['user'])
         self.enter_ims_password(password or self.config.get_section('IMS_DB')['password'])
         self.open_database_settings()
-        self.enter_ims_psb(psb or self.config.get_section('IMS_DB')['psb'][0:6])
-        self.enter_ims_pcb(pcb or self.config.get_section('IMS_DB')['schema'])
+        self.enter_ims_psb(psb or self.config.get_section('IMS_DB')['psb'][0:7])
         self.enter_ims_dbd_xml(dbd_xml or self.config.get_section('IMS_DB')['dbd_xml'])
         self.open_change_data_capture_settings()
         self.enter_logstream_name(logstream_name or self.config.get_section('IMS_DB')['logstream_name'])

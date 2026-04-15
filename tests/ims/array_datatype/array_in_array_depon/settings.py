@@ -18,21 +18,15 @@ def create_endpoints(ims_test: SimpleNamespace):
 
 def create_task(ims_test: SimpleNamespace):
     create_endpoints(ims_test)  # sets ims_test.target_name
-    task_name = f"IMS2{ims_test.target_db.config['endpoint']}TAB_ERR_FL"
+    task_name = ims_test.test_dir_name
     ims_test.tasks_general_page.create_new_task()
     new_task_name = ims_test.new_task_page.new_task_creation(task_name)
     ims_test.replicate_actions.task_data_loader()
     ims_test.designer_page.choose_source_target(ims_test.ims_source_name, ims_test.target_name)
     ims_test.designer_page.enter_table_selection()
-    ims_test.table_selection.select_chosen_tables("STRUCT3", "STRUCT3__ARRAY_BASE", "STRUCT3__ARRAY_BASE__ARRAY_1", "STRUCT3__ARRAY_BASE__ARRAY_1__ARRAY_2",
-                                                  "STRUCT3__ARRAY_BASE__ARRAY_1__ARRAY_2__ARRAY_3", "STRUCT3__ARRAY_BASE__ARRAY_1__ARRAY_2__ARRAY_3__ARRAY_4")
+    ims_test.table_selection.select_chosen_tables("STRUCT3", "STRUCT3__COURSE", "STRUCT3__COURSE__ASSIGNMENTS", "STRUCT3__SUB")
     ims_test.designer_page.enter_task_settings()
-    ims_test.task_settings.target_schema()
-    ims_test.task_settings.control_tables_click()
-    ims_test.task_settings.control_schema()
-    ims_test.task_settings.full_load_tab()
-    ims_test.task_settings.set_fl_method("TRUNCATE before loading")
-    ims_test.task_settings.ok_button()
+    ims_test.task_settings.set_task_settings_general()
     ims_test.task_name = new_task_name
     return new_task_name
 

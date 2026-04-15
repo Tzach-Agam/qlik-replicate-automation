@@ -125,8 +125,10 @@ class MonitorPage:
         """ Wait for the Change Processing (CDC) to complete."""
         dynamic_wait = WebDriverWait(self.driver, timeout)
         transferring_element = (By.XPATH, "//div[@id='taskFlowMapDirective'][contains(@class, 'RUNNING') and contains(@class, 'Transferring')]")
-        #dynamic_wait.until(EC.visibility_of_element_located(transferring_element))
         dynamic_wait.until(EC.invisibility_of_element_located(transferring_element))
+        dynamic_wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, "[class='phantomPie ng-scope']")))
+        dynamic_wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "nvd3-pie-chart[id='pieChartId']")))
+        print("CDC PIE disparaged")
         print("CDC completed")
 
     def _check_operation_status(self, column_index: int, *expected_statuses: str):

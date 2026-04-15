@@ -4,7 +4,7 @@ def test_cached_events(ims_test):
     """Test for cached events"""
     create_task(ims_test)
 
-    ims_test.ims_db.cursor.execute("DELETE FROM \"DEVPCB\".\"STRUCT1\"")
+    ims_test.ims_db.cursor.execute("DELETE FROM \"DVPCB\".\"STRUCT1\"")
     for i in range(1, 2001):
         ims_test.ims_db.cursor.execute(
             f"INSERT INTO STRUCT1 (ROOT_ROOTID, SKEY, NUM_DATES, VARIANT_SELECTOR, NUM_1, STR_1, DATE_STRUCT_1_DATE_YY, DATE_STRUCT_1_DATE_MM, DATE_STRUCT_1_DATE_DD )"

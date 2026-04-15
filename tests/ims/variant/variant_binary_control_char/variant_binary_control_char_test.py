@@ -4,18 +4,18 @@ def test_variant_binary_control_char(ims_test):
     """VARIANT binary while control field is char"""
     create_task(ims_test)
 
-    ims_test.ims_db.cursor.execute("DELETE FROM \"DEVPCB\".\"STRUCT3\"")
-    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DEVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
+    ims_test.ims_db.cursor.execute("DELETE FROM \"DVPCB\".\"STRUCT3\"")
+    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
     "VALUES('ROOT000003', '00000000000000000001', 'AAAAAA', 'OP1')")
-    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DEVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
+    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
     "VALUES('ROOT000003', '00000000000000000002', 'BBBBBB', 'OP2')")
-    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DEVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
+    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
     "VALUES('ROOT000003', '00000000000000000003', 'AAAAAA', 'OP1')")
-    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DEVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
+    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
     "VALUES('ROOT000003', '00000000000000000004', 'BBBBBB', 'OP2')")
-    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DEVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
+    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
     "VALUES('ROOT000003', '00000000000000000005', 'AAAAAA', 'OP1')")
-    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DEVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY)"
+    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY)"
     "VALUES('ROOT000003', '00000000000000000006')")
     ims_test.ims_db.connection.commit()
 
@@ -23,24 +23,24 @@ def test_variant_binary_control_char(ims_test):
     ims_test.monitor_page.wait_for_fl('1')
     ims_test.monitor_page.cdc_tab()
 
-    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DEVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
+    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
                                    "VALUES('ROOT000003', '00000000000000000007', 'AAAAAA', 'OP1')")
-    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DEVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
+    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
                                    "VALUES('ROOT000003', '00000000000000000008', 'BBBBBB', 'OP2')")
-    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DEVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
+    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
                                    "VALUES('ROOT000003', '00000000000000000009', 'AAAAAA', 'OP1')")
-    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DEVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
+    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
                                    "VALUES('ROOT000003', '00000000000000000010', 'BBBBBB', 'OP2')")
-    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DEVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
+    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY, VARIANT_SELECTOR, COL1)"
                                    "VALUES('ROOT000003', '00000000000000000011', 'AAAAAA', 'OP1')")
-    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DEVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY)"
+    ims_test.ims_db.cursor.execute(f"INSERT INTO \"DVPCB\".\"STRUCT3\"  (ROOT_ROOTID, SKEY)"
                                    "VALUES('ROOT000003', '00000000000000000012')")
     ims_test.ims_db.cursor.execute(
-        f"UPDATE  \"DEVPCB\".\"STRUCT3\" SET VARIANT_SELECTOR = 'BBBBBB', COL2 = 'UP' WHERE SKEY = '00000000000000000001'")
+        f"UPDATE  \"DVPCB\".\"STRUCT3\" SET VARIANT_SELECTOR = 'BBBBBB', COL2 = 'UP' WHERE SKEY = '00000000000000000001'")
     ims_test.ims_db.cursor.execute(
-        f"UPDATE  \"DEVPCB\".\"STRUCT3\" SET COL1 = 'UP' WHERE SKEY = '00000000000000000003'")
+        f"UPDATE  \"DVPCB\".\"STRUCT3\" SET COL1 = 'UP' WHERE SKEY = '00000000000000000003'")
     ims_test.ims_db.cursor.execute(
-        f"DELETE FROM \"DEVPCB\".\"STRUCT3\" WHERE SKEY = '00000000000000000002'")
+        f"DELETE FROM \"DVPCB\".\"STRUCT3\" WHERE SKEY = '00000000000000000002'")
     ims_test.ims_db.connection.commit()
 
     ims_test.ims_db.sync_command()

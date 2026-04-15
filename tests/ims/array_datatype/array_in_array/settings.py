@@ -24,7 +24,8 @@ def create_task(ims_test: SimpleNamespace):
     ims_test.replicate_actions.task_data_loader()
     ims_test.designer_page.choose_source_target(ims_test.ims_source_name, ims_test.target_name)
     ims_test.designer_page.enter_table_selection()
-    ims_test.table_selection.select_chosen_tables("STRUCT3", "ARRAY_BASE", "ARRAY_1", "ARRAY_2", "ARRAY_3", "ARRAY_4")
+    ims_test.table_selection.select_chosen_tables("STRUCT3", "STRUCT3__ARRAY_BASE", "STRUCT3__ARRAY_BASE__ARRAY_1", "STRUCT3__ARRAY_BASE__ARRAY_1__ARRAY_2",
+                                                  "STRUCT3__ARRAY_BASE__ARRAY_1__ARRAY_2__ARRAY_3", "STRUCT3__ARRAY_BASE__ARRAY_1__ARRAY_2__ARRAY_3__ARRAY_4")
     ims_test.designer_page.enter_task_settings()
     ims_test.task_settings.set_task_settings_general()
     ims_test.task_name = new_task_name

@@ -4,36 +4,36 @@ def test_bit_datatype(ims_test):
     """Test for IMS BIT Data Type"""
     create_task(ims_test)
 
-    ims_test.ims_db.cursor.execute("DELETE FROM \"DEVPCB\".\"ALLTYPES\"")
+    ims_test.ims_db.cursor.execute("DELETE FROM \"DVPCB\".\"ALLTYPES\"")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
         f"VALUES ('ROOT000000', 1, 1, 1)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
         f"VALUES ('ROOT000000', 2, 1, 1)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
         f"VALUES ('ROOT000000', 3, 0, 1)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
         f"VALUES ('ROOT000000', 4, 0, 1)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
         f"VALUES ('ROOT000000', 5, 1, 0)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
         f"VALUES ('ROOT000000', 6, 1, 0)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
         f"VALUES ('ROOT000000', 7, 0, 0)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)" 
         f"VALUES ('ROOT000000', 8, 0, 0)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID)" 
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID)" 
         f"VALUES ('ROOT000000', 9)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID)" 
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID)" 
         f"VALUES ('ROOT000000', 10)")
     ims_test.ims_db.connection.commit()
 
@@ -42,56 +42,56 @@ def test_bit_datatype(ims_test):
     ims_test.monitor_page.cdc_tab()
 
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
         f"VALUES ('ROOT000000', 11, 1, 1)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
         f"VALUES ('ROOT000000', 12, 1, 1)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
         f"VALUES ('ROOT000000', 13, 0, 1)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
         f"VALUES ('ROOT000000', 14, 0, 1)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
         f"VALUES ('ROOT000000', 15, 1, 0)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
         f"VALUES ('ROOT000000', 16, 1, 0)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
         f"VALUES ('ROOT000000', 17, 0, 0)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID, BIT_TABLE_1_BIT_COL1, BIT_TABLE_1_BIT_COL2)"
         f"VALUES ('ROOT000000', 18, 0, 0)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID)"
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID)"
         f"VALUES ('ROOT000000', 19)")
     ims_test.ims_db.cursor.execute(
-        f"INSERT INTO \"DEVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID)"
+        f"INSERT INTO \"DVPCB\".\"ALLTYPES\" (ROOT_ROOTID, ID)"
         f"VALUES ('ROOT000000', 20)")
     ims_test.ims_db.cursor.execute(
-        f"UPDATE  \"DEVPCB\".\"ALLTYPES\" SET BIT_TABLE_1_BIT_COL1 = 1 WHERE ID = 4")
+        f"UPDATE  \"DVPCB\".\"ALLTYPES\" SET BIT_TABLE_1_BIT_COL1 = 1 WHERE ID = 4")
     ims_test.ims_db.cursor.execute(
-        f"UPDATE  \"DEVPCB\".\"ALLTYPES\" SET BIT_TABLE_1_BIT_COL2 = 1 WHERE ID = 6")
+        f"UPDATE  \"DVPCB\".\"ALLTYPES\" SET BIT_TABLE_1_BIT_COL2 = 1 WHERE ID = 6")
     ims_test.ims_db.cursor.execute(
-        f"UPDATE  \"DEVPCB\".\"ALLTYPES\" SET BIT_TABLE_1_BIT_COL1 = 1 WHERE ID = 8")
+        f"UPDATE  \"DVPCB\".\"ALLTYPES\" SET BIT_TABLE_1_BIT_COL1 = 1 WHERE ID = 8")
     ims_test.ims_db.cursor.execute(
-        f"UPDATE  \"DEVPCB\".\"ALLTYPES\" SET BIT_TABLE_1_BIT_COL1 = 1 WHERE ID = 10")
+        f"UPDATE  \"DVPCB\".\"ALLTYPES\" SET BIT_TABLE_1_BIT_COL1 = 1 WHERE ID = 10")
     ims_test.ims_db.cursor.execute(
-        f"UPDATE  \"DEVPCB\".\"ALLTYPES\" SET BIT_TABLE_1_BIT_COL1 = 0 WHERE ID = 16")
+        f"UPDATE  \"DVPCB\".\"ALLTYPES\" SET BIT_TABLE_1_BIT_COL1 = 0 WHERE ID = 16")
     ims_test.ims_db.cursor.execute(
-        f"DELETE FROM \"DEVPCB\".\"ALLTYPES\" WHERE ID = 2")
+        f"DELETE FROM \"DVPCB\".\"ALLTYPES\" WHERE ID = 2")
     ims_test.ims_db.cursor.execute(
-        f"DELETE FROM \"DEVPCB\".\"ALLTYPES\" WHERE ID = 20")
+        f"DELETE FROM \"DVPCB\".\"ALLTYPES\" WHERE ID = 20")
     ims_test.ims_db.connection.commit()
 
     ims_test.ims_db.sync_command()
 
     ims_test.monitor_page.wait_for_cdc()
-    ims_test.monitor_page.insert_check('10', '8')
-    ims_test.monitor_page.update_check('0', '2')
+    ims_test.monitor_page.insert_check('8', '10')
+    ims_test.monitor_page.update_check('2', '0')
     ims_test.monitor_page.delete_check('2', '2')
     ims_test.monitor_page.stop_task()
     ims_test.monitor_page.stop_task_wait()
