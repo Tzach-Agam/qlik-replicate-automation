@@ -1,5 +1,29 @@
 --------------
-Table: "ARRAY_1"
+Table: "STRUCT3"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
+
+ROOTID,SKEY
+ROOT000003,KEY1
+ROOT000003,KEY2
+ROOT000003,KEY3
+
+--------------
+Table: "STRUCT3__ARRAY_BASE"
+Primary Key: ROOTID, SKEY, ARRAY_BASE_ROWNUM
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
+Column: ARRAY_BASE_ROWNUM, Type: NUMBER, Length: 22, AllowDBNull: False
+Column: CHAR_COL_BASE, Type: NVARCHAR2, Length: 20, AllowDBNull: True
+
+ROOTID,SKEY,ARRAY_BASE_ROWNUM,CHAR_COL_BASE
+ROOT000003,KEY1,1,AAAAA
+ROOT000003,KEY2,1,AAAAA
+ROOT000003,KEY3,1,AAAAA
+
+--------------
+Table: "STRUCT3__ARRAY_BASE__ARRAY_1"
 Primary Key: ROOTID, SKEY, ARRAY_BASE_ROWNUM, ARRAY_1_ROWNUM
 Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
 Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
@@ -13,7 +37,7 @@ ROOT000003,KEY2,1,1,BBBBB
 ROOT000003,KEY3,1,1,BBBBB
 
 --------------
-Table: "ARRAY_2"
+Table: "STRUCT3__ARRAY_BASE__ARRAY_1__ARRAY_2"
 Primary Key: ROOTID, SKEY, ARRAY_BASE_ROWNUM, ARRAY_1_ROWNUM, ARRAY_2_ROWNUM
 Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
 Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
@@ -26,7 +50,7 @@ Column: DECIMAL_COL_2, Type: NUMBER, Length: 22, AllowDBNull: False
 ROOTID,SKEY,ARRAY_BASE_ROWNUM,ARRAY_1_ROWNUM,ARRAY_2_ROWNUM,CHAR_COL_2,DECIMAL_COL_2
 
 --------------
-Table: "ARRAY_3"
+Table: "STRUCT3__ARRAY_BASE__ARRAY_1__ARRAY_2__ARRAY_3"
 Primary Key: ROOTID, SKEY, ARRAY_BASE_ROWNUM, ARRAY_1_ROWNUM, ARRAY_2_ROWNUM, ARRAY_3_ROWNUM
 Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
 Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
@@ -39,7 +63,7 @@ Column: CHAR_COL_3, Type: NVARCHAR2, Length: 20, AllowDBNull: True
 ROOTID,SKEY,ARRAY_BASE_ROWNUM,ARRAY_1_ROWNUM,ARRAY_2_ROWNUM,ARRAY_3_ROWNUM,CHAR_COL_3
 
 --------------
-Table: "ARRAY_4"
+Table: "STRUCT3__ARRAY_BASE__ARRAY_1__ARRAY_2__ARRAY_3__ARRAY_4"
 Primary Key: ROOTID, SKEY, ARRAY_BASE_ROWNUM, ARRAY_1_ROWNUM, ARRAY_2_ROWNUM, ARRAY_3_ROWNUM, ARRAY_4_ROWNUM
 Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
 Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
@@ -52,31 +76,9 @@ Column: CHAR_COL_4, Type: NVARCHAR2, Length: 20, AllowDBNull: True
 Column: ARRAY_5, Type: NCLOB, Length: 4000, AllowDBNull: True
 
 ROOTID,SKEY,ARRAY_BASE_ROWNUM,ARRAY_1_ROWNUM,ARRAY_2_ROWNUM,ARRAY_3_ROWNUM,ARRAY_4_ROWNUM,CHAR_COL_4,ARRAY_5
+ROOT000003,KEY1,1,1,1,1,1,EEEEE,"[""FFFFF""]"
+ROOT000003,KEY2,1,1,1,1,1,EEEEE,"[""FFFFF""]"
+ROOT000003,KEY3,1,1,1,1,1,EEEEE,"[""FFFFF""]"
 
---------------
-Table: "ARRAY_BASE"
-Primary Key: ROOTID, SKEY, ARRAY_BASE_ROWNUM
-Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
-Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
-Column: ARRAY_BASE_ROWNUM, Type: NUMBER, Length: 22, AllowDBNull: False
-Column: CHAR_COL_BASE, Type: NVARCHAR2, Length: 20, AllowDBNull: True
-
-ROOTID,SKEY,ARRAY_BASE_ROWNUM,CHAR_COL_BASE
-ROOT000003,KEY1,1,AAAAA
-ROOT000003,KEY2,1,AAAAA
-ROOT000003,KEY3,1,AAAAA
-
---------------
-Table: "STRUCT3"
-Primary Key: ROOTID, SKEY
-Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
-Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
-
-ROOTID,SKEY
-ROOT000003,KEY1
-ROOT000003,KEY2
-ROOT000003,KEY3
-
-']W:  Table 'public'.'STRUCT3' (subtask 1 thread 1) is suspended' found 1 times in the log file.
-']E:  Failed sending row to table replicate_selenium_target.ARRAY_2' not found in the log file.
-']E:  Handling End of table 'replicate_selenium_target'.'ARRAY_2' loading failed' found 1 times in the log file.
+']W:  Table 'IMSDEV'.'STRUCT3' (subtask 1 thread 1) is suspended' found 1 times in the log file.
+']E:  Handling End of table 'replicate_selenium_target'.'STRUCT3__ARRAY_BASE__ARRAY_1__ARRAY_2' loading failed' found 1 times in the log file.

@@ -27,9 +27,9 @@ def test_insert_conflict(ims_test):
     ims_test.monitor_page.cdc_tab()
 
     ims_test.target_db.execute_query(
-        f"INSERT INTO \"{ims_test.target_schema}\".BASIC_TABLE VALUES ('ROOT000002', 'KEY6', 1, 'Captrue_Change', 6666, 'Captrue_Change', 6666, 'Captrue_Change')")
+        f"INSERT INTO \"{ims_test.target_schema}\".STRUCT2__BASIC_TABLE VALUES ('ROOT000002', 'KEY6', 1, 'Captrue_Change', 6666, 'Captrue_Change', 6666, 'Captrue_Change')")
     ims_test.target_db.execute_query(
-        f"INSERT INTO \"{ims_test.target_schema}\".BASIC_TABLE VALUES ('ROOT000002', 'KEY7', 1, 'Captrue_Change', 7777, 'Captrue_Change', 7777, 'Captrue_Change')")
+        f"INSERT INTO \"{ims_test.target_schema}\".STRUCT2__BASIC_TABLE VALUES ('ROOT000002', 'KEY7', 1, 'Captrue_Change', 7777, 'Captrue_Change', 7777, 'Captrue_Change')")
     ims_test.ims_db.cursor.execute(
         f"INSERT INTO \"DVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY, BASIC_TABLE_1_COL1_CHAR, BASIC_TABLE_1_COL2_NUM, BASIC_TABLE_1_COL3_CHAR, BASIC_TABLE_1_COL4_NUM, BASIC_TABLE_1_COL5_CHAR) "
         "VALUES('ROOT000002', 'KEY6', 'Captrue_Change', 6666, 'Captrue_Change', 6666, 'Captrue_Change')")
@@ -40,8 +40,8 @@ def test_insert_conflict(ims_test):
 
     ims_test.ims_db.sync_command()
 
-    ims_test.monitor_page.insert_check('2', '2')
     ims_test.monitor_page.wait_for_cdc()
+    ims_test.monitor_page.insert_check('2', '2')
     ims_test.monitor_page.wait_for_message_in_ui("Source changes that would have had no impact were not applied to the target database")
     ims_test.monitor_page.stop_task()
     ims_test.monitor_page.stop_task_wait()

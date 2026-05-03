@@ -6,7 +6,7 @@ from time import sleep
 
 # --- Configuration ---
 PYTHON_EXE = sys.executable
-TEST_DIR = Path(__file__).resolve().parents[2] / "transformation"
+TEST_DIR = Path(__file__).resolve().parents[2] / "fl_cdc"
 
 # --- State ---
 total_runs = 0

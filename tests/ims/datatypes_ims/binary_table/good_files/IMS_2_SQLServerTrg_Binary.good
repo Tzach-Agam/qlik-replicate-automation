@@ -18,7 +18,7 @@ ROOT000000,11
 ROOT000000,12
 
 --------------
-Table: "BINARY_TABLE"
+Table: "ALLTYPES__BINARY_TABLE"
 Primary Key: ROOTID, ID, BINARY_TABLE_ROWNUM
 Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
 Column: ID, Type: int, Length: None, AllowDBNull: False

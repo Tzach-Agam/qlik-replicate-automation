@@ -18,7 +18,7 @@ ROOT000002,KEY8
 ROOT000002,KEY9
 
 --------------
-Table: "UNICODE_TABLE"
+Table: "STRUCT2__UNICODE_TABLE"
 Primary Key: ROOTID, SKEY, UNICODE_TABLE_ROWNUM
 Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
 Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False

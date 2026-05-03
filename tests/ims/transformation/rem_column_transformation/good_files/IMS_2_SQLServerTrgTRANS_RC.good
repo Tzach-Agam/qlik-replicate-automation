@@ -17,7 +17,7 @@ ROOT000002,KEY8
 ROOT000002,KEY9
 
 --------------
-Table: "TRANSFORM_TABLE"
+Table: "STRUCT2__TRANSFORM_TABLE"
 Primary Key: ROOTID, SKEY, TRANSFORM_TABLE_ROWNUM
 Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
 Column: SKEY, Type: nvarchar, Length: 40, AllowDBNull: False

@@ -27,7 +27,7 @@ def test_sub_array_without_parent_array(ims_test):
     ims_test.monitor_page.cdc_tab()
     ims_test.monitor_page.wait_for_message_in_ui("encountered a fatal error")
     ims_test.monitor_page.wait_for_message_in_ui("Failed to allocate Hierarchy Manager.")
-    ims_test.monitor_page.wait_for_message_in_ui("Couldn't find table 'public'.'ARRAY_BASE' in capture list.")
+    ims_test.monitor_page.wait_for_message_in_ui("Couldn't find table 'IMSDEV'.'STRUCT3__ARRAY_BASE' in capture list.")
 
     ims_test.replicate_actions.navigate_to_main_page('tasks')
     move_file_to_target_dir(ims_test.config.replicate_logs_path(), ims_test.task_logs_dir,
@@ -39,7 +39,7 @@ def test_sub_array_without_parent_array(ims_test):
     log_finder(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
                "encountered a fatal error", ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_SUB_ARRAY_NO_PARENT.csv")
     log_finder(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
-               "Couldn't find table 'public'.'STRUCT2' in capture list", ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_SUB_ARRAY_NO_PARENT.csv")
+               "Couldn't find table 'IMSDEV'.'STRUCT3__ARRAY_BASE' in capture list", ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_SUB_ARRAY_NO_PARENT.csv")
 
     compare_files(ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_SUB_ARRAY_NO_PARENT.good",
                   ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_SUB_ARRAY_NO_PARENT.csv")

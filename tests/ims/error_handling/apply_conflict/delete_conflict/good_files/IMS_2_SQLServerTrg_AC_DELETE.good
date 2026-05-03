@@ -1,5 +1,17 @@
 --------------
-Table: "BASIC_TABLE"
+Table: "STRUCT2"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: SKEY, Type: nvarchar, Length: 40, AllowDBNull: False
+
+ROOTID,SKEY
+ROOT000002,KEY1
+ROOT000002,KEY2
+ROOT000002,KEY4
+ROOT000002,KEY5
+
+--------------
+Table: "STRUCT2__BASIC_TABLE"
 Primary Key: ROOTID, SKEY, BASIC_TABLE_ROWNUM
 Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
 Column: SKEY, Type: nvarchar, Length: 40, AllowDBNull: False
@@ -15,16 +27,4 @@ ROOT000002,KEY1,1,Full_Load,1111,Full_Load,1111,Full_Load
 ROOT000002,KEY2,1,Full_Load,2222,Full_Load,2222,Full_Load
 ROOT000002,KEY4,1,Full_Load,4444,Full_Load,4444,Full_Load
 ROOT000002,KEY5,1,Full_Load,5555,Full_Load,5555,Full_Load
-
---------------
-Table: "STRUCT2"
-Primary Key: ROOTID, SKEY
-Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
-Column: SKEY, Type: nvarchar, Length: 40, AllowDBNull: False
-
-ROOTID,SKEY
-ROOT000002,KEY1
-ROOT000002,KEY2
-ROOT000002,KEY4
-ROOT000002,KEY5
 

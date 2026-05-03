@@ -25,11 +25,11 @@ def test_data_error_trg_cdc(ims_test):
     ims_test.designer_page.run_new_task()
     ims_test.monitor_page.wait_for_fl('2')
     ims_test.monitor_page.cdc_tab()
-    ims_test.target_db.execute_query(f"DROP TABLE \"{ims_test.target_schema}\".BASIC_TABLE")
+    ims_test.target_db.execute_query(f"DROP TABLE \"{ims_test.target_schema}\".STRUCT2__BASIC_TABLE")
     if ims_test.target_type == "oracle":
-        ims_test.target_db.execute_query(f"CREATE TABLE \"{ims_test.target_schema}\".BASIC_TABLE (ROOTID NVARCHAR2(20), SKEY NVARCHAR2(40), BASIC_TABLE_ROWNUM NUMBER, COL5_CHAR NVARCHAR2(50), COL4_DECIMAL NUMBER, COL3_CHAR NVARCHAR2(50), COL2_DECIMAL NUMBER NOT NULL, COL1_CHAR NVARCHAR2(50), PRIMARY KEY (ROOTID, SKEY, BASIC_TABLE_ROWNUM))")
+        ims_test.target_db.execute_query(f"CREATE TABLE \"{ims_test.target_schema}\".STRUCT2__BASIC_TABLE (ROOTID NVARCHAR2(20), SKEY NVARCHAR2(40), BASIC_TABLE_ROWNUM NUMBER, COL5_CHAR NVARCHAR2(50), COL4_DECIMAL NUMBER, COL3_CHAR NVARCHAR2(50), COL2_DECIMAL NUMBER NOT NULL, COL1_CHAR NVARCHAR2(50), PRIMARY KEY (ROOTID, SKEY, BASIC_TABLE_ROWNUM))")
     if ims_test.target_type == "sqlserver":
-        ims_test.target_db.execute_query(f"CREATE TABLE \"{ims_test.target_schema}\".BASIC_TABLE (ROOTID NVARCHAR(20), SKEY NVARCHAR(40), BASIC_TABLE_ROWNUM NUMERIC, COL5_CHAR NVARCHAR(50), COL4_DECIMAL NUMERIC, COL3_CHAR NVARCHAR(50), COL2_DECIMAL NUMERIC NOT NULL, COL1_CHAR NVARCHAR(50), PRIMARY KEY (ROOTID, SKEY, BASIC_TABLE_ROWNUM))")
+        ims_test.target_db.execute_query(f"CREATE TABLE \"{ims_test.target_schema}\".STRUCT2__BASIC_TABLE (ROOTID NVARCHAR(20), SKEY NVARCHAR(40), BASIC_TABLE_ROWNUM NUMERIC, COL5_CHAR NVARCHAR(50), COL4_DECIMAL NUMERIC, COL3_CHAR NVARCHAR(50), COL2_DECIMAL NUMERIC NOT NULL, COL1_CHAR NVARCHAR(50), PRIMARY KEY (ROOTID, SKEY, BASIC_TABLE_ROWNUM))")
 
     ims_test.ims_db.cursor.execute(
         f"INSERT INTO \"DVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY, BASIC_TABLE_1_COL1_CHAR, BASIC_TABLE_1_COL3_CHAR, BASIC_TABLE_1_COL4_DECIMAL, BASIC_TABLE_1_COL5_CHAR)"

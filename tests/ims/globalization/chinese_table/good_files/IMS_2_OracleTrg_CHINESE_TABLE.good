@@ -1,5 +1,21 @@
 --------------
-Table: "CHINESE_TABLE"
+Table: "STRUCT2"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
+
+ROOTID,SKEY
+ROOT000002,KEY1
+ROOT000002,KEY2
+ROOT000002,KEY3
+ROOT000002,KEY5
+ROOT000002,KEY6
+ROOT000002,KEY7
+ROOT000002,KEY8
+ROOT000002,KEY9
+
+--------------
+Table: "STRUCT2__CHINESE_TABLE"
 Primary Key: ROOTID, SKEY, CHINESE_TABLE_ROWNUM
 Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
 Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
@@ -16,20 +32,4 @@ ROOT000002,KEY6,1,汉语漢,汉语漢
 ROOT000002,KEY7,1,汉语漢,汉语漢
 ROOT000002,KEY8,1,汉语漢,汉语漢
 ROOT000002,KEY9,1,汉语漢,汉语漢
-
---------------
-Table: "STRUCT2"
-Primary Key: ROOTID, SKEY
-Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
-Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
-
-ROOTID,SKEY
-ROOT000002,KEY1
-ROOT000002,KEY2
-ROOT000002,KEY3
-ROOT000002,KEY5
-ROOT000002,KEY6
-ROOT000002,KEY7
-ROOT000002,KEY8
-ROOT000002,KEY9
 

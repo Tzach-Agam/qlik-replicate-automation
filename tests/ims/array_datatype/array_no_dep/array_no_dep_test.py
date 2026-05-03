@@ -56,9 +56,9 @@ def test_array_no_dep(ims_test):
     ims_test.ims_db.sync_command()
 
     ims_test.monitor_page.wait_for_cdc()
-    ims_test.monitor_page.insert_check('6', '15', '5')
-    ims_test.monitor_page.update_check('2', '6', '2')
-    ims_test.monitor_page.delete_check('1', '3', '1')
+    ims_test.monitor_page.insert_check('6', '5', '15')
+    ims_test.monitor_page.update_check('2', '2', '6')
+    ims_test.monitor_page.delete_check('1', '1', '3')
     ims_test.monitor_page.stop_task()
     ims_test.monitor_page.stop_task_wait()
 

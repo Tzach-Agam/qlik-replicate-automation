@@ -15,7 +15,7 @@ TEST_DBD_MAP = {
     "array_datatypes": "ARRAY_DATATYPES.dbd",
     "array_in_variant": "ARRAY_IN_VARIANT.dbd",
     "array_in_array_depon": "ARRAY_IN_ARRAY_DEPON_SCHOOL.dbd",
-    "struct_baisc": "STRUCT_BASIC.dbd",
+    "struct_basic": "STRUCT_BASIC.dbd",
     "struct_in_struct": "STRUCT_IN_STRUCT.dbd",
     "struct_depon_parent": "STRUCT_DEPON_PARENT.dbd",
     "struct_depon_sibling": "STRUCT_DEPON_SIBLING.dbd",

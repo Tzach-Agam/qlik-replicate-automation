@@ -25,7 +25,7 @@ ROOT000000,18
 ROOT000000,19
 
 --------------
-Table: "BIT_TABLE"
+Table: "ALLTYPES__BIT_TABLE"
 Primary Key: ROOTID, ID, BIT_TABLE_ROWNUM
 Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
 Column: ID, Type: NUMBER, Length: 22, AllowDBNull: False

@@ -45,10 +45,10 @@ def test_variant_binary_control_char(ims_test):
 
     ims_test.ims_db.sync_command()
 
+    ims_test.monitor_page.wait_for_cdc()
     ims_test.monitor_page.insert_check('6')
     ims_test.monitor_page.update_check('2')
     ims_test.monitor_page.delete_check('1')
-    ims_test.monitor_page.wait_for_cdc()
     ims_test.monitor_page.stop_task()
     ims_test.monitor_page.stop_task_wait()
 
@@ -57,5 +57,5 @@ def test_variant_binary_control_char(ims_test):
                             f"reptask_{ims_test.task_name}.log", ims_test.config, ims_test.replicate_actions, ims_test.task_name)
     ims_test.target_db.export_schema_data_to_csv(ims_test.target_schema,
                                                  ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_VAR_BINARY_CON_CHAR.csv")
-    # compare_files(ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_VAR_BINARY_CON_CHAR.good",
-    #               ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_VAR_BINARY_CON_CHAR.csv")
+    compare_files(ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_VAR_BINARY_CON_CHAR.good",
+                  ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_VAR_BINARY_CON_CHAR.csv")

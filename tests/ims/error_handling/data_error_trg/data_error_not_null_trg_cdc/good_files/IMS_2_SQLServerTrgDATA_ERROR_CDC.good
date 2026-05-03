@@ -1,18 +1,4 @@
 --------------
-Table: "BASIC_TABLE"
-Primary Key: ROOTID, SKEY, BASIC_TABLE_ROWNUM
-Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
-Column: SKEY, Type: nvarchar, Length: 40, AllowDBNull: False
-Column: BASIC_TABLE_ROWNUM, Type: numeric, Length: None, AllowDBNull: False
-Column: COL5_CHAR, Type: nvarchar, Length: 50, AllowDBNull: True
-Column: COL4_DECIMAL, Type: numeric, Length: None, AllowDBNull: True
-Column: COL3_CHAR, Type: nvarchar, Length: 50, AllowDBNull: True
-Column: COL2_DECIMAL, Type: numeric, Length: None, AllowDBNull: False
-Column: COL1_CHAR, Type: nvarchar, Length: 50, AllowDBNull: True
-
-ROOTID,SKEY,BASIC_TABLE_ROWNUM,COL5_CHAR,COL4_DECIMAL,COL3_CHAR,COL2_DECIMAL,COL1_CHAR
-
---------------
 Table: "STRUCT2"
 Primary Key: ROOTID, SKEY
 Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
@@ -26,6 +12,20 @@ ROOT000002,KEY4
 ROOT000002,KEY5
 ROOT000002,KEY6
 ROOT000002,KEY7
+
+--------------
+Table: "STRUCT2__BASIC_TABLE"
+Primary Key: ROOTID, SKEY, BASIC_TABLE_ROWNUM
+Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
+Column: SKEY, Type: nvarchar, Length: 40, AllowDBNull: False
+Column: BASIC_TABLE_ROWNUM, Type: numeric, Length: None, AllowDBNull: False
+Column: COL5_CHAR, Type: nvarchar, Length: 50, AllowDBNull: True
+Column: COL4_DECIMAL, Type: numeric, Length: None, AllowDBNull: True
+Column: COL3_CHAR, Type: nvarchar, Length: 50, AllowDBNull: True
+Column: COL2_DECIMAL, Type: numeric, Length: None, AllowDBNull: False
+Column: COL1_CHAR, Type: nvarchar, Length: 50, AllowDBNull: True
+
+ROOTID,SKEY,BASIC_TABLE_ROWNUM,COL5_CHAR,COL4_DECIMAL,COL3_CHAR,COL2_DECIMAL,COL1_CHAR
 
 ']W:  A data error was encountered' found 1 times in the log file.
 ']W:  Error converting field 'COL2_DECIMAL', error message: 'An error occurred converting the field COL2_DECIMAL in the struct STRUCT2.BASIC_TABLE: ' found 1 times in the log file.

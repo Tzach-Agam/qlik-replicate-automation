@@ -1,5 +1,26 @@
 --------------
-Table: "AR_NOD_3C_1E"
+Table: "STRUCT2"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
+Column: AR_NOD_1C_1E, Type: NCLOB, Length: 4000, AllowDBNull: True
+Column: AR_NOD_1C_3E, Type: NCLOB, Length: 4000, AllowDBNull: True
+
+ROOTID,SKEY,AR_NOD_1C_1E,AR_NOD_1C_3E
+ROOT000002,KEY1,"[""AAAAA""]","[""AAAAA"",""AAAAA"",""AAAAA""]"
+ROOT000002,KEY10,"[""IIIII""]","[""IIIII"",""IIIII"",""IIIII""]"
+ROOT000002,KEY11,"[""JJJJJ""]","[""JJJJJ"",""JJJJJ"",""JJJJJ""]"
+ROOT000002,KEY12,[],[]
+ROOT000002,KEY2,"[""BBBBB""]","[""BBBBB"",""BBBBB"",""BBBBB""]"
+ROOT000002,KEY3,"[""KKKKK""]","[""KKKKK"",""KKKKK"",""KKKKK""]"
+ROOT000002,KEY4,"[""LLLLL""]","[""LLLLL"",""LLLLL"",""LLLLL""]"
+ROOT000002,KEY6,[],[]
+ROOT000002,KEY7,"[""FFFFF""]","[""FFFFF"",""FFFFF"",""FFFFF""]"
+ROOT000002,KEY8,"[""GGGGG""]","[""GGGGG"",""GGGGG"",""GGGGG""]"
+ROOT000002,KEY9,"[""HHHHH""]","[""HHHHH"",""HHHHH"",""HHHHH""]"
+
+--------------
+Table: "STRUCT2__AR_NOD_3C_1E"
 Primary Key: ROOTID, SKEY, AR_NOD_3C_1E_ROWNUM
 Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
 Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
@@ -20,7 +41,7 @@ ROOT000002,KEY8,1,GGGGG,GGGGG,GGGGG
 ROOT000002,KEY9,1,HHHHH,HHHHH,HHHHH
 
 --------------
-Table: "AR_NOD_3C_3E"
+Table: "STRUCT2__AR_NOD_3C_3E"
 Primary Key: ROOTID, SKEY, AR_NOD_3C_3E_ROWNUM
 Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
 Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
@@ -57,25 +78,4 @@ ROOT000002,KEY8,3,GGGGG,GGGGG,GGGGG
 ROOT000002,KEY9,1,HHHHH,HHHHH,HHHHH
 ROOT000002,KEY9,2,HHHHH,HHHHH,HHHHH
 ROOT000002,KEY9,3,HHHHH,HHHHH,HHHHH
-
---------------
-Table: "STRUCT2"
-Primary Key: ROOTID, SKEY
-Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
-Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
-Column: AR_NOD_1C_1E, Type: NCLOB, Length: 4000, AllowDBNull: True
-Column: AR_NOD_1C_3E, Type: NCLOB, Length: 4000, AllowDBNull: True
-
-ROOTID,SKEY,AR_NOD_1C_1E,AR_NOD_1C_3E
-ROOT000002,KEY1,"[""AAAAA""]","[""AAAAA"",""AAAAA"",""AAAAA""]"
-ROOT000002,KEY10,"[""IIIII""]","[""IIIII"",""IIIII"",""IIIII""]"
-ROOT000002,KEY11,"[""JJJJJ""]","[""JJJJJ"",""JJJJJ"",""JJJJJ""]"
-ROOT000002,KEY12,[],[]
-ROOT000002,KEY2,"[""BBBBB""]","[""BBBBB"",""BBBBB"",""BBBBB""]"
-ROOT000002,KEY3,"[""KKKKK""]","[""KKKKK"",""KKKKK"",""KKKKK""]"
-ROOT000002,KEY4,"[""LLLLL""]","[""LLLLL"",""LLLLL"",""LLLLL""]"
-ROOT000002,KEY6,[],[]
-ROOT000002,KEY7,"[""FFFFF""]","[""FFFFF"",""FFFFF"",""FFFFF""]"
-ROOT000002,KEY8,"[""GGGGG""]","[""GGGGG"",""GGGGG"",""GGGGG""]"
-ROOT000002,KEY9,"[""HHHHH""]","[""HHHHH"",""HHHHH"",""HHHHH""]"
 

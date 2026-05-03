@@ -17,7 +17,7 @@ def create_endpoints(ims_test: SimpleNamespace):
     ims_test.manage_endpoints.close()
 
 def create_task(ims_test: SimpleNamespace):
-    create_endpoints(ims_test)  # sets ims_test.target_name
+    create_endpoints(ims_test)
     task_name = ims_test.test_dir_name
     ims_test.tasks_general_page.create_new_task()
     new_task_name = ims_test.new_task_page.new_task_creation(task_name)

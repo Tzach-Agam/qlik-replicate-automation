@@ -37,7 +37,7 @@ ROOT000000,31
 ROOT000000,32
 
 --------------
-Table: "CHAR_TABLE"
+Table: "ALLTYPES__CHAR_TABLE"
 Primary Key: ROOTID, ID, CHAR_TABLE_ROWNUM
 Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
 Column: ID, Type: NUMBER, Length: 22, AllowDBNull: False

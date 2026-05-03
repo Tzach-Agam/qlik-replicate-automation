@@ -1,5 +1,21 @@
 --------------
-Table: "RUSSIAN_TABLE"
+Table: "STRUCT2"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
+
+ROOTID,SKEY
+ROOT000002,KEY1
+ROOT000002,KEY2
+ROOT000002,KEY3
+ROOT000002,KEY5
+ROOT000002,KEY6
+ROOT000002,KEY7
+ROOT000002,KEY8
+ROOT000002,KEY9
+
+--------------
+Table: "STRUCT2__RUSSIAN_TABLE"
 Primary Key: ROOTID, SKEY, RUSSIAN_TABLE_ROWNUM
 Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
 Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
@@ -16,20 +32,4 @@ ROOT000002,KEY6,1,Словообразование,Словообразован�
 ROOT000002,KEY7,1,Словообразование,Словообразование
 ROOT000002,KEY8,1,Словообразование,Словообразование
 ROOT000002,KEY9,1,Словообразование,Словообразование
-
---------------
-Table: "STRUCT2"
-Primary Key: ROOTID, SKEY
-Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
-Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
-
-ROOTID,SKEY
-ROOT000002,KEY1
-ROOT000002,KEY2
-ROOT000002,KEY3
-ROOT000002,KEY5
-ROOT000002,KEY6
-ROOT000002,KEY7
-ROOT000002,KEY8
-ROOT000002,KEY9
 

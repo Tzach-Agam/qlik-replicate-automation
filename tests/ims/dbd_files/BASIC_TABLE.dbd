@@ -316,6 +316,22 @@
                 <applicationDatatype datatype="CHAR"/>
             </field>
         </segment>
+		<segment name="STRUCT5" imsName="STRUCT5">
+            <hdam label="GENDS1">
+                <bytes maxBytes="1000"/>
+                <pointer/>
+            </hdam>
+            <field name="SKEY" imsName="SKEY" seqType="U" imsDatatype="C">
+                <startPos>1</startPos>
+                <relativeStart>0</relativeStart>
+                <startAfter></startAfter>
+                <bytes>20</bytes>
+                <maxBytes>0</maxBytes>
+                <remarks></remarks>
+                <marshaller/>
+                <applicationDatatype datatype="CHAR"/>
+            </field>
+        </segment>
         <segment name="PARENT" imsName="PARENT">
             <hdam label="GENDS1">
                 <bytes maxBytes="500"/>

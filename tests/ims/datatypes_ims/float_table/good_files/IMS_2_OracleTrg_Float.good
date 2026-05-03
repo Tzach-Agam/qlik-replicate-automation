@@ -24,7 +24,7 @@ ROOT000000,17
 ROOT000000,18
 
 --------------
-Table: "FLOAT_TABLE"
+Table: "ALLTYPES__FLOAT_TABLE"
 Primary Key: ROOTID, ID, FLOAT_TABLE_ROWNUM
 Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
 Column: ID, Type: NUMBER, Length: 22, AllowDBNull: False

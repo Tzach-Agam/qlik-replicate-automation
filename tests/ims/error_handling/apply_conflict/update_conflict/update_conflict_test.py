@@ -27,9 +27,9 @@ def test_update_conflict(ims_test):
     ims_test.monitor_page.cdc_tab()
 
     ims_test.target_db.execute_query(
-        f"DELETE FROM \"{ims_test.target_schema}\".BASIC_TABLE WHERE ROOTID = 'ROOT000002' AND SKEY = 'KEY2'")
+        f"DELETE FROM \"{ims_test.target_schema}\".STRUCT2__BASIC_TABLE WHERE ROOTID = 'ROOT000002' AND SKEY = 'KEY2'")
     ims_test.target_db.execute_query(
-        f"DELETE FROM \"{ims_test.target_schema}\".BASIC_TABLE WHERE ROOTID = 'ROOT000002' AND SKEY = 'KEY3'")
+        f"DELETE FROM \"{ims_test.target_schema}\".STRUCT2__BASIC_TABLE WHERE ROOTID = 'ROOT000002' AND SKEY = 'KEY3'")
     ims_test.ims_db.cursor.execute(
         f"UPDATE \"DVPCB\".\"STRUCT2\" SET BASIC_TABLE_1_COL1_CHAR = 'UPDATE_CONFLICT', BASIC_TABLE_1_COL2_NUM = 9999 WHERE SKEY = 'KEY2'")
     ims_test.ims_db.cursor.execute(
@@ -38,8 +38,8 @@ def test_update_conflict(ims_test):
 
     ims_test.ims_db.sync_command()
 
-    ims_test.monitor_page.update_check('2', '0')
     ims_test.monitor_page.wait_for_cdc()
+    ims_test.monitor_page.update_check('0', '2')
     ims_test.monitor_page.wait_for_message_in_ui("Source changes that would have had no impact were not applied to the target database")
     ims_test.monitor_page.stop_task()
     ims_test.monitor_page.stop_task_wait()

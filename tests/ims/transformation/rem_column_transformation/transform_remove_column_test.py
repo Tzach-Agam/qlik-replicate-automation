@@ -3,6 +3,7 @@ from settings import *
 def test_transform_remove_column(ims_test):
     """Test for removing a column in transformation"""
     create_task(ims_test)
+
     ims_test.ims_db.cursor.execute("DELETE FROM \"DVPCB\".\"STRUCT2\"")
     ims_test.ims_db.cursor.execute(
         f"INSERT INTO \"DVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY, TRANSFORM_TABLE_1_COL_NUM1, TRANSFORM_TABLE_1_COL_CHAR1, TRANSFORM_TABLE_1_COL_NUM2, TRANSFORM_TABLE_1_COL_CHAR2)"
@@ -23,9 +24,11 @@ def test_transform_remove_column(ims_test):
         f"INSERT INTO \"DVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY, TRANSFORM_TABLE_1_COL_NUM1, TRANSFORM_TABLE_1_COL_CHAR1, TRANSFORM_TABLE_1_COL_NUM2, TRANSFORM_TABLE_1_COL_CHAR2)"
         "VALUES ('ROOT000002', 'KEY6', 66, 'AAAAA', 66, 'AAAAA')")
     ims_test.ims_db.connection.commit()
+
     ims_test.designer_page.run_new_task()
     ims_test.monitor_page.wait_for_fl('2')
     ims_test.monitor_page.cdc_tab()
+
     ims_test.ims_db.cursor.execute(
         f"INSERT INTO \"DVPCB\".\"STRUCT2\" (ROOT_ROOTID, SKEY, TRANSFORM_TABLE_1_COL_NUM1, TRANSFORM_TABLE_1_COL_CHAR1, TRANSFORM_TABLE_1_COL_NUM2, TRANSFORM_TABLE_1_COL_CHAR2)"
         "VALUES ('ROOT000002', 'KEY7', 77, 'AAAAA', 77, 'AAAAA')")
@@ -51,13 +54,16 @@ def test_transform_remove_column(ims_test):
     ims_test.ims_db.cursor.execute(f"DELETE FROM \"DVPCB\".\"STRUCT2\" WHERE SKEY = 'KEY3'")
     ims_test.ims_db.cursor.execute(f"DELETE FROM \"DVPCB\".\"STRUCT2\" WHERE SKEY = 'KEY4'")
     ims_test.ims_db.connection.commit()
+
     ims_test.ims_db.sync_command()
+
+    ims_test.monitor_page.wait_for_cdc()
     ims_test.monitor_page.insert_check('6', '6')
     ims_test.monitor_page.update_check('0', '2')
     ims_test.monitor_page.delete_check('2', '2')
-    ims_test.monitor_page.wait_for_cdc()
     ims_test.monitor_page.stop_task()
     ims_test.monitor_page.stop_task_wait()
+
     ims_test.replicate_actions.navigate_to_main_page('tasks')
     move_file_to_target_dir(ims_test.config.replicate_logs_path(), ims_test.task_logs_dir,
                             f"reptask_{ims_test.task_name}.log", ims_test.config, ims_test.replicate_actions, ims_test.task_name)

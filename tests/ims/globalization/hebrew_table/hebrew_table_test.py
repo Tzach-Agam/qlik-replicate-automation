@@ -50,7 +50,7 @@ def test_hebrew_table(ims_test):
 
     ims_test.monitor_page.wait_for_cdc()
     ims_test.monitor_page.insert_check('3', '3')
-    ims_test.monitor_page.update_check('2', '0')
+    ims_test.monitor_page.update_check('0', '2')
     ims_test.monitor_page.delete_check('1', '1')
     ims_test.monitor_page.stop_task()
     ims_test.monitor_page.stop_task_wait()

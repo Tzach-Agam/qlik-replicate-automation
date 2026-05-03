@@ -38,9 +38,9 @@ def test_variant_with_array(ims_test):
     ims_test.ims_db.sync_command()
 
     ims_test.monitor_page.wait_for_cdc()
-    ims_test.monitor_page.insert_check('27', '9')
-    ims_test.monitor_page.update_check('0', '10')
-    ims_test.monitor_page.delete_check('10', '5')
+    ims_test.monitor_page.insert_check('9', '27')
+    ims_test.monitor_page.update_check('10', '0')
+    ims_test.monitor_page.delete_check('5', '10')
     ims_test.monitor_page.stop_task()
     ims_test.monitor_page.stop_task_wait()
 

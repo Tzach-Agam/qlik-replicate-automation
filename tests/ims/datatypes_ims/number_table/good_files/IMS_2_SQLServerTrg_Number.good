@@ -23,7 +23,7 @@ ROOT000000,17
 ROOT000000,18
 
 --------------
-Table: "NUMBER_TABLE"
+Table: "ALLTYPES__NUMBER_TABLE"
 Primary Key: ROOTID, ID, NUMBER_TABLE_ROWNUM
 Column: ROOTID, Type: nvarchar, Length: 20, AllowDBNull: False
 Column: ID, Type: int, Length: None, AllowDBNull: False
