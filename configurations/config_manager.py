@@ -8,6 +8,8 @@ class ConfigurationManager:
         :param config_file: Path to the configuration file (config.ini)."""
         self.config_file = config_file
         self.config = self.read_config()
+        os_type = "Linux" if self.get_is_os_linux() else "Windows"
+        print(f"\nRunning on: {os_type} | Server: {self.get_base_url()} | User: {self.get_username()}")
 
     def read_config(self):
         """Reads and parses the configuration file."""

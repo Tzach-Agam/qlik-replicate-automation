@@ -61,6 +61,8 @@ def ims(config_manager, request):
     print(f"Copied DBD for test folder '{test_dir_name}': {dbd_file} → {dst_file}")
     ims_db = IMSDatabase(config_manager, 'IMS_DB')
     ims_db.connect()
+    if config_manager.get_is_os_linux():
+        dbd_file = config_manager.get_section('Paths')['dbd_files_dir_lin'] + dbd_name
     yield ims_db, dbd_file
     print("🧹 IMS teardown")
     ims_db.close()
