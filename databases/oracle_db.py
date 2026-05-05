@@ -81,9 +81,9 @@ class OracleDatabase:
         """ Drop an existing user in the connected Oracle database.
             :param user_name: The name of the schema to drop. """
         if self.does_user_not_exist(user_name):
-            print(f"User '{user_name}' already exists. Skipping drop.")
+            print(f"User '{user_name}' does not exist. Skipping drop.")
         else:
-            drop_user_query = f'drop user "{user_name}"'
+            drop_user_query = f'drop user "{user_name}" CASCADE'
             self.execute_query(drop_user_query)
             print(f"User '{user_name}' dropped")
 

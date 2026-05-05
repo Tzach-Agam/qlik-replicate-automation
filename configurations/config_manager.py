@@ -25,10 +25,6 @@ class ConfigurationManager:
         """Gets the operating system from the configuration file (config file)."""
         return self.config.getboolean("OS", "Linux")
 
-    def get_linux_dbd_dir(self):
-        """Gets the dbd files directory for Linux from the configuration file (config file)."""
-        return self.config.get("Paths", "linux_dbd_files_dir")
-
     def get_driver(self):
         """Gets a specific driver from the configuration file (config file)."""
         return self.config.get("Browser", "driver")
@@ -49,15 +45,18 @@ class ConfigurationManager:
 
     def get_base_url(self):
         """Returns the base URL setting from the 'Website' section in config.ini. """
-        return self.config.get('Website', 'base_url')
+        key = 'base_url_lin' if self.get_is_os_linux() else 'base_url_win'
+        return self.config.get('Website', key)
 
     def get_username(self):
         """Returns the username setting from the 'Website' section in config.ini. """
-        return self.config.get('Credentials', 'username')
+        key = 'username_lin' if self.get_is_os_linux() else 'username_win'
+        return self.config.get('Credentials', key)
 
     def get_password(self):
         """Returns the password setting from the 'Website' section in config.ini. """
-        return self.config.get('Credentials', 'password')
+        key = 'password_lin' if self.get_is_os_linux() else 'password_win'
+        return self.config.get('Credentials', key)
 
     def get_login_url(self):
         """Returns the login URL setting from the 'Website' section in config.ini. """
@@ -84,8 +83,13 @@ class ConfigurationManager:
     def replicate_logs_path(self):
         """Gets and returns the path to the directory with all the task task_logs of replicate software
         (source path of task task_logs)."""
-        source_log_path = self.config.get('Paths', 'replicate_logs_directory')
-        return source_log_path
+        key = 'rep_log_dir_lin' if self.get_is_os_linux() else 'rep_log_dir_win'
+        return self.config.get('Paths', key)
+
+    def java_logs_path(self):
+        """Gets and returns the path to the Java endpoint logs directory."""
+        key = 'java_log_dir_lin' if self.get_is_os_linux() else 'java_log_dir_win'
+        return self.config.get('Paths', key)
 
     def downloaded_files_path(self):
         """Gets the downloads path from the 'Paths' section in config.ini, for the dir in which all the downloaded files

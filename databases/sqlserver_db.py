@@ -90,7 +90,7 @@ class SQLServerDatabase:
         """ Drop an existing schema in the connected database.
             :param schema_name: The name of the schema to drop. """
         if self.does_schema_not_exist(schema_name):
-            print(f"Schema '{schema_name}' already exists. Skipping drop.")
+            print(f"Schema '{schema_name}' does not exist. Skipping drop.")
         else:
             drop_schema_query = f'drop schema "{schema_name}"'
             self.execute_query(drop_schema_query)

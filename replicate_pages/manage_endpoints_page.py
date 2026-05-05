@@ -421,25 +421,6 @@ class ManageEndpoints:
         self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Role:']")))
         self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Type:']")))
 
-    def create_ims_source_endpoint(self, endpoint_name):
-        """Creates an IMS source endpoint using the parameters in the config.ini file"""
-        self.new_endpoint_connection()
-        self.choose_ims_type()
-        self.enter_ims_host(self.config.get_section('IMS_DB')['host'])
-        self.enter_ims_port(self.config.get_section('IMS_DB')['port'])
-        self.enter_ims_connect_host(self.config.get_section('IMS_DB')['ims_connect_host'])
-        self.enter_ims_connect_port(self.config.get_section('IMS_DB')['ims_connect_port'])
-        self.enter_ims_username(self.config.get_section('IMS_DB')['user'])
-        self.enter_ims_password(self.config.get_section('IMS_DB')['password'])
-        self.enter_ims_psb(self.config.get_section('IMS_DB')['psb'][0:7])
-        self.enter_ims_dbd_xml(self.config.get_section('IMS_DB')['dbd_xml'])
-        self.enter_logstream_name(self.config.get_section('IMS_DB')['logstream_name'])
-        self.enter_endpoint_description('IMS Source Endpoint')
-        self.enter_endpoint_name(endpoint_name)
-        self.test_connection_valid()
-        self.save()
-        print("Created a IMS source endpoint:", endpoint_name)
-
     def create_custom_ims_source_endpoint(self, endpoint_name, description, host=None, port=None, ims_connect_host=None, ims_connect_port=None, user=None, password=None,
                                           psb=None, schema=None, dbd_xml=None, logstream_name=None,
                                           trusted_ca=None, client_password=None, client_certificate=None, max_seg_memory=5):
@@ -459,9 +440,9 @@ class ManageEndpoints:
         self.open_change_data_capture_settings()
         self.enter_logstream_name(logstream_name or self.config.get_section('IMS_DB')['logstream_name'])
         self.open_security()
-        self.enter_client_certificate(client_certificate or self.config.get_section('IMS_DB')['client_certificate'])
+        self.enter_client_certificate(client_certificate or self.config.get_section('IMS_DB')['client_certificate_lin' if self.config.get_is_os_linux() else 'client_certificate_win'])
         self.enter_client_password(client_password or self.config.get_section('IMS_DB')['client_password'])
-        self.enter_trusted_ca(trusted_ca or self.config.get_section('IMS_DB')['trusted_ca'])
+        self.enter_trusted_ca(trusted_ca or self.config.get_section('IMS_DB')['trusted_ca_lin' if self.config.get_is_os_linux() else 'trusted_ca_win'])
         self.move_to_advanced()
         self.enter_max_segment_memory(max_seg_memory)
         self.move_to_general()
@@ -474,7 +455,7 @@ class ManageEndpoints:
     def create_custom_ims_source_endpoint2(self, endpoint_name, description, host=None, port=None, ims_connect_host=None, ims_connect_port=None, user=None, password=None,
                                           psb=None, pcb=None, dbd_xml=None, logstream_name=None,
                                           trusted_ca=None, client_password=None, client_certificate=None, max_seg_memory=5):
-        """Creates custom IMS source endpoint using parameters inserted by the user"""
+        """Creates custom IMS source endpoint using parameters inserted by the user without test connection and saving"""
         self.new_endpoint_connection()
         self.choose_ims_type()
         self.enter_ims_host(host or self.config.get_section('IMS_DB')['host'])
@@ -490,9 +471,9 @@ class ManageEndpoints:
         self.open_change_data_capture_settings()
         self.enter_logstream_name(logstream_name or self.config.get_section('IMS_DB')['logstream_name'])
         self.open_security()
-        self.enter_client_certificate(client_certificate or self.config.get_section('IMS_DB')['client_certificate'])
+        self.enter_client_certificate(client_certificate or self.config.get_section('IMS_DB')['client_certificate_lin' if self.config.get_is_os_linux() else 'client_certificate_win'])
         self.enter_client_password(client_password or self.config.get_section('IMS_DB')['client_password'])
-        self.enter_trusted_ca(trusted_ca or self.config.get_section('IMS_DB')['trusted_ca'])
+        self.enter_trusted_ca(trusted_ca or self.config.get_section('IMS_DB')['trusted_ca_lin' if self.config.get_is_os_linux() else 'trusted_ca_win'])
         self.move_to_advanced()
         self.enter_max_segment_memory(max_seg_memory)
         self.move_to_general()
