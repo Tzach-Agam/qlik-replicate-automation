@@ -176,3 +176,17 @@ def ims_test(request, config_manager, ims, target_db, replicate_pages, default_s
             env.task_name, env.ims_source_name, env.target_name)
     else:
         print("⚠️ Skipping task deletion - task was never created", flush=True)
+
+
+def collect_logs(ims_test):
+    ims_test.replicate_actions.navigate_to_main_page('tasks')
+    move_file_to_target_dir(ims_test.config.replicate_logs_path(), ims_test.task_logs_dir,
+                            f"reptask_{ims_test.task_name}.log", ims_test.config,
+                            ims_test.replicate_actions, ims_test.task_name)
+
+
+def finalize_test(ims_test, csv_name):
+    ims_test.target_db.export_schema_data_to_csv(ims_test.target_schema,
+                                                 ims_test.good_files_dir + f"\\{csv_name}.csv")
+    compare_files(ims_test.good_files_dir + f"\\{csv_name}.good",
+                  ims_test.good_files_dir + f"\\{csv_name}.csv")

@@ -1,0 +1,38 @@
+--------------
+Table: "STRUCT2"
+Primary Key: ROOTID, SKEY
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
+
+ROOTID,SKEY
+ROOT000002,KEY1
+ROOT000002,KEY10
+ROOT000002,KEY2
+ROOT000002,KEY4
+ROOT000002,KEY5
+ROOT000002,KEY6
+ROOT000002,KEY7
+ROOT000002,KEY9
+
+--------------
+Table: "STRUCT2__BASIC_TABLE"
+Primary Key: ROOTID, SKEY, BASIC_TABLE_ROWNUM
+Column: ROOTID, Type: NVARCHAR2, Length: 40, AllowDBNull: False
+Column: SKEY, Type: NVARCHAR2, Length: 80, AllowDBNull: False
+Column: BASIC_TABLE_ROWNUM, Type: NUMBER, Length: 22, AllowDBNull: False
+Column: COL5_CHAR, Type: NVARCHAR2, Length: 100, AllowDBNull: True
+Column: COL4_NUM, Type: NUMBER, Length: 22, AllowDBNull: True
+Column: COL3_CHAR, Type: NVARCHAR2, Length: 100, AllowDBNull: True
+Column: COL2_NUM, Type: NUMBER, Length: 22, AllowDBNull: True
+Column: COL1_CHAR, Type: NVARCHAR2, Length: 100, AllowDBNull: True
+
+ROOTID,SKEY,BASIC_TABLE_ROWNUM,COL5_CHAR,COL4_NUM,COL3_CHAR,COL2_NUM,COL1_CHAR
+ROOT000002,KEY1,1,Full_Load,1111,Full_Load,1111,UPDATE
+ROOT000002,KEY10,1,Capture_Changes,5555,Capture_Changes,5555,Capture_Changes
+ROOT000002,KEY2,1,Full_Load,2222,Full_Load,2222,UPDATE
+ROOT000002,KEY4,1,Full_Load,4444,Full_Load,4444,Full_Load
+ROOT000002,KEY5,1,Full_Load,5555,Full_Load,5555,Full_Load
+ROOT000002,KEY6,1,Capture_Changes,1111,Capture_Changes,1111,UPDATE
+ROOT000002,KEY7,1,Capture_Changes,2222,Capture_Changes,2222,UPDATE
+ROOT000002,KEY9,1,Capture_Changes,4444,Capture_Changes,4444,Capture_Changes
+

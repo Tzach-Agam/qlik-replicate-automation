@@ -87,18 +87,11 @@ def test_data_error_src(ims_test):
     ims_test.monitor_page.stop_task()
     ims_test.monitor_page.stop_task_wait()
 
-    ims_test.replicate_actions.navigate_to_main_page('tasks')
-    move_file_to_target_dir(ims_test.config.replicate_logs_path(), ims_test.task_logs_dir, f"reptask_{ims_test.task_name}.log", ims_test.config, ims_test.replicate_actions, ims_test.task_name)
-    ims_test.target_db.export_schema_data_to_csv(ims_test.target_schema,
-                                                  ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}DATA_ERROR_SRC.csv")
-
+    collect_logs(ims_test)
     log_finder(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
                "]W:  Unloading of segment 'STRUCT2' finished with 4 data errors",
                ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}DATA_ERROR_SRC.csv")
-
     log_finder(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
                "]W:  Error converting field 'COL2_DECIMAL', error message: 'An error occurred converting the field COL2_DECIMAL in the struct STRUCT2.BASIC_TABLE",
                ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}DATA_ERROR_SRC.csv")
-
-    compare_files(ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}DATA_ERROR_SRC.good",
-                  ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}DATA_ERROR_SRC.csv")
+    finalize_test(ims_test, f"IMS_2_{ims_test.target_db.config['endpoint']}DATA_ERROR_SRC")

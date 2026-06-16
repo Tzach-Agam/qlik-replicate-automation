@@ -35,6 +35,7 @@ TEST_DBD_MAP = {
     "data_error_src":  "DATA_ERROR.dbd",
     "table_error_cdc":  "TABLE_ERROR.dbd",
     "table_error_fl":  "TABLE_ERROR.dbd",
+    "invalid_segment_in_dbd": "INVALID_SEGMENTS.dbd",
     "cdc_without_logstream":  "BASIC_TABLE.dbd",
     "variant_string": "VARIANT_STRING.dbd",
     "variant_diff_control_field": "VARIANT_NOT_SUITABLE.dbd",

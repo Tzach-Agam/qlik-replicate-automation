@@ -29,21 +29,12 @@ def test_table_error_fl(ims_test):
     ims_test.monitor_page.wait_for_message_in_ui("Table 'IMSDEV'.'STRUCT3' (subtask 1 thread 1) is suspended")
     ims_test.monitor_page.stop_task()
     ims_test.monitor_page.stop_task_wait()
-    ims_test.replicate_actions.navigate_to_main_page('tasks')
 
-    move_file_to_target_dir(ims_test.config.replicate_logs_path(), ims_test.task_logs_dir,
-                            f"reptask_{ims_test.task_name}.log", ims_test.config, ims_test.replicate_actions,
-                            ims_test.task_name)
-
-    ims_test.target_db.export_schema_data_to_csv(ims_test.target_schema,
-                                                 ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}TABLE_ERROR_FL.csv")
-
+    collect_logs(ims_test)
     log_finder(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
                "]W:  Table 'IMSDEV'.'STRUCT3' (subtask 1 thread 1) is suspended",
                ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}TABLE_ERROR_FL.csv")
     log_finder(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
                "]E:  Handling End of table 'replicate_selenium_target'.'STRUCT3__ARRAY_BASE__ARRAY_1__ARRAY_2' loading failed",
                ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}TABLE_ERROR_FL.csv")
-
-    compare_files(ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}TABLE_ERROR_FL.good",
-                  ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}TABLE_ERROR_FL.csv")
+    finalize_test(ims_test, f"IMS_2_{ims_test.target_db.config['endpoint']}TABLE_ERROR_FL")

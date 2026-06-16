@@ -5,14 +5,14 @@ def test_cached_events(ims_test):
     create_task(ims_test)
 
     ims_test.ims_db.cursor.execute("DELETE FROM \"DVPCB\".\"STRUCT1\"")
-    for i in range(1, 2001):
+    for i in range(1, 2500):
         ims_test.ims_db.cursor.execute(
             f"INSERT INTO STRUCT1 (ROOT_ROOTID, SKEY, NUM_DATES, VARIANT_SELECTOR, NUM_1, STR_1, DATE_STRUCT_1_DATE_YY, DATE_STRUCT_1_DATE_MM, DATE_STRUCT_1_DATE_DD )"
             f"VALUES ('ROOT000001', 'KEY{i}', 1, 'A', 100001, 'AAAAAAAAAA', 1999, 08, 26)")
     ims_test.ims_db.connection.commit()
     print("Finished with first batch")
 
-    for i in range(2001, 4001):
+    for i in range(2500, 5001):
         ims_test.ims_db.cursor.execute(
         f"INSERT INTO STRUCT1 (ROOT_ROOTID, SKEY, NUM_DATES, VARIANT_SELECTOR, SHORT_2, STR_2, DATE_STRUCT_1_DATE_YY, DATE_STRUCT_1_DATE_MM, DATE_STRUCT_1_DATE_DD, DATE_STRUCT_2_DATE_YY, DATE_STRUCT_2_DATE_MM, DATE_STRUCT_2_DATE_DD)"
         f"VALUES ('ROOT000001', 'KEY{i}', 2, 'B', 111, 'TZACH', 1999, 08, 26, 2000, 09, 21)")
@@ -20,7 +20,7 @@ def test_cached_events(ims_test):
     print("Finished with second batch")
 
     ims_test.designer_page.run_new_task()
-    for i in range(4001, 4006):
+    for i in range(5001, 6006):
         ims_test.ims_db.cursor.execute(
             f"INSERT INTO STRUCT1 (ROOT_ROOTID, SKEY, NUM_DATES, VARIANT_SELECTOR, NUM_1, STR_1, DATE_STRUCT_1_DATE_YY, DATE_STRUCT_1_DATE_MM, DATE_STRUCT_1_DATE_DD, DATE_STRUCT_2_DATE_YY, DATE_STRUCT_2_DATE_MM, DATE_STRUCT_2_DATE_DD, DATE_STRUCT_3_DATE_YY, DATE_STRUCT_3_DATE_MM, DATE_STRUCT_3_DATE_DD)" 
             f"VALUES ('ROOT000001', 'KEY{i}', 3, 'A', 100002, 'SHLOMO', 1999, 08, 26, 2000, 09, 21, 2010, 10, 10)")
