@@ -185,8 +185,15 @@ def collect_logs(ims_test):
                             ims_test.replicate_actions, ims_test.task_name)
 
 
-def finalize_test(ims_test, csv_name):
-    ims_test.target_db.export_schema_data_to_csv(ims_test.target_schema,
-                                                 ims_test.good_files_dir + f"\\{csv_name}.csv")
-    compare_files(ims_test.good_files_dir + f"\\{csv_name}.good",
-                  ims_test.good_files_dir + f"\\{csv_name}.csv")
+def finalize_test(ims_test, csv_name, log_checks=None):
+    """
+    :param log_checks: optional list of (log_file_path, search_text) tuples. When given, log_finder
+    appends its result line for each tuple, in order, to the exported CSV after the schema export
+    and before the comparison, since export_schema_data_to_csv overwrites the file and would
+    otherwise wipe out an earlier log_finder call.
+    """
+    csv_path = ims_test.good_files_dir + f"\\{csv_name}.csv"
+    ims_test.target_db.export_schema_data_to_csv(ims_test.target_schema, csv_path)
+    for log_file_path, search_text in log_checks or []:
+        log_finder(log_file_path, search_text, csv_path)
+    compare_files(ims_test.good_files_dir + f"\\{csv_name}.good", csv_path)

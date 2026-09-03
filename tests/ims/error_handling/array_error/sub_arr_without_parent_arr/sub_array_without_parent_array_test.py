@@ -30,8 +30,10 @@ def test_sub_array_without_parent_array(ims_test):
     ims_test.monitor_page.wait_for_message_in_ui("Couldn't find table 'IMSDEV'.'STRUCT3__ARRAY_BASE' in capture list.")
 
     collect_logs(ims_test)
-    log_finder(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
-               "encountered a fatal error", ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_SUB_ARRAY_NO_PARENT.csv")
-    log_finder(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
-               "Couldn't find table 'IMSDEV'.'STRUCT3__ARRAY_BASE' in capture list", ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_SUB_ARRAY_NO_PARENT.csv")
-    finalize_test(ims_test, f"IMS_2_{ims_test.target_db.config['endpoint']}_SUB_ARRAY_NO_PARENT")
+    finalize_test(ims_test, f"IMS_2_{ims_test.target_db.config['endpoint']}_SUB_ARRAY_NO_PARENT",
+                  log_checks=[
+                      (ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
+                       "encountered a fatal error"),
+                      (ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
+                       "Couldn't find table 'IMSDEV'.'STRUCT3__ARRAY_BASE' in capture list"),
+                  ])

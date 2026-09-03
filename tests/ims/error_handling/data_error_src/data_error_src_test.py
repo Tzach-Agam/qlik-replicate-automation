@@ -88,10 +88,10 @@ def test_data_error_src(ims_test):
     ims_test.monitor_page.stop_task_wait()
 
     collect_logs(ims_test)
-    log_finder(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
-               "]W:  Unloading of segment 'STRUCT2' finished with 4 data errors",
-               ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}DATA_ERROR_SRC.csv")
-    log_finder(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
-               "]W:  Error converting field 'COL2_DECIMAL', error message: 'An error occurred converting the field COL2_DECIMAL in the struct STRUCT2.BASIC_TABLE",
-               ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}DATA_ERROR_SRC.csv")
-    finalize_test(ims_test, f"IMS_2_{ims_test.target_db.config['endpoint']}DATA_ERROR_SRC")
+    finalize_test(ims_test, f"IMS_2_{ims_test.target_db.config['endpoint']}DATA_ERROR_SRC",
+                  log_checks=[
+                      (ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
+                       "]W:  Unloading of segment 'STRUCT2' finished with 4 data errors"),
+                      (ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
+                       "]W:  Error converting field 'COL2_DECIMAL', error message: 'An error occurred converting the field COL2_DECIMAL in the struct STRUCT2.BASIC_TABLE"),
+                  ])

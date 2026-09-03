@@ -1,6 +1,5 @@
 import os
 import shutil
-import filecmp
 import random
 import time
 
@@ -124,7 +123,11 @@ def compare_files(good_file, data_file):
 
      If the data in the good and data files is identical, it means that all the data in all the tables was replicated
      from the source to the target successfully, which means successful result of the test."""
-    if filecmp.cmp(good_file, data_file, shallow=False):
+    with open(good_file, 'r', encoding='utf-8') as f:
+        good_content = f.read()
+    with open(data_file, 'r', encoding='utf-8') as f:
+        data_content = f.read()
+    if good_content == data_content:
         os.remove(data_file)
         print(f"Data file is deleted since it's identical to the Good file")
     else:

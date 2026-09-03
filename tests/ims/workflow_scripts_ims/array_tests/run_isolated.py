@@ -6,7 +6,7 @@ from time import sleep
 
 # --- Configuration ---
 PYTHON_EXE = sys.executable
-TEST_DIR = Path(__file__).resolve().parents[2] / "array_datatype"
+TEST_DIR = Path(__file__).resolve().parents[2] / "error_handling"
 
 # --- State ---
 total_runs = 0

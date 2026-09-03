@@ -47,7 +47,6 @@ def test_insert_conflict(ims_test):
     ims_test.monitor_page.stop_task_wait()
 
     collect_logs(ims_test)
-    log_finder(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
-               "Source changes that would have had no impact were not applied to the target database",
-               ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}_AC_INSERT.csv")
-    finalize_test(ims_test, f"IMS_2_{ims_test.target_db.config['endpoint']}_AC_INSERT")
+    finalize_test(ims_test, f"IMS_2_{ims_test.target_db.config['endpoint']}_AC_INSERT",
+                  log_checks=[(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
+                               "Source changes that would have had no impact were not applied to the target database")])

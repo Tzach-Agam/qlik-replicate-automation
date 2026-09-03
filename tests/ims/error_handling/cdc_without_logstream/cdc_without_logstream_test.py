@@ -31,10 +31,10 @@ def test_cdc_without_logstream(ims_test):
     ims_test.monitor_page.wait_for_message_in_ui("encountered a fatal error")
 
     collect_logs(ims_test)
-    log_finder(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
-               "]E:  CDC requires a LogStream name",
-               ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}CDC_NO_LOGSTREAM.csv")
-    log_finder(ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
-               "encountered a fatal error",
-               ims_test.good_files_dir + f"\\IMS_2_{ims_test.target_db.config['endpoint']}CDC_NO_LOGSTREAM.csv")
-    finalize_test(ims_test, f"IMS_2_{ims_test.target_db.config['endpoint']}CDC_NO_LOGSTREAM")
+    finalize_test(ims_test, f"IMS_2_{ims_test.target_db.config['endpoint']}CDC_NO_LOGSTREAM",
+                  log_checks=[
+                      (ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
+                       "]E:  CDC requires a LogStream name"),
+                      (ims_test.task_logs_dir + f"\\reptask_{ims_test.task_name}.log",
+                       "encountered a fatal error"),
+                  ])

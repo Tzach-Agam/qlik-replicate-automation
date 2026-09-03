@@ -21,11 +21,15 @@ def chrom_driver(config: ConfigurationManager):
     options.add_experimental_option("prefs", {
         "download.default_directory": config.downloaded_files_path(),
         "download.prompt_for_download": False,
-        "safebrowsing.enabled": True
+        "safebrowsing.enabled": False
     })
     if config.get_headless():
         options.add_argument('--headless=new')
     driver = webdriver.Chrome(service=service, options=options)
+    driver.execute_cdp_cmd("Page.setDownloadBehavior", {
+        "behavior": "allow",
+        "downloadPath": config.downloaded_files_path()
+    })
     return driver
 
 def edge_driver(config: ConfigurationManager):
@@ -39,11 +43,15 @@ def edge_driver(config: ConfigurationManager):
     options.add_experimental_option("prefs", {
         "download.default_directory": config.downloaded_files_path(),
         "download.prompt_for_download": False,
-        "safebrowsing.enabled": True
+        "safebrowsing.enabled": False
     })
     if config.get_headless():
         options.add_argument('--headless=new')
     driver = webdriver.Edge(service=service, options=options)
+    driver.execute_cdp_cmd("Page.setDownloadBehavior", {
+        "behavior": "allow",
+        "downloadPath": config.downloaded_files_path()
+    })
     return driver
 
 def firefox_driver(config: ConfigurationManager):
@@ -62,7 +70,7 @@ def firefox_driver(config: ConfigurationManager):
     profile.set_preference("pdfjs.disabled", True)  # Avoid opening PDFs in Firefox viewer
     if config.get_headless():
         options.add_argument('--headless')
-    driver = webdriver.Firefox(service=service, options=options, firefox_profile=profile)
+    driver = webdriver.Firefox(service=service, options=options)
     return driver
 
 def get_webdriver(config: ConfigurationManager):
