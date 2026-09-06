@@ -422,7 +422,7 @@ class ManageEndpoints:
         self.wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Type:']")))
 
     def create_custom_ims_source_endpoint(self, endpoint_name, description, host=None, port=None, ims_connect_host=None, ims_connect_port=None, user=None, password=None,
-                                          psb=None, schema=None, dbd_xml=None, logstream_name=None,
+                                          psb=None, dbd_xml=None, logstream_name=None,
                                           trusted_ca=None, client_password=None, client_certificate=None, max_seg_memory=5):
         """Creates custom IMS source endpoint using parameters inserted by the user"""
         self.new_endpoint_connection()
@@ -453,7 +453,7 @@ class ManageEndpoints:
         print("Created a IMS source endpoint:", endpoint_name)
 
     def create_custom_ims_source_endpoint2(self, endpoint_name, description, host=None, port=None, ims_connect_host=None, ims_connect_port=None, user=None, password=None,
-                                          psb=None, pcb=None, dbd_xml=None, logstream_name=None,
+                                          psb=None, dbd_xml=None, logstream_name=None,
                                           trusted_ca=None, client_password=None, client_certificate=None, max_seg_memory=5):
         """Creates custom IMS source endpoint using parameters inserted by the user without test connection and saving"""
         self.new_endpoint_connection()
@@ -480,6 +480,68 @@ class ManageEndpoints:
         self.enter_endpoint_description(description)
         self.enter_endpoint_name(endpoint_name)
         print("Created a IMS source endpoint:", endpoint_name)
+
+
+    """------------------ VSAM endpoint: Specific Methods ------------------"""
+
+    def choose_vsam_type(self):
+        """Select 'IBM VSAM' as the endpoint type in the New Endpoint Connection dialog."""
+        self.choose_endpoint_type("IBM VSAM")
+        vsam_type = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//li//*[text()='IBM VSAM']")))
+        safe_click(vsam_type)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='host']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Save']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Test Connection']")))
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Advanced']")))
+
+    def enter_vsam_host(self, host):
+        """Enter the z/OS server host in the 'Replicate z/OS server' section."""
+        server = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='host']")))
+        server.send_keys(host)
+
+    def enter_vsam_port(self, port):
+        """Enter the z/OS server port in the 'Replicate z/OS server' section."""
+        port_element = self.driver.find_element(By.CSS_SELECTOR, "[prop='port']>div>div:nth-of-type(2)>div>input")
+        port_element.clear()
+        port_element.send_keys(port)
+
+    def open_data(self):
+        security_section = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Data']")))
+        safe_click(security_section)
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@errlabel='metadataZip']")))
+
+    def enter_zip_metadata_file(self, zip_path):
+        """Enter the local path to the metadata zip in the 'Data' section."""
+        zip_field = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@errlabel='metadataZip']")))
+        zip_field.clear()
+        zip_field.send_keys(zip_path)
+
+    def create_custom_vsam_source_endpoint(self, endpoint_name, description, host=None, port=None,
+                                           zip_metadata_file=None,
+                                           trusted_ca=None, client_password=None, client_certificate=None):
+        """Creates custom VSAM source endpoint using parameters inserted by the user"""
+        self.new_endpoint_connection()
+        self.choose_vsam_type()
+        self.enter_vsam_host(host or self.config.get_section('VSAM_DB')['host'])
+        self.enter_vsam_port(port or self.config.get_section('VSAM_DB')['port'])
+        self.open_data()
+        self.enter_zip_metadata_file(zip_metadata_file)
+        self.open_security()
+        self.enter_client_certificate(client_certificate or self.config.get_section('VSAM_DB')[
+            'client_certificate_lin' if self.config.get_is_os_linux() else 'client_certificate_win'])
+        self.enter_client_password(client_password or self.config.get_section('VSAM_DB')['client_password'])
+        self.enter_trusted_ca(trusted_ca or self.config.get_section('VSAM_DB')[
+            'trusted_ca_lin' if self.config.get_is_os_linux() else 'trusted_ca_win'])
+        self.enter_endpoint_description(description)
+        self.enter_endpoint_name(endpoint_name)
+        self.test_connection_valid()
+        self.save()
+        print("Created a VSAM source endpoint:", endpoint_name)
+
+
+
+    """------------------ General Methods ------------------"""
+
 
     def test_connection(self):
         """Click the 'Test Connection' button to test the database connection."""
