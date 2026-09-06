@@ -57,6 +57,8 @@ def vsam(config_manager, request):
     print(f"Resolved metadata zip for test folder '{test_dir_name}': {zip_file}")
     vsam_db = VSAMDatabase(config_manager, 'VSAM_DB')
     vsam_db.connect()
+    if config_manager.get_is_os_linux():
+        zip_file = config_manager.get_section('Paths')['zip_vsam_dir_lin'] + zip_name
     yield vsam_db, zip_file
     print("VSAM teardown")
     vsam_db.close()

@@ -22,7 +22,7 @@ def create_task(vsam_test: SimpleNamespace):
     create_endpoints(vsam_test)  # sets vsam_test.vsam_source_name / target_name
     task_name = vsam_test.test_dir_name
     vsam_test.tasks_general_page.create_new_task()
-    new_task_name = vsam_test.new_task_page.new_task_creation(task_name)
+    new_task_name = vsam_test.new_task_page.fl_only_task_creation(task_name)
     vsam_test.replicate_actions.task_data_loader()
     vsam_test.designer_page.choose_source_target(vsam_test.vsam_source_name, vsam_test.target_name)
     vsam_test.designer_page.enter_table_selection()

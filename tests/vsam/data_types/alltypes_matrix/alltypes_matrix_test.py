@@ -39,7 +39,7 @@ def test_alltypes_matrix(vsam_test):
     create_task(vsam_test)
 
     vsam_test.designer_page.run_new_task()
-    vsam_test.monitor_page.wait_for_fl('20')
+    vsam_test.monitor_page.wait_for_fl('1')
 
     collect_logs(vsam_test)
     finalize_test(vsam_test, csv_name="ALLTYPES_MATRIX")
