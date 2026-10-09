@@ -77,7 +77,7 @@ class DesignerPage:
 
     def run_task_dropdown(self):
         """Click the 'Run' task dropdown menu."""
-        run_dropdown = self.driver.find_element(By.CSS_SELECTOR, "button[data-toggle='dropdown']>[class='caret']")
+        run_dropdown = self.driver.find_element(By.XPATH, "//button[@class='clickableOnHover dropdown-toggle caretWrap']")
         safe_click(run_dropdown)
 
     def run_new_task(self, timeout=60):
